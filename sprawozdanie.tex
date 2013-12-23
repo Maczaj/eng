@@ -1,9 +1,7 @@
 \documentclass[11pt,a4paper]{article}
  
 \usepackage{polski}
-\usepackage[utf8]{inputenc} 
-   % by użyć polskich znaków w systemach Linux
-   % używamy kodowania "latin2" lub "utf8", dla Windows "cp1250" 
+\usepackage[utf8]{inputenc} %utf-8 żeby nie było problemów z przenoszeniem między windowsem a linuxem
 \title{Generator raportów}
 \author{Maciej Kucharski}
 \date{Semetr 13Z}
@@ -18,14 +16,23 @@ w~systemie \LaTeX change this!!!!!!.
 \end{abstract}
 % ogólna problematyka raportów
 \section{Problematyka raportów}\label{sec:raport}
-Raport bardzo ważna rzecz - napisać tutaj jak bardzo ważna i jakie są rodzaje raportów
- 
+Raport to standardowa forma dokumentu biznesowego, który prezentuje informacje jakościowe i ilościowe w logiczny sposób. Raporty takie należą do jednych z najważniejszych dokumentów przedsiębiorstwa. Raport przedstawia widok informacji odpowiedni dla danej grupy odbiorców i powinien być automatycznie dostosowywany w zależności od użytkownika. Funkcje raportów to np.
+ocena wydajności biznesowej, umożliwiająca szybkie sprawdzenie stanu oraz monitorowanie stopnia realizacji strategicznych celów przedsiębiorstwa, podsumowywanie kluczowych wskaźników biznesu, czy prezentacja miar biznesowych w oparciu o różne statystyki. W następnych punktach zostaną przedstawione najczęściej wykorzystywane wzorce raportów.
+%master-detail
+\subsection{Raport typu master-detail}\label{sec:master_detail}
+Ten typ raportu prezentuje listę nadrzędnych wartości oraz szczegóły aktualnie wybranej pozycji. W zasadzie odpowiada strukturze typowego dokumentu, np. faktury. Idea pochodzi z lat 80-tych, kiedy to ekrany mieściły niewielką liczbę kolumn na raz, np. kilka podczas, gdy dane zawierały ich kilkanaście bądź kilkadziesiąt. W części nadrzędnej (master) prezentowane jest tylko kilka wspólnych kolumn, a w części podrzędnej (detail) wszystkie pozostałe pola. Jeśli raport jest prezentowany w sposób interaktywny, np. przez jakąś aplikację, część podrzędna jest "schowana" chyba, że użytkownik zarząda jej pokazania. Ten typ raportu może być zastosowany przy relacjach typu jeden-wiele. Zarówno obszar nadrzędny, jak i podrzędny może być formularzem, listą lub drzewem pozycji, co umożliwia wprowadzanie wielu stopni podrzędności, przy czym obszar podrzędny zwykle jest umieszczony pod lub obok obszaru nadrzędnego. Przykładem może być spis pozycji wchodzących w skład danego zamówienia lub działy przedsiębiorstwa wraz ze spisem pracowników każdego z nich.
+%break groups
+\subsection{Raporty z grupami łamiącymi (break groups)}\label{sec:break_groups}
+Ten typ raportu polega na podziale wierszy trafiających do raportu na grupy o jednakowych wartościach w wyróżnionych kolumnach. Każdą z takich grup można odpowiednio obsłużyć, np. opatrywać je nagłówkami, czy wyliczać dla nich podsumowania. Taka struktura umożliwia dosyć elastyczną prezentację tych samych danych. Załóżmy, że mamy bazę pracowników zatrudnionych w różnych działach. Mogą oni być pogrupowani na podstawie działów, w których są zatrudnieni, następnie, w obrębie działów, można podzielić ich np. ze względu na lata pracy, a dodatkowo np. ze względu na przedziały ich zarobków. 
+%macierzowy
+\subsection{Raport macierzowy (krzyżowy)}\label{sec:macierzowy}
+Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są często wykorzystywane przy różnego rodzaju ankietach. Prezentują związki między dwoma zmiennymi i ułatwiają znalezienie między nimi zależności. Struktura tego raportu przypomina arkusz kalkulacyjny programu Exel. Ułatwia to wspólne prezentacje danych, które pozornie nie mają ze sobą związku. Przykładem może być analiza ankiety, z której wynika na przykład, że pewien model samochodu sprzedaje się lepiej w pewnych województwach.
 % raporty w Oracle XML Publisher
 \section{Raporty w Oracle XML Publisher}\label{sec:raportOraclePublisher}
 W tym rozdziale opisać coś mniejwięcej o raportach robionych przez publishera i wkleić ewentualnie jakieś SSy
 =====> takowoż odniesienie wygląda =====>  \ref{sec:raport}.
 
 % opis Apache FOP
-\section[Apache FOP}\label
+\section{Apache FOP}\label{sec:fop}
  
 \end{document}
