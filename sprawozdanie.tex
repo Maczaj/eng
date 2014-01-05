@@ -2,6 +2,7 @@
  
 \usepackage{polski}
 \usepackage[utf8]{inputenc} %utf-8 żeby nie było problemów z przenoszeniem między windowsem a linuxem
+\usepackage{graphicx}
 \title{Generator raportów z bazy danych bazując na wzorcach}
 \author{Maciej Kucharski}
 \date{Semetr 13Z}
@@ -26,8 +27,24 @@ Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są
 \section{Raporty w Oracle XML Publisher}\label{sec:raportOraclePublisher}
 XML Publisher (zwany również BI Publisher) jest narzędziem umożliwiającym tworzenie raportów oraz zarządzanie nimi oraz ich dostarczanie. Ze względu na tematykę pracy, analizie będzie podlegać tylko pierwszy aspekt. Początkowo był fragmentem innego produktu Oracle, jednak od jakiegoś czas jest dostępny jako samodzielny program. Mimo bazowania na technologiach XSLT i XSL-FO nie jest zachowana pełna zgodność z W3C, jednak dla celów raportowania zapewnia wysoką wydajność i niezawodność. XML Publisher pozwala na tworzenie zaawansowanych raportów z użyciem XML jako formatu danych wejściowych. 
 
+Narzędzie umożliwia tworzenie wszystkich z wymienionych w rozdziale \ref{sec:raport} typów raportów oraz dodatkowo wiele innych. Ostatecznie, dzięki edytorowi można utworzyć niestandardowy szablon wyglądu raportu. Główną jego siłą jest umożliwienie tworzenia zapytań do bazy danych osobom bez przygotowania informatycznego. Jest to możliwe dzięki interfejsowi użytkownika pozwalającemu wybrać m.in. tabele i kolumny, z których będą pobierane dane za pomocą kliknięć myszy. Można również na bieżąco podglądać efekty czynności. Ostatecznie generowane jest zapytanie SQL. Raport może być zarówno interaktywny, jak i wyświetlony np. w formacie PDF.
+
+Publisher umożliwia również utworzenie zadania cyklicznego raportowania, co w większych przedsiębiorstwach może być istotne.
+
+W następnych podrozdziałach zostaną przedstawione przykładowe raporty z programu Oracle XML Publisher.
+
+\subsection{Raport master-detail oraz z grupami łamiącymi}
+W poniższym raporcie jako część nadrzędna został przyjęty kanał, za pośrednictwem którego złożono zamówienie, zaś część podrzędną stanowią zamówienia zrealizowane tym kanałem. Poniższy raport ilustruje również raporty z wykorzystaniem grup łamiących - spis produktów jest podrzędny względem zamówienia.
+
+\includegraphics[scale=0.75]{master_detail_publisher}
+
+\subsection{Raport macierzowy}
+Poniżej przedstawiony jest raport macierzowy (krzyżowy) utworzony w programie Oracle XML Publisher. TODO: Ewentualnie może napisać co jest na tym raporcie?
+
+\includegraphics[scale=0.75]{crosstab_publisher}
+
 % opis Apache FOP
 \section{Apache FOP}\label{sec:fop}
-Apache FOP (Formatting Objects Processor) jest programem napisanym w Javie, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. 
+Apache FOP (Formatting Objects Processor) jest programem napisanym w Javie, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1
  
 \end{document}
