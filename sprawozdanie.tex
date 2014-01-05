@@ -2,18 +2,13 @@
  
 \usepackage{polski}
 \usepackage[utf8]{inputenc} %utf-8 żeby nie było problemów z przenoszeniem między windowsem a linuxem
-\title{Generator raportów}
+\title{Generator raportów z bazy danych bazując na wzorcach}
 \author{Maciej Kucharski}
 \date{Semetr 13Z}
  
 \begin{document}
 \maketitle
  
-\begin{abstract}
-TODO: CHANGE THIS!!!!
-Dokument ten prezentuje kilka zasad składu tekstu 
-w~systemie \LaTeX change this!!!!!!. 
-\end{abstract}
 % ogólna problematyka raportów
 \section{Problematyka raportów}\label{sec:raport}
 Raport to standardowa forma dokumentu biznesowego, który prezentuje informacje jakościowe i ilościowe w logiczny sposób. Raporty takie należą do jednych z najważniejszych dokumentów przedsiębiorstwa. Raport przedstawia widok informacji odpowiedni dla danej grupy odbiorców i powinien być automatycznie dostosowywany w zależności od użytkownika. Funkcje raportów to np.
@@ -29,10 +24,10 @@ Ten typ raportu polega na podziale wierszy trafiających do raportu na grupy o j
 Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są często wykorzystywane przy różnego rodzaju ankietach. Prezentują związki między dwoma zmiennymi i ułatwiają znalezienie między nimi zależności. Struktura tego raportu przypomina arkusz kalkulacyjny programu Exel. Ułatwia to wspólne prezentacje danych, które pozornie nie mają ze sobą związku. Przykładem może być analiza ankiety, z której wynika na przykład, że pewien model samochodu sprzedaje się lepiej w pewnych województwach.
 % raporty w Oracle XML Publisher
 \section{Raporty w Oracle XML Publisher}\label{sec:raportOraclePublisher}
-W tym rozdziale opisać coś mniejwięcej o raportach robionych przez publishera i wkleić ewentualnie jakieś SSy
-=====> takowoż odniesienie wygląda =====>  \ref{sec:raport}.
+XML Publisher (zwany również BI Publisher) jest narzędziem umożliwiającym tworzenie raportów oraz zarządzanie nimi oraz ich dostarczanie. Ze względu na tematykę pracy, analizie będzie podlegać tylko pierwszy aspekt. Początkowo był fragmentem innego produktu Oracle, jednak od jakiegoś czas jest dostępny jako samodzielny program. Mimo bazowania na technologiach XSLT i XSL-FO nie jest zachowana pełna zgodność z W3C, jednak dla celów raportowania zapewnia wysoką wydajność i niezawodność. XML Publisher pozwala na tworzenie zaawansowanych raportów z użyciem XML jako formatu danych wejściowych. 
 
 % opis Apache FOP
 \section{Apache FOP}\label{sec:fop}
+Apache FOP (Formatting Objects Processor) jest programem napisanym w Javie, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. 
  
 \end{document}
