@@ -34,17 +34,38 @@ Publisher umożliwia również utworzenie zadania cyklicznego raportowania, co w
 W następnych podrozdziałach zostaną przedstawione przykładowe raporty z programu Oracle XML Publisher.
 
 \subsection{Raport master-detail oraz z grupami łamiącymi}
-W poniższym raporcie jako część nadrzędna został przyjęty kanał, za pośrednictwem którego złożono zamówienie, zaś część podrzędną stanowią zamówienia zrealizowane tym kanałem. Poniższy raport ilustruje również raporty z wykorzystaniem grup łamiących - spis produktów jest podrzędny względem zamówienia.
+W poniższym fragmencie raportu atrybut CHANNEL pełni rolę grupy łamiącej - dla wszystkich widocznych zamówień jest wartość jest taka sama. Ponadto funkcję raportu master-detail pełni zamówienie wraz ze spisem produktów wchodzących w jego skład.
 
 \includegraphics[scale=0.75]{master_detail_publisher}
 
 \subsection{Raport macierzowy}
-Poniżej przedstawiony jest raport macierzowy (krzyżowy) utworzony w programie Oracle XML Publisher. TODO: Ewentualnie może napisać co jest na tym raporcie?
+Poniżej przedstawiony jest raport macierzowy (krzyżowy) utworzony w programie Oracle XML Publisher. Zawiera informacje o zależności wydatków na pewne produkty w zależności od położenia geograficznego.
 
 \includegraphics[scale=0.75]{crosstab_publisher}
 
 % opis Apache FOP
 \section{Apache FOP}\label{sec:fop}
-Apache FOP (Formatting Objects Processor) jest programem napisanym w Javie, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1
+Apache FOP (Formatting Objects Processor) jest programem napisanym w Javie, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1. 
+
+FOP może być wykorzystywane zarówno jako niezależna aplikacja uruchamiana np. z wiersza poleceń, jak i biblioteka Javy, dzięki czemu może być wykorzystany w każdej aplikacji tworzonej w języku Java. FOP umożliwia również przetwarzanie danych w formacie XML przy użyciu odpowiednich transformacji XSLT.
+
+%raporty z apexa
+\section{Raportowanie w ApEx}\label{sec:raporapex}
+Oracle Application Express sam w sobie nie generuje raportów w formacie PDF. Aby to umożliwić, należy wykorzystać zewnętrzne narzędzie: Oracle XML (BI) Publishera, APEX Listenera lub Apache FOP uruchamianego jako serwlet na serwerze aplikacyjnym. W tej pracy zastosowana będzie tylko ostatnia metoda.
+
+Schemat poglądowy wykorzystania FOP przez Apex'a prezentuje poniższy obrazek:
+
+\includegraphics[scale=0.5]{apex_fop_usage}
+
+
+Wersja 4.2.2 Application Express pozwala na stosowanie własnych wzorców wyglądu raportu zapisanych w XSL-FO. Istnieją darmowe narzędzia za pomocą których mozna wczytać dane w formacie XML, dostosować np. ich rozmieszczenie na stronie raportu metodą drag\&drop, a następnie wygenerować skrypt XSLT transformujący dane na wynikową stronę raportu. 
+
+\section{Format zapisu wzorca wyglądu raportu}\label{sec:formatywzorce}
+Aby możliwe było wygenerowanie raportu, niezbędny jest wzorzec ich wyglądu. Należy wybrać jakiś format spośród wielu istniejących, przy czym głównym czynnikiem jest łatwość przetwarzania i istnienie darmowych narzędzi do graficznej edycji. W związku z tym najsensowniejszym rozwiązaniem wydają się formatu bazujące na XML - SVG lub XSL-FO, a to ze względu na istnienie wielu parserów XML zgodnych ze standardami SAX i DOM. Dla obu standardów istnieją narzędzia wspomniane wcześniej - dla SVG jest to np. open source'owy SVG-edit działający w przeglądarce. Dla XSL-FO niestety trudniej znaleźć darmowe oprogramowanie, ale można wykorzystać Altova StyleVision (darmowa wersja basic w zupełności wystarczy na potrzeby tej pracy). 
+
+Ostatecznie jako wzorzec zostanie wykorzystany format XSL-FO.
+
+
+
  
 \end{document}
