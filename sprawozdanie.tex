@@ -3,69 +3,226 @@
 \usepackage{polski}
 \usepackage[utf8]{inputenc} %utf-8 żeby nie było problemów z przenoszeniem między windowsem a linuxem
 \usepackage{graphicx}
-\title{Generator raportów z bazy danych bazując na wzorcach}
-\author{Maciej Kucharski}
-\date{Semetr 13Z}
+\usepackage{listings}
+\usepackage{indentfirst}
+
+%lokalne makro na komendę
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\setlength\parindent{24pt}
+\oddsidemargin=20pt
+\textwidth=420pt
+
+
+
  
 \begin{document}
-\maketitle
+
+%strona tytułowa
+\begin{titlepage}
+\begin{center}
+%nagłówek uczelni
+\textsc{\LARGE Politechnika Warszawska}\\[0.5cm]
+\textsc{\Large Wydział Elektroniki i Technik Informacyjnych}\\
+\textsc{\Large Instytut Automatyki i Informatyki Stosowanej}\\[1.5cm]
+
+\textsc{\Large Sprawozdanie z pracowni dyplomowej inżynierskiej I} \\[0.5cm]
+%tytuł między kreskami
+\HRule \\[0.4cm]
+{ \huge \bfseries Generator raportów z baz danych w technologii XSL-FO  bazujący na wzorcach \\[0.4cm]}
+\HRule \\[1.5cm]
+
+%autor
+\begin{minipage} {0.4\textwidth}
+\begin{flushleft} \large
+\emph{Autor:}\\
+ Maciej Kucharski 
+\end{flushleft}
+\end{minipage}
+%promotor
+\begin{minipage} {0.4\textwidth}
+\begin{flushright} \large
+
+\emph{Opiekun:}\\
+doc. dr inż. Tomasz Traczyk
+
+\end{flushright}
+\end{minipage}	
+\vfill
+\large Semestr 13Z
+
+	\end{center}
+\end{titlepage}
  
+\tableofcontents
+\newpage
+
+%Cel pracy
+\section{Cel pracy} \label{sec:cel}
+XSL-FO to zaawansowana, ale mało popularna technologia, umożliwiająca m.in. tworzenie publikacji na wysokim poziomie poligraficznym. Za pomocą tej technologii można tworzyć również zaawansowane i atrakcyjne graficznie raporty z bazy danych. W szczególności narzędzie Oracle Application Express potrafi współpracować z dość popularnym procesorem XSL-FO Apache FOP. Dane pobrane z bazy należy odpowiednio przekształcić np. za pomocą XSLT do postaci XSL-FO.
+
+Celem pracy jest opracowanie i stworzenie narzędzia, które potrafiłoby na podstawie specyfikacji danych źródłowych oraz wzorca wyglądu raportu wygenerować odpowiednie skrypty XSLT, przekształcające dane w dokumenty XSL-FO, dające po przetworzeniu wynikowe raporty. Narzędzie ma działać podobnie do Oracle XML (BI) Publishera, jednak w znacznie węższym zakresie i z prostszymi wzorcami.
+
+W następnych rozdziałach zaprezentowane zostaną narzędzia i technologie wykorzystane w niniejszej pracy.
+
+%najpierw XML ogólnie
+\section{XML} \label{sec:xml}
+XML (Extensible Markup Language) to standard organizacji W3C służący do liniowego przedstawiania danych semistrukturalnych. Język XML jest podobny do popularnego HTML-a. Głównym przeznaczeniem XML-a jest elastyczna reprezentacja danych, które są reprezentowane za pomocą tzw.znaczników. Znacznikiem są zarówno elementy, jak i atrybuty. Elementy składają się z otwierającego znacznika, zamykającego znacznika i wszystkich informacji między nimi. Może to być zarówno tekst, jak i zagnieżdżone na dowolną głębokość podelementy. 
+
+Atrybuty służą przekazaniu dodatkowych informacji o elementach i obejmują pary klucz-wartość. Poniższy listing prezentuje przykładowe dane w zapisie spełniającym minimalne wymogi XML:\\
+
+\lstset{language=XML}
+\begin{lstlisting}[frame=single,caption=Prosty XML,label=simplexml]
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<root>
+	<element1>wartosc</element1>
+	<element2 atrybut="wartosc_atrybutu">wartosc</element2>
+	<element3 atrybut="wartosc" />
+</root>
+\end{lstlisting}
+
+Element \textless root\textgreater \ jest głównym elementem dokumentu XML, tzw. root element. Element takiego typu musi występować w każdym XML-u.
+
+Dzięki zdefiniowaniu DTD bądź XMLSchema możliwe jest określenie, jakie elementy i atrybuty występują w dokumencie.Wtedy wartość atrybutu standalone wynosi "false".  Parser wczytujący dokument może dzięki temu walidować jego poprawność. W praktyce DTD jest żadko stosowane ze względu na fakt, że jest oddzielnym językiem. Z kolei XMLSchema jest określana za pomocą XML.
+
+%teraz XSLT
+\section{XSLT} \label{sec:xslt}
+Język XSLT (Extensible Stylesheet Language for Transformations) to standard opracowany przez W3C. Może być wykorzystany do przekształcania do przekształcenia dokumentu z jednej postaci na inną lub podobnie, jak XPath lub XQuery, do pobierania danych z dokumentów. Specyfikacja w XSLT jest dokumentem XML zwanym arkuszem stylów. Znaczniki stosowane w XSLT pochodzą z określonej przestrzeni nazw. Poniższy listing prezentuje ogólny arkusz stylów:\\
+
+\lstset{language=XSLT}
+\begin{lstlisting}[frame=single,caption=Ogólny arkusz XSLT,label=simplexslt]
+<?xml version="1.0" encoding="utf-8" ?>
+<xsl:stylesheet 
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	...
+</xsl:stylesheet>
+\end{lstlisting}
+
+W jednym arkuszu stylów może być zdefiniowanych wiele szablonów. Stosowanie arkusza stylów do dokumentu XML polega na przeglądaniu listy szablonów zdefiniowanych w arkuszu do momentu znalezienia tego, który pasuje do elementu korzenia. Dla elementów zagnieżdżonych należy ponownie przeszukać listę szablonów. Poniższy listing prezentuje strukturę szablonu XSLT:\\
+\lstset{language=XSLT}
+\begin{lstlisting}[frame=single,caption=Ogólny szablon XSLT,label=simplexsltszablon]
+<xsl:template match="wyrazenie XPath">
+	...wynik transformacji...
+</xsl:template>
+\end{lstlisting}
+
+Arkusz XSLT pozwala również na stosowanie pętli i instrukcji warunkowych.
+
+
+%wreszcie XSL-FO
+\section{XSL-FO} \label{sec:xslfo}
+XSL Formatting Objects to język oparty na XML, stosowany do formatowania dokumentów. Główną ideą postania tej specyfikacji jest fakt, że w przeciwnieństwie do HTML, czy XHTML, dokumenty XML nie zawierają wbudowanego układu wizualnego. XSL-FO jest językiem, który może zostać użyty do nadania dokumentowi XML układu na stronie, kolorów, czcionek itd. z przeznaczeniem wyniku dla różnych mediów, np. ekranu lub drukarki. W tym sensie pełni funkcję podobną do stylów CSS, jednak jest bardziej elastyczny i daje większe możliwości, zwłaszcza jeśli chodzi np. o stronicowanie i przewijanie.
+
 % ogólna problematyka raportów
 \section{Problematyka raportów}\label{sec:raport}
-Raport to standardowa forma dokumentu biznesowego, który prezentuje informacje jakościowe i ilościowe w logiczny sposób. Raporty takie należą do jednych z najważniejszych dokumentów przedsiębiorstwa. Raport przedstawia widok informacji odpowiedni dla danej grupy odbiorców i powinien być automatycznie dostosowywany w zależności od użytkownika. Funkcje raportów to np.
+Raport to standardowa forma dokumentu biznesowego, który prezentuje informacje jakościowe i ilościowe w logiczny sposób. Raporty takie należą do najważniejszych dokumentów przedsiębiorstwa. Raport przedstawia widok informacji odpowiedni dla danej grupy odbiorców. Jego funkcje to np.
 ocena wydajności biznesowej, umożliwiająca szybkie sprawdzenie stanu oraz monitorowanie stopnia realizacji strategicznych celów przedsiębiorstwa, podsumowywanie kluczowych wskaźników biznesu, czy prezentacja miar biznesowych w oparciu o różne statystyki. W następnych punktach zostaną przedstawione najczęściej wykorzystywane wzorce raportów.
 %master-detail
 \subsection{Raport typu master-detail}\label{sec:master_detail}
-Ten typ raportu prezentuje listę nadrzędnych wartości oraz szczegóły aktualnie wybranej pozycji. W zasadzie odpowiada strukturze typowego dokumentu, np. faktury. Idea pochodzi z lat 80-tych, kiedy to ekrany mieściły niewielką liczbę kolumn na raz, np. kilka podczas, gdy dane zawierały ich kilkanaście bądź kilkadziesiąt. W części nadrzędnej (master) prezentowane jest tylko kilka wspólnych kolumn, a w części podrzędnej (detail) wszystkie pozostałe pola. Jeśli raport jest prezentowany w sposób interaktywny, np. przez jakąś aplikację, część podrzędna jest "schowana" chyba, że użytkownik zarząda jej pokazania. Ten typ raportu może być zastosowany przy relacjach typu jeden-wiele. Zarówno obszar nadrzędny, jak i podrzędny może być formularzem, listą lub drzewem pozycji, co umożliwia wprowadzanie wielu stopni podrzędności, przy czym obszar podrzędny zwykle jest umieszczony pod lub obok obszaru nadrzędnego. Przykładem może być spis pozycji wchodzących w skład danego zamówienia lub działy przedsiębiorstwa wraz ze spisem pracowników każdego z nich.
+Ten typ raportu prezentuje wartości pełniące funkcję nadrzędnych względem innych oraz szczegóły aktualnie wybranej pozycji. W zasadzie odpowiada strukturze typowego dokumentu, np. faktury. Ten typ raportu może być zastosowany przy związkach typu jeden-wiele. Zarówno obszar nadrzędny jak i podrzędny może być listą lub drzewem pozycji, co umożliwia wprowadzanie wielu stopni podrzędności, przy czym obszar podrzędny zwykle jest umieszczony pod lub obok obszaru nadrzędnego. Przykładem może być spis pozycji wchodzących w skład danego zamówienia lub działy przedsiębiorstwa wraz ze spisem pracowników każdego z nich.
 %break groups
-\subsection{Raporty z grupami łamiącymi (break groups)}\label{sec:break_groups}
+\subsection{Raporty z grupami łamiącymi (\emph{break groups})}\label{sec:break_groups}
 Ten typ raportu polega na podziale wierszy trafiających do raportu na grupy o jednakowych wartościach w wyróżnionych kolumnach. Każdą z takich grup można odpowiednio obsłużyć, np. opatrywać je nagłówkami, czy wyliczać dla nich podsumowania. Taka struktura umożliwia dosyć elastyczną prezentację tych samych danych. Załóżmy, że mamy bazę pracowników zatrudnionych w różnych działach. Mogą oni być pogrupowani na podstawie działów, w których są zatrudnieni, następnie, w obrębie działów, można podzielić ich np. ze względu na lata pracy, a dodatkowo np. ze względu na przedziały ich zarobków. 
 %macierzowy
 \subsection{Raport macierzowy (krzyżowy)}\label{sec:macierzowy}
 Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są często wykorzystywane przy różnego rodzaju ankietach. Prezentują związki między dwoma zmiennymi i ułatwiają znalezienie między nimi zależności. Struktura tego raportu przypomina arkusz kalkulacyjny programu Exel. Ułatwia to wspólne prezentacje danych, które pozornie nie mają ze sobą związku. Przykładem może być analiza ankiety, z której wynika na przykład, że pewien model samochodu sprzedaje się lepiej w pewnych województwach.
-% raporty w Oracle XML Publisher
-\section{Raporty w Oracle XML Publisher}\label{sec:raportOraclePublisher}
-XML Publisher (zwany również BI Publisher) jest narzędziem umożliwiającym tworzenie raportów oraz zarządzanie nimi oraz ich dostarczanie. Ze względu na tematykę pracy, analizie będzie podlegać tylko pierwszy aspekt. Początkowo był fragmentem innego produktu Oracle, jednak od jakiegoś czas jest dostępny jako samodzielny program. Mimo bazowania na technologiach XSLT i XSL-FO nie jest zachowana pełna zgodność z W3C, jednak dla celów raportowania zapewnia wysoką wydajność i niezawodność. XML Publisher pozwala na tworzenie zaawansowanych raportów z użyciem XML jako formatu danych wejściowych. 
 
-Narzędzie umożliwia tworzenie wszystkich z wymienionych w rozdziale \ref{sec:raport} typów raportów oraz dodatkowo wiele innych. Ostatecznie, dzięki edytorowi można utworzyć niestandardowy szablon wyglądu raportu. Główną jego siłą jest umożliwienie tworzenia zapytań do bazy danych osobom bez przygotowania informatycznego. Jest to możliwe dzięki interfejsowi użytkownika pozwalającemu wybrać m.in. tabele i kolumny, z których będą pobierane dane za pomocą kliknięć myszy. Można również na bieżąco podglądać efekty czynności. Ostatecznie generowane jest zapytanie SQL. Raport może być zarówno interaktywny, jak i wyświetlony np. w formacie PDF.
-
-Publisher umożliwia również utworzenie zadania cyklicznego raportowania, co w większych przedsiębiorstwach może być istotne.
-
-W następnych podrozdziałach zostaną przedstawione przykładowe raporty z programu Oracle XML Publisher.
-
-\subsection{Raport master-detail oraz z grupami łamiącymi}
-W poniższym fragmencie raportu atrybut CHANNEL pełni rolę grupy łamiącej - dla wszystkich widocznych zamówień jest wartość jest taka sama. Ponadto funkcję raportu master-detail pełni zamówienie wraz ze spisem produktów wchodzących w jego skład.
-
-\includegraphics[scale=0.75]{master_detail_publisher}
-
-\subsection{Raport macierzowy}
-Poniżej przedstawiony jest raport macierzowy (krzyżowy) utworzony w programie Oracle XML Publisher. Zawiera informacje o zależności wydatków na pewne produkty w zależności od położenia geograficznego.
-
-\includegraphics[scale=0.75]{crosstab_publisher}
 
 % opis Apache FOP
 \section{Apache FOP}\label{sec:fop}
-Apache FOP (Formatting Objects Processor) jest programem napisanym w Javie, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1. 
+Apache FOP (Formatting Objects Processor) jest programem napisanym w języku \emph{Java}, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1. 
 
 FOP może być wykorzystywane zarówno jako niezależna aplikacja uruchamiana np. z wiersza poleceń, jak i biblioteka Javy, dzięki czemu może być wykorzystany w każdej aplikacji tworzonej w języku Java. FOP umożliwia również przetwarzanie danych w formacie XML przy użyciu odpowiednich transformacji XSLT.
 
 %raporty z apexa
 \section{Raportowanie w ApEx}\label{sec:raporapex}
-Oracle Application Express sam w sobie nie generuje raportów w formacie PDF. Aby to umożliwić, należy wykorzystać zewnętrzne narzędzie: Oracle XML (BI) Publishera, APEX Listenera lub Apache FOP uruchamianego jako serwlet na serwerze aplikacyjnym. W tej pracy zastosowana będzie tylko ostatnia metoda.
+Oracle Application Express sam w sobie nie generuje raportów w formacie PDF. Aby to umożliwić, należy wykorzystać zewnętrzne narzędzie: Oracle XML (BI) Publishera lub Apache FOP uruchamianego jako serwlet na serwerze aplikacyjnym. W tej pracy zastosowana będzie tylko ostatnia metoda.
 
-Schemat poglądowy wykorzystania FOP przez Apex'a prezentuje poniższy obrazek:
+Schemat poglądowy wykorzystania FOP przez Apexa prezentuje poniższy obrazek:\\\\
+\includegraphics[scale=0.5]{apex_fop_usage}\\
 
-\includegraphics[scale=0.5]{apex_fop_usage}
 
+Wersja 4.2.2 Application Express pozwala na stosowanie własnych wzorców wyglądu raportu zapisanych w XSL-FO. Istnieją darmowe narzędzia za pomocą których można wczytać dane w formacie XML, dostosować np. ich rozmieszczenie na stronie raportu metodą \emph{drag\&drop}, a następnie wygenerować skrypt XSLT transformujący dane na wynikową stronę raportu. 
 
-Wersja 4.2.2 Application Express pozwala na stosowanie własnych wzorców wyglądu raportu zapisanych w XSL-FO. Istnieją darmowe narzędzia za pomocą których mozna wczytać dane w formacie XML, dostosować np. ich rozmieszczenie na stronie raportu metodą drag\&drop, a następnie wygenerować skrypt XSLT transformujący dane na wynikową stronę raportu. 
-
+%Format wzorca wyglądu
 \section{Format zapisu wzorca wyglądu raportu}\label{sec:formatywzorce}
-Aby możliwe było wygenerowanie raportu, niezbędny jest wzorzec ich wyglądu. Należy wybrać jakiś format spośród wielu istniejących, przy czym głównym czynnikiem jest łatwość przetwarzania i istnienie darmowych narzędzi do graficznej edycji. W związku z tym najsensowniejszym rozwiązaniem wydają się formatu bazujące na XML - SVG lub XSL-FO, a to ze względu na istnienie wielu parserów XML zgodnych ze standardami SAX i DOM. Dla obu standardów istnieją narzędzia wspomniane wcześniej - dla SVG jest to np. open source'owy SVG-edit działający w przeglądarce. Dla XSL-FO niestety trudniej znaleźć darmowe oprogramowanie, ale można wykorzystać Altova StyleVision (darmowa wersja basic w zupełności wystarczy na potrzeby tej pracy). 
+Aby możliwe było wygenerowanie raportu, niezbędny jest wzorzec ich wyglądu. Należy wybrać jakiś format spośród wielu istniejących, przy czym głównym czynnikiem jest łatwość przetwarzania i istnienie darmowych narzędzi do graficznej edycji. W związku z tym najsensowniejszym rozwiązaniem wydają się formatu bazujące na XML: SVG lub XSL-FO, a to ze względu na istnienie wielu parserów XML w praktycznie dowolnych językach programowania. Dla obu standardów istnieją narzędzia wspomniane wcześniej - dla SVG jest to np. open source'owy \emph{SVG-edit} działający w przeglądarce. Dla XSL-FO niestety trudniej znaleźć darmowe oprogramowanie, po dłuższych poszukiwaniach okazało się, że darmowe wersje testowe programów takich, jak np. \emph{XF Designer}, czy \emph{J4LFOP} niefortunnie mają zablokowaną opcję eksportu XSL-FO. 
 
-Ostatecznie jako wzorzec zostanie wykorzystany format XSL-FO.
+Ostatecznie jako wzorzec zostanie wykorzystany format SVG ze względu na dostępność narzędzi określanych jako WYSIWYG (\emph{What You See Is What You Get}).
+
+%jak widzę tę apkę?
+\section{Koncepcja realizacji aplikacji}
+W tym rozdziale zostanie przedstawione zastosowanie przygotowywanego narzędzia, określone zostaną dane wejściowe, przybliżony sposób ich przetwarzania oraz określony zostanie wynik działania aplikacji.
+
+\subsection{Zastosowanie}\label{sec:appZast}
+W celu zapewnienia jednakowego wyglądu raportu niezależnie od platformy najlepiej jest zapisywać raport w formacie PDF. Żeby to zrobić Apex potrzebuje danych wejściowych w XML oraz arkusza XSLT, co skutkuje wygenerowaniem pliku w formacie XSL-FO. Ten z kolei jest wysyłany do FOP, co skutuje powstaniem pliku PDF. Przygotowywane narzędzie ma właśnie na celu przygotowanie arkusza XSLT dla potrzeb Apexa. Drugą możliwością jest również bezpośrednie skorzystanie z wygenerowanego pliku XSLT i uruchomienie FOP z poziomu wiersza poleceń przez aplikację. 
+
+\subsection{Dane wejściowe}\label{sec:appDane}
+Dla uproszczenia konstrukcji aplikacji zakłada się, że dane do raportu zostaną dostarczone w pliku XML, przy czym jego struktura spełnia pewne założenia. Np. dla raportu master-detail część nadrzędna jest elementem, a pozostałe kolumny jej dotyczące są zapisane jako atrybuty tego elementu. Część podrzędna z kolei jest elementem zagnieżdżonym w elemencie nadrzędnym, zawierającym w sobie kolejno zapisane elementy stanowiące część podrzędną, gdzie kolumny je opisujące również są zapisane jako atrybuty. Strukturę danych wejściowych dla raportu master-detail prezentuje poniższy listing:\\
+\lstset{language=XML}
+\begin{lstlisting}[frame=single,caption=Zakładana struktura pliku z danymi wejściowymi dla raportu master-detail,label=strukturaDanychMD]
+<?xml version="1.0" encoding="UTF-8"?>
+<klienci>
+<klient id="4" nazwa="Szyb-fol" miasto="Pionki" 
+  ulica="Krajowa 17" kod_pocztowy="65246" 
+    numer_telefonu="224575495">
+  <zamowienia>
+     <zamowienie id="1" wartosc="0" data_zlozenia="2014-01-26"/>
+     <zamowienie id="4" wartosc="0" data_zlozenia="2014-01-26"/>
+     <zamowienie id="5" wartosc="0" data_zlozenia="2014-01-26"/>
+  </zamowienia>
+   </klient>	
+</klienci>
+
+\end{lstlisting}
+Dla raportów z grupami łamiącymi zakładana struktura jest właściwie taka sama, przy czym dodatkowo jest wymagane, żeby atrybuty według których nastąpi grupowanie były zapisane w kolejności malejącego priorytetu.
+
+Struktura danych dla raportu macierzowego będzie podobna do tej dla raportu \emph{master-detail}. Elementem nadrzędnym będzie element z pierwszej tabeli, zaś w elemencie podrzędnym będzie zawierał elementy, z którymi jest w relacji. Wartość, dla danej relacji będzie zapisana jako wartość odpowiedniego elementu.
+
+\lstset{language=XML}
+\begin{lstlisting}[frame=single,caption=Zakładana struktura pliku z danymi wejściowymi dla raportu macierzowego,label=strukturaDanychMAtrix]
+<?xml version="1.0" encoding="UTF-8"?>
+<wojewodztwa>
+	<wojewodztwo nazwa="mazowieckie">
+		<zatrudnienie_w_sektorach>
+			<sektor nazwa="uslugi">55%</sektor>
+			<sektor nazwa="rolnictwo">30%</sektor>
+			<sektor nazwa="przemysl">15%</sektor>		
+		</zatrudnienie_w_sektorach>	
+	</wojewodztwo>
+</wojewodztwa>
+\end{lstlisting}
 
 
+Dodatkową daną wejściową będzie wzorzec wyglądu raportu. Będzie on zapisany w formacie SVG, jak zostało to zaznaczone w rozdziale \ref{sec:formatywzorce}.
 
- 
+\subsection{Sposób przetwarzania danych}\label{sec:appPrzetwarzanie}
+Na początku działania do pliku wyjściowego dodawane są elementy stałe, tj. nagłówek samego XML oraz określenie właściwej przestrzeni nazw. Następnie rozpoczyna się przetwarzanie samego wzorca. Prosta analiza położenia wszystkich elementów wzorca powinna pozwolić określić ogólne parametry strony raportu takie jak np. marginesy czy rozmiar strony. W dalszym przetwarzaniu biorą udział również dane. Nazwa emph{rootElementu} posłuży za tytuł raportu. Dalsze postępowanie będzie zależne od typu raportu wybranego przez użytkownika. W przypadku raportu master-detail wystąpienie elementu nadrzędnego oznacza powstanie nowego bloku (w sensie zgodnym z terminologią XSL-FO) zawierającego wartości elementu oraz (w przypadku niepustego zbioru elementów podrzędnych) kolejnego bloku składającego się z wartości odpowiadających kolejnym wartościom z elementu podrzędnego. Warto byłoby skonstruować schemat przetwarzania tak, aby umożliwiał zastosowanie wielu stopni podrzędności. Fakt, że element jest nadrzędny w stosunku do innego może być wykrywany poprzez sprawdzenie, czy pierwszy z jego elementów-dzieci ma atrybuty. W dość ogólnym rysie wyglądałoby to jak na poniższym listingu (zakładając strukturę taką jak na listingu z rodziału \ref{sec:appDane}:\\
+
+\lstset{language=XML}
+\begin{lstlisting}[frame=single,caption=Przykładowa struktura pliku XSL-FO,label=strukturaXSL]
+<fo:block>
+   atrybut1 atrybut2 ....
+   wartosc1 wartosc2...
+   <fo:block>
+     atrybut1 atrybut2 ....
+     wartosc1 wartosc2...	
+  </fo:block>
+</fo:block>
+
+
+\end{lstlisting}
+
+Dla raportu z wykorzystaniem grup łamiących podejście będzie podobne z tym, że główny element \emph{fo:block} będzie zawierał wiele bloków podrzędnych (w zależności od liczby wartości przyjmowanych przez atrybut względem którego następuje grupowanie.
+
+Odwzorowanie raportu macierzowego będzie wymagało tworzenia bloków sąsiadujących ze sobą, a nie zagnieżdżonych.
+
+Oczywiście ostatecznie do wyjściowego arkusza XSLT musi zostać dopisana transformacja tworząca odpowiednie struktury XSL-FO. Ponieważ zapisanie transformacji XSLT wymaga podania wyrażenia XPath odpowiadającego transformowanym znacznikom, podczas przetwarzania musi być pamiętana przebyta ścieżka.
+
+\subsection{Dane wyjściowe}\label{sec:appOutput}
+ Efektem działania aplikacji ma być plik z arkuszem transformacji XSLT. Będzie on mógł zostać wykorzystany przez Apexa do wygenerowania pliku dokumentu w formacie XSL-FO, co umożliwi generację pliku PDF przy użyciu FOP.
+
+\section{Dalsze plany}\label{sec:plany}
+W następnych etapach przygotowania pracy planowane jest przede wszystkim uszczegółowienie opisu przetwarzania danych w taki sposób, aby dało się na jego podstawie rozpocząć implementację aplikacji realizującej funkcjonalność będącą celem pracy. 
 \end{document}
+
