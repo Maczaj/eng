@@ -118,7 +118,7 @@ XSL Formatting Objects to język oparty na XML, stosowany do formatowania dokume
 Raport to standardowa forma dokumentu biznesowego, który prezentuje informacje jakościowe i ilościowe w logiczny sposób. Raporty takie należą do najważniejszych dokumentów przedsiębiorstwa. Raport przedstawia widok informacji odpowiedni dla danej grupy odbiorców. Jego funkcje to np.
 ocena wydajności biznesowej, umożliwiająca szybkie sprawdzenie stanu oraz monitorowanie stopnia realizacji strategicznych celów przedsiębiorstwa, podsumowywanie kluczowych wskaźników biznesu, czy prezentacja miar biznesowych w oparciu o różne statystyki. W następnych punktach zostaną przedstawione najczęściej wykorzystywane wzorce raportów.
 %master-detail
-\subsection{Raport typu master-detail}\label{sec:master_detail}
+\subsection{Raport typu \emph{master-detail}}\label{sec:master_detail}
 Ten typ raportu prezentuje wartości pełniące funkcję nadrzędnych względem innych oraz szczegóły aktualnie wybranej pozycji. W zasadzie odpowiada strukturze typowego dokumentu, np. faktury. Ten typ raportu może być zastosowany przy związkach typu jeden-wiele. Zarówno obszar nadrzędny jak i podrzędny może być listą lub drzewem pozycji, co umożliwia wprowadzanie wielu stopni podrzędności, przy czym obszar podrzędny zwykle jest umieszczony pod lub obok obszaru nadrzędnego. Przykładem może być spis pozycji wchodzących w skład danego zamówienia lub działy przedsiębiorstwa wraz ze spisem pracowników każdego z nich.
 %break groups
 \subsection{Raporty z grupami łamiącymi (\emph{break groups})}\label{sec:break_groups}
@@ -130,7 +130,7 @@ Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są
 
 % opis Apache FOP
 \section{Apache FOP}\label{sec:fop}
-Apache FOP (Formatting Objects Processor) jest programem napisanym w języku \emph{Java}, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1. 
+Apache FOP (\emph{Formatting Objects Processor}) jest programem napisanym w języku \emph{Java}, który konwertuje pliki zapisane w formacie XSL-FO na pliki w formacie PDF lub innych drukowalnych, m.in. RTF czy PostScript. Najnowsza stabilna wersja jest w znacznym stopniu zgodna ze specyfikacją XSL-FO 1.1. 
 
 FOP może być wykorzystywane zarówno jako niezależna aplikacja uruchamiana np. z wiersza poleceń, jak i biblioteka Javy, dzięki czemu może być wykorzystany w każdej aplikacji tworzonej w języku Java. FOP umożliwia również przetwarzanie danych w formacie XML przy użyciu odpowiednich transformacji XSLT.
 
@@ -138,15 +138,21 @@ FOP może być wykorzystywane zarówno jako niezależna aplikacja uruchamiana np
 \section{Raportowanie w ApEx}\label{sec:raporapex}
 Oracle Application Express sam w sobie nie generuje raportów w formacie PDF. Aby to umożliwić, należy wykorzystać zewnętrzne narzędzie: Oracle XML (BI) Publishera lub Apache FOP uruchamianego jako serwlet na serwerze aplikacyjnym. W tej pracy zastosowana będzie tylko ostatnia metoda.
 
-Schemat poglądowy wykorzystania FOP przez Apexa prezentuje poniższy obrazek:\\\\
-\includegraphics[scale=0.5]{apex_fop_usage}\\
+Schemat poglądowy wykorzystania FOP przez ApExa prezentuje obrazek \ref{fop:apex_usage}:\\
+
+\begin{figure}[h]
+\centering
+\caption{Sposób wykorzystania FOP przez ApExa}
+\includegraphics[scale=0.5]{apex_fop_usage}
+\label{fop:apex_usage}
+\end{figure}
 
 
 Wersja 4.2.2 Application Express pozwala na stosowanie własnych wzorców wyglądu raportu zapisanych w XSL-FO. Istnieją darmowe narzędzia za pomocą których można wczytać dane w formacie XML, dostosować np. ich rozmieszczenie na stronie raportu metodą \emph{drag\&drop}, a następnie wygenerować skrypt XSLT transformujący dane na wynikową stronę raportu. 
 
 %Format wzorca wyglądu
 \section{Format zapisu wzorca wyglądu raportu}\label{sec:formatywzorce}
-Aby możliwe było wygenerowanie raportu, niezbędny jest wzorzec ich wyglądu. Należy wybrać jakiś format spośród wielu istniejących, przy czym głównym czynnikiem jest łatwość przetwarzania i istnienie darmowych narzędzi do graficznej edycji. W związku z tym najsensowniejszym rozwiązaniem wydają się formatu bazujące na XML: SVG lub XSL-FO, a to ze względu na istnienie wielu parserów XML w praktycznie dowolnych językach programowania. Dla obu standardów istnieją narzędzia wspomniane wcześniej - dla SVG jest to np. open source'owy \emph{SVG-edit} działający w przeglądarce. Dla XSL-FO niestety trudniej znaleźć darmowe oprogramowanie, po dłuższych poszukiwaniach okazało się, że darmowe wersje testowe programów takich, jak np. \emph{XF Designer}, czy \emph{J4LFOP} niefortunnie mają zablokowaną opcję eksportu XSL-FO. 
+Aby możliwe było wygenerowanie raportu, niezbędny jest wzorzec jego wyglądu. Należy wybrać jakiś format spośród wielu istniejących, przy czym głównym czynnikiem jest łatwość przetwarzania i istnienie darmowych narzędzi do graficznej edycji. W związku z tym najsensowniejszym rozwiązaniem wydają się formaty bazujące na XML: SVG lub XSL-FO, a to ze względu na istnienie wielu parserów XML w praktycznie dowolnych językach programowania. Dla obu standardów istnieją narzędzia wspomniane wcześniej; dla SVG jest to np. open source'owy \emph{SVG-edit} działający w przeglądarce, bądź bardziej zaawansowany \emph{InkScape}. Dla XSL-FO niestety trudniej znaleźć darmowe oprogramowanie, po dłuższych poszukiwaniach okazało się, że darmowe wersje testowe programów takich, jak np. \emph{XF Designer}, czy \emph{J4LFOP} niefortunnie mają zablokowaną opcję eksportu XSL-FO. 
 
 Ostatecznie jako wzorzec zostanie wykorzystany format SVG ze względu na dostępność narzędzi określanych jako WYSIWYG (\emph{What You See Is What You Get}).
 
@@ -155,7 +161,7 @@ Ostatecznie jako wzorzec zostanie wykorzystany format SVG ze względu na dostęp
 W tym rozdziale zostanie przedstawione zastosowanie przygotowywanego narzędzia, określone zostaną dane wejściowe, przybliżony sposób ich przetwarzania oraz określony zostanie wynik działania aplikacji.
 
 \subsection{Zastosowanie}\label{sec:appZast}
-W celu zapewnienia jednakowego wyglądu raportu niezależnie od platformy najlepiej jest zapisywać raport w formacie PDF. Żeby to zrobić Apex potrzebuje danych wejściowych w XML oraz arkusza XSLT, co skutkuje wygenerowaniem pliku w formacie XSL-FO. Ten z kolei jest wysyłany do FOP, co skutuje powstaniem pliku PDF. Przygotowywane narzędzie ma właśnie na celu przygotowanie arkusza XSLT dla potrzeb Apexa. Drugą możliwością jest również bezpośrednie skorzystanie z wygenerowanego pliku XSLT i uruchomienie FOP z poziomu wiersza poleceń przez aplikację. 
+W celu zapewnienia jednakowego wyglądu raportu niezależnie od platformy najlepiej jest zapisywać raport w formacie PDF. Żeby to zrobić, ApEx potrzebuje danych wejściowych w XML oraz arkusza XSLT, co skutkuje wygenerowaniem pliku w formacie XSL-FO. Ten z kolei jest wysyłany do FOP, co skutuje powstaniem pliku PDF. Przygotowywane narzędzie ma właśnie na celu przygotowanie arkusza XSLT dla potrzeb ApExa. Drugą możliwością jest również bezpośrednie skorzystanie z wygenerowanego pliku XSLT i uruchomienie FOP z poziomu wiersza poleceń przez aplikację. 
 
 \subsection{Dane wejściowe}\label{sec:appDane}
 Dla uproszczenia konstrukcji aplikacji zakłada się, że dane do raportu zostaną dostarczone w pliku XML, przy czym jego struktura spełnia pewne założenia. Np. dla raportu master-detail część nadrzędna jest elementem, a pozostałe kolumny jej dotyczące są zapisane jako atrybuty tego elementu. Część podrzędna z kolei jest elementem zagnieżdżonym w elemencie nadrzędnym, zawierającym w sobie kolejno zapisane elementy stanowiące część podrzędną, gdzie kolumny je opisujące również są zapisane jako atrybuty. Strukturę danych wejściowych dla raportu master-detail prezentuje poniższy listing:\\
