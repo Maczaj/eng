@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DOCUMENT>
+    <DATE>03/22/2014</DATE>
+    <USER_NAME>MACZAJ</USER_NAME>
+    <APP_ID>111</APP_ID>
+    <APP_NAME>Oracle APEX AppBuilder</APP_NAME>
+    <TITLE>emp-salaries-by-department-crosstab</TITLE>
+    <REGION ID="0">
+        <ROWSET>
+            <ROW>
+                <JOB>CLERK</JOB>
+                <10>1300</10>
+                <20>950</20>
+                <30>950</30>
+                <40></40>
+            </ROW>
+            <ROW>
+                <JOB>SALESMAN</JOB>
+                <10></10>
+                <20></20>
+                <30>1400</30>
+                <40></40>
+            </ROW>
+            <ROW>
+                <JOB>PRESIDENT</JOB>
+                <10>5000</10>
+                <20></20>
+                <30></30>
+                <40></40>
+            </ROW>
+            <ROW>
+                <JOB>MANAGER</JOB>
+                <10>2450</10>
+                <20>2975</20>
+                <30>2850</30>
+                <40></40>
+            </ROW>
+            <ROW>
+                <JOB>ANALYST</JOB>
+                <10></10>
+                <20>3000</20>
+                <30></30>
+                <40></40>
+            </ROW>
+        </ROWSET>
+    </REGION>
+</DOCUMENT>

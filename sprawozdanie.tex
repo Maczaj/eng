@@ -164,54 +164,86 @@ W tym rozdziale zostanie przedstawione zastosowanie przygotowywanego narzędzia,
 W celu zapewnienia jednakowego wyglądu raportu niezależnie od platformy najlepiej jest zapisywać raport w formacie PDF. Żeby to zrobić, ApEx potrzebuje danych wejściowych w XML oraz arkusza XSLT, co skutkuje wygenerowaniem pliku w formacie XSL-FO. Ten z kolei jest wysyłany do FOP, co skutuje powstaniem pliku PDF. Przygotowywane narzędzie ma właśnie na celu przygotowanie arkusza XSLT dla potrzeb ApExa. Drugą możliwością jest również bezpośrednie skorzystanie z wygenerowanego pliku XSLT i uruchomienie FOP z poziomu wiersza poleceń przez aplikację. 
 
 \subsection{Dane wejściowe}\label{sec:appDane}
-Dla uproszczenia konstrukcji aplikacji zakłada się, że dane do raportu zostaną dostarczone w pliku XML, przy czym jego struktura spełnia pewne założenia. Np. dla raportu master-detail część nadrzędna jest elementem, a pozostałe kolumny jej dotyczące są zapisane jako atrybuty tego elementu. Część podrzędna z kolei jest elementem zagnieżdżonym w elemencie nadrzędnym, zawierającym w sobie kolejno zapisane elementy stanowiące część podrzędną, gdzie kolumny je opisujące również są zapisane jako atrybuty. Strukturę danych wejściowych dla raportu master-detail prezentuje poniższy listing:\\
+Dla uproszczenia konstrukcji aplikacji zakłada się, że dane do raportu zostaną dostarczone w pliku XML, przy czym jego struktura jest odpowiednio określona. Ogólny schemat danych XML generowanych przez ApExa jest przedstawiony na listingu \ref{rap:apex}.\\
+
 \lstset{language=XML}
-\begin{lstlisting}[frame=single,caption=Zakładana struktura pliku z danymi wejściowymi dla raportu master-detail,label=strukturaDanychMD]
+\begin{lstlisting}[frame=single,caption=Ogólna postać dokumentu XML z danymi pochodzącymi z ApExa,label=rap:apex]
 <?xml version="1.0" encoding="UTF-8"?>
-<klienci>
-<klient id="4" nazwa="Szyb-fol" miasto="Pionki" 
-  ulica="Krajowa 17" kod_pocztowy="65246" 
-    numer_telefonu="224575495">
-  <zamowienia>
-     <zamowienie id="1" wartosc="0" data_zlozenia="2014-01-26"/>
-     <zamowienie id="4" wartosc="0" data_zlozenia="2014-01-26"/>
-     <zamowienie id="5" wartosc="0" data_zlozenia="2014-01-26"/>
-  </zamowienia>
-   </klient>	
-</klienci>
-
+<DOCUMENT>
+ <ROWSET>
+  <ROW>
+    <KOLUMNA1>...</KOLUMNA1>
+    <KOLUMNA2>...</KOLUMNA2>
+       ...	
+  </ROW>
+  <ROW>....</ROW>
+ </ROWSET>
+</DOCUMENT>
 \end{lstlisting}
-Dla raportów z grupami łamiącymi zakładana struktura jest właściwie taka sama, przy czym dodatkowo jest wymagane, żeby atrybuty według których nastąpi grupowanie były zapisane w kolejności malejącego priorytetu.
 
-Struktura danych dla raportu macierzowego będzie podobna do tej dla raportu \emph{master-detail}. Elementem nadrzędnym będzie element z pierwszej tabeli, zaś w elemencie podrzędnym będzie zawierał elementy, z którymi jest w relacji. Wartość, dla danej relacji będzie zapisana jako wartość odpowiedniego elementu.
+W dokumencie mogą być również zawarte dowolne dodatkowe informacje takie, jak np. nazwa użytkownika generującego raport, datę, nazwę aplikacji w ApExie lub wartość znajdująca się w określonym regionie strony w ApExie. Fakt ten jest wykorzystywany do przekazania danych pozycji nadrzędnej przy raporcie \emph{master-detail}. Przykładowy dokument XML z danymi dla raportu \emph{master-detail} przedstawia listing \ref{strukturaDanychMD}. Wpis \emph{P8\_DEPTNO} oznacza kolumnę o nazwie \emph{DEPTNO} znajdującą się na stronie o numerze 8 w aplikacji stworzonej poprzez ApExa.
+
+
+\lstset{language=XML}
+\begin{lstlisting}[frame=single,caption=Struktura pliku z danymi wejściowymi dla raportu master-detail,label=strukturaDanychMD]
+<?xml version="1.0" encoding="UTF-8"?>
+<DOCUMENT>
+    <P8_DEPTNO></P8_DEPTNO>
+    <P8_DNAME></P8_DNAME>
+    <P8_LOC></P8_LOC>
+    <REGION ID="0">
+        <ROWSET>
+            <ROW>
+                <EMPNO></EMPNO>
+                <ENAME></ENAME>
+                <JOB></JOB>
+                <MGR></MGR>
+                <HIREDATE></HIREDATE>
+                <SAL></SAL>
+                <COMM></COMM>
+                <DEPTNO></DEPTNO>
+            </ROW>
+        </ROWSET>
+    </REGION>
+</DOCUMENT>
+\end{lstlisting}
+
+
+Dla raportów z grupami łamiącymi zakładana struktura właściwie odpowiada strukturze ogólnego dokumentu, przy czym dodatkowo jest wymagane, żeby zapytanie SQL pobierające dane do raportu posiadało klauzulę \emph{ORDER BY} sortującą dane według odpowiednich kolumn.
+
+Struktura danych dla raportu macierzowego będzie podobna do tej dla raportu \emph{master-detail}. Różnicą będzie nie występowanie wartości z regionu strony jako danej dodatkowej oraz występowanie dodatkowej kolumny dla każdego wiersza. Przykładowy plik jest zaprezentowana na listingu \ref{strukturaDanychMAtrix}. Fragment ten prezentuje średnie zarobki na określonym stanowisku w działach o podanych numerach identyfikacyjnych.
 
 \lstset{language=XML}
 \begin{lstlisting}[frame=single,caption=Zakładana struktura pliku z danymi wejściowymi dla raportu macierzowego,label=strukturaDanychMAtrix]
 <?xml version="1.0" encoding="UTF-8"?>
-<wojewodztwa>
-	<wojewodztwo nazwa="mazowieckie">
-		<zatrudnienie_w_sektorach>
-			<sektor nazwa="uslugi">55%</sektor>
-			<sektor nazwa="rolnictwo">30%</sektor>
-			<sektor nazwa="przemysl">15%</sektor>		
-		</zatrudnienie_w_sektorach>	
-	</wojewodztwo>
-</wojewodztwa>
+<DOCUMENT>
+    <REGION ID="0">
+        <ROWSET>
+            <ROW>
+                <JOB>CLERK</JOB>
+                <10>1300</10>
+                <20>950</20>
+                <30>950</30>
+                <40></40>
+            </ROW>
+        </ROWSET>
+    </REGION>
+</DOCUMENT>
 \end{lstlisting}
 
 
 Dodatkową daną wejściową będzie wzorzec wyglądu raportu. Będzie on zapisany w formacie SVG, jak zostało to zaznaczone w rozdziale \ref{sec:formatywzorce}.
 
 \subsection{Sposób przetwarzania danych}\label{sec:appPrzetwarzanie}
-Na początku działania do pliku wyjściowego dodawane są elementy stałe, tj. nagłówek samego XML oraz określenie właściwej przestrzeni nazw. Następnie rozpoczyna się przetwarzanie samego wzorca. Prosta analiza położenia wszystkich elementów wzorca powinna pozwolić określić ogólne parametry strony raportu takie jak np. marginesy czy rozmiar strony. W dalszym przetwarzaniu biorą udział również dane. Nazwa emph{rootElementu} posłuży za tytuł raportu. Dalsze postępowanie będzie zależne od typu raportu wybranego przez użytkownika. W przypadku raportu master-detail wystąpienie elementu nadrzędnego oznacza powstanie nowego bloku (w sensie zgodnym z terminologią XSL-FO) zawierającego wartości elementu oraz (w przypadku niepustego zbioru elementów podrzędnych) kolejnego bloku składającego się z wartości odpowiadających kolejnym wartościom z elementu podrzędnego. Warto byłoby skonstruować schemat przetwarzania tak, aby umożliwiał zastosowanie wielu stopni podrzędności. Fakt, że element jest nadrzędny w stosunku do innego może być wykrywany poprzez sprawdzenie, czy pierwszy z jego elementów-dzieci ma atrybuty. W dość ogólnym rysie wyglądałoby to jak na poniższym listingu (zakładając strukturę taką jak na listingu z rodziału \ref{sec:appDane}:\\
+Na początku działania do pliku wyjściowego dodawane są elementy stałe, tj. nagłówek samego XML oraz określenie właściwej przestrzeni nazw. Następnie rozpoczyna się przetwarzanie samego wzorca. Prosta analiza położenia wszystkich elementów wzorca powinna pozwolić określić ogólne parametry strony raportu takie jak np. marginesy czy rozmiar strony. W dalszym przetwarzaniu biorą udział również dane. Dalsze postępowanie będzie zależne od typu raportu wybranego przez użytkownika. W przypadku raportu master-detail wystąpienie elementu nadrzędnego oznacza powstanie nowego bloku (w sensie zgodnym z terminologią XSL-FO) zawierającego wartości elementu oraz (w przypadku niepustego zbioru elementów podrzędnych) kolejnego bloku składającego się z wartości odpowiadających kolejnym wartościom z elementu podrzędnego. Warto byłoby skonstruować schemat przetwarzania tak, aby umożliwiał zastosowanie wielu stopni podrzędności. Fakt, że element jest nadrzędny w stosunku do innego może być wykrywany poprzez sprawdzenie, czy pierwszy z jego elementów-dzieci ma własnych potomków. W dość ogólnym rysie wyglądałoby to jak na poniższym listingu (zakładając strukturę taką jak na listingu z rodziału \ref{sec:appDane}:\\
 
 \lstset{language=XML}
 \begin{lstlisting}[frame=single,caption=Przykładowa struktura pliku XSL-FO,label=strukturaXSL]
 <fo:block>
-   atrybut1 atrybut2 ....
+   kolumna1 kolumna2....
    wartosc1 wartosc2...
    <fo:block>
-     atrybut1 atrybut2 ....
+     kolumna1 kolumna2....
      wartosc1 wartosc2...	
   </fo:block>
 </fo:block>
@@ -226,7 +258,10 @@ Odwzorowanie raportu macierzowego będzie wymagało tworzenia bloków sąsiaduj�
 Oczywiście ostatecznie do wyjściowego arkusza XSLT musi zostać dopisana transformacja tworząca odpowiednie struktury XSL-FO. Ponieważ zapisanie transformacji XSLT wymaga podania wyrażenia XPath odpowiadającego transformowanym znacznikom, podczas przetwarzania musi być pamiętana przebyta ścieżka.
 
 \subsection{Dane wyjściowe}\label{sec:appOutput}
- Efektem działania aplikacji ma być plik z arkuszem transformacji XSLT. Będzie on mógł zostać wykorzystany przez Apexa do wygenerowania pliku dokumentu w formacie XSL-FO, co umożliwi generację pliku PDF przy użyciu FOP.
+ Efektem działania aplikacji ma być plik z arkuszem transformacji XSLT. Będzie on mógł zostać wykorzystany przez ApExa do wygenerowania pliku dokumentu w formacie XSL-FO, co umożliwi generację pliku PDF przy użyciu FOP.
+
+\subsection{Wykorzystane technologie} \label{sec:appTech}
+Ze względu na łatwość przetwarzania dokumentów XML wykorzystanych zostanie oparty na \emph{JVM} język \emph{Groovy}. Ponieważ ApEx umożliwia wywołanie zewnętrznego webserwisu, w celu zautomatyzowania procesu, można rozważyć wykorzystanie technologii webowych i uruchomienie aplikacji na serwerze aplikacyjnym. W takim przypadku wygodnie będzie skorzystać z frameworka webowego, np. \emph{Apache CXF}. Dodatkowo do zarządzania dodatkowymi zależnościami i usprawienia procesu budowania wykorzystane zostanie narzędzie \emph{Apache Maven}.
 
 \section{Dalsze plany}\label{sec:plany}
 W następnych etapach przygotowania pracy planowane jest przede wszystkim uszczegółowienie opisu przetwarzania danych w taki sposób, aby dało się na jego podstawie rozpocząć implementację aplikacji realizującej funkcjonalność będącą celem pracy. 
