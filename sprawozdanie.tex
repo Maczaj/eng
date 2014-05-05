@@ -65,49 +65,6 @@ Celem pracy jest opracowanie i stworzenie narzędzia, które potrafiłoby na pod
 
 W następnych rozdziałach zaprezentowane zostaną narzędzia i technologie wykorzystane w niniejszej pracy.
 
-%najpierw XML ogólnie
-\section{XML} \label{sec:xml}
-XML (Extensible Markup Language) to standard organizacji W3C służący do liniowego przedstawiania danych semistrukturalnych. Język XML jest podobny do popularnego HTML-a. Głównym przeznaczeniem XML-a jest elastyczna reprezentacja danych, które są reprezentowane za pomocą tzw.znaczników. Znacznikiem są zarówno elementy, jak i atrybuty. Elementy składają się z otwierającego znacznika, zamykającego znacznika i wszystkich informacji między nimi. Może to być zarówno tekst, jak i zagnieżdżone na dowolną głębokość podelementy. 
-
-Atrybuty służą przekazaniu dodatkowych informacji o elementach i obejmują pary klucz-wartość. Poniższy listing prezentuje przykładowe dane w zapisie spełniającym minimalne wymogi XML:\\
-
-\lstset{language=XML}
-\begin{lstlisting}[frame=single,caption=Prosty XML,label=simplexml]
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<root>
-	<element1>wartosc</element1>
-	<element2 atrybut="wartosc_atrybutu">wartosc</element2>
-	<element3 atrybut="wartosc" />
-</root>
-\end{lstlisting}
-
-Element \textless root\textgreater \ jest głównym elementem dokumentu XML, tzw. root element. Element takiego typu musi występować w każdym XML-u.
-
-Dzięki zdefiniowaniu DTD bądź XMLSchema możliwe jest określenie, jakie elementy i atrybuty występują w dokumencie.Wtedy wartość atrybutu standalone wynosi "false".  Parser wczytujący dokument może dzięki temu walidować jego poprawność. W praktyce DTD jest żadko stosowane ze względu na fakt, że jest oddzielnym językiem. Z kolei XMLSchema jest określana za pomocą XML.
-
-%teraz XSLT
-\section{XSLT} \label{sec:xslt}
-Język XSLT (Extensible Stylesheet Language for Transformations) to standard opracowany przez W3C. Może być wykorzystany do przekształcania do przekształcenia dokumentu z jednej postaci na inną lub podobnie, jak XPath lub XQuery, do pobierania danych z dokumentów. Specyfikacja w XSLT jest dokumentem XML zwanym arkuszem stylów. Znaczniki stosowane w XSLT pochodzą z określonej przestrzeni nazw. Poniższy listing prezentuje ogólny arkusz stylów:\\
-
-\lstset{language=XSLT}
-\begin{lstlisting}[frame=single,caption=Ogólny arkusz XSLT,label=simplexslt]
-<?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet 
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	...
-</xsl:stylesheet>
-\end{lstlisting}
-
-W jednym arkuszu stylów może być zdefiniowanych wiele szablonów. Stosowanie arkusza stylów do dokumentu XML polega na przeglądaniu listy szablonów zdefiniowanych w arkuszu do momentu znalezienia tego, który pasuje do elementu korzenia. Dla elementów zagnieżdżonych należy ponownie przeszukać listę szablonów. Poniższy listing prezentuje strukturę szablonu XSLT:\\
-\lstset{language=XSLT}
-\begin{lstlisting}[frame=single,caption=Ogólny szablon XSLT,label=simplexsltszablon]
-<xsl:template match="wyrazenie XPath">
-	...wynik transformacji...
-</xsl:template>
-\end{lstlisting}
-
-Arkusz XSLT pozwala również na stosowanie pętli i instrukcji warunkowych.
-
 
 %wreszcie XSL-FO
 \section{XSL-FO} \label{sec:xslfo}
@@ -122,10 +79,10 @@ ocena wydajności biznesowej, umożliwiająca szybkie sprawdzenie stanu oraz mon
 Ten typ raportu prezentuje wartości pełniące funkcję nadrzędnych względem innych oraz szczegóły aktualnie wybranej pozycji. W zasadzie odpowiada strukturze typowego dokumentu, np. faktury. Ten typ raportu może być zastosowany przy związkach typu jeden-wiele. Zarówno obszar nadrzędny jak i podrzędny może być listą lub drzewem pozycji, co umożliwia wprowadzanie wielu stopni podrzędności, przy czym obszar podrzędny zwykle jest umieszczony pod lub obok obszaru nadrzędnego. Przykładem może być spis pozycji wchodzących w skład danego zamówienia lub działy przedsiębiorstwa wraz ze spisem pracowników każdego z nich.
 %break groups
 \subsection{Raporty z grupami łamiącymi (\emph{break groups})}\label{sec:break_groups}
-Ten typ raportu polega na podziale wierszy trafiających do raportu na grupy o jednakowych wartościach w wyróżnionych kolumnach. Każdą z takich grup można odpowiednio obsłużyć, np. opatrywać je nagłówkami, czy wyliczać dla nich podsumowania. Taka struktura umożliwia dosyć elastyczną prezentację tych samych danych. Załóżmy, że mamy bazę pracowników zatrudnionych w różnych działach. Mogą oni być pogrupowani na podstawie działów, w których są zatrudnieni, następnie, w obrębie działów, można podzielić ich np. ze względu na lata pracy, a dodatkowo np. ze względu na przedziały ich zarobków. 
+Ten typ raportu polega na podziale wierszy trafiających do raportu na grupy \\o jednakowych wartościach w wyróżnionych kolumnach. Każdą z takich grup można odpowiednio obsłużyć, np. opatrywać je nagłówkami, czy wyliczać dla nich podsumowania. Taka struktura umożliwia dosyć elastyczną prezentację tych samych danych. Załóżmy, że mamy bazę pracowników zatrudnionych w różnych działach. Mogą oni być pogrupowani na podstawie działów, w których są zatrudnieni, następnie, w obrębie działów, można podzielić ich np. ze względu na lata pracy, a dodatkowo np. ze względu na przedziały ich zarobków. 
 %macierzowy
 \subsection{Raport macierzowy (krzyżowy)}\label{sec:macierzowy}
-Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są często wykorzystywane przy różnego rodzaju ankietach. Prezentują związki między dwoma zmiennymi i ułatwiają znalezienie między nimi zależności. Struktura tego raportu przypomina arkusz kalkulacyjny programu Exel. Ułatwia to wspólne prezentacje danych, które pozornie nie mają ze sobą związku. Przykładem może być analiza ankiety, z której wynika na przykład, że pewien model samochodu sprzedaje się lepiej w pewnych województwach.
+Raport macierzowy prezentuje związki między dwoma wymiarami. Takie raporty są często wykorzystywane przy różnego rodzaju ankietach. Prezentują związki między dwoma zmiennymi i ułatwiają znalezienie między nimi zależności. Struktura tego raportu przypomina arkusz kalkulacyjny programu Exel. Ułatwia to wspólne prezentacje danych, które pozornie nie mają ze sobą związku. Przykładem może zestawienie średnich zarobków pracowników w zależności od działu przedsiębiorstwa, w którym pracują, oraz zajmowanego przez nich stanowiska.
 
 
 % opis Apache FOP
@@ -240,12 +197,10 @@ Na początku działania do pliku wyjściowego dodawane są elementy stałe, tj. 
 \lstset{language=XML}
 \begin{lstlisting}[frame=single,caption=Przykładowa struktura pliku XSL-FO,label=strukturaXSL]
 <fo:block>
-   kolumna1 kolumna2....
-   wartosc1 wartosc2...
-   <fo:block>
-     kolumna1 kolumna2....
-     wartosc1 wartosc2...	
-  </fo:block>
+   master
+   <fo:table>
+     detail
+  </fo:table>
 </fo:block>
 
 
@@ -253,7 +208,7 @@ Na początku działania do pliku wyjściowego dodawane są elementy stałe, tj. 
 
 Dla raportu z wykorzystaniem grup łamiących podejście będzie podobne z tym, że wystąpienie zgodnej wartości atrybutu względem którego ma nastąpić grupowanie spowoduje wstawienie pustego bloku jako wartość komórki w wierszu tabeli.
 
-Odwzorowanie raportu macierzowego będzie wymagało innego podejścia do przetwarzania danych, niż w poprzednim przypadku. Ze względu na strukturę tego typu raportu, należy przetwarzać daną kolumnę jednocześnie dla wszystkich wierszy wchodzących w skład raportu. Ponadto pierwsza kolumna wchodząca w skład każdego wiersza będzie zawierać nie konkretną wartość, a odpowiednią nazwę.
+Odwzorowanie raportu macierzowego nie będzie wymagało podejścia zbytnio różniącego się od poprzednich przypadków.
 
 Oczywiście ostatecznie do wyjściowego arkusza XSLT musi zostać dopisana transformacja tworząca odpowiednie struktury XSL-FO. Ponieważ zapisanie transformacji XSLT wymaga podania wyrażenia XPath odpowiadającego transformowanym znacznikom, podczas przetwarzania musi być pamiętana przebyta ścieżka.
 
@@ -261,7 +216,7 @@ Oczywiście ostatecznie do wyjściowego arkusza XSLT musi zostać dopisana trans
  Efektem działania aplikacji ma być plik z arkuszem transformacji XSLT. Będzie on mógł zostać wykorzystany przez ApExa do wygenerowania pliku dokumentu w formacie XSL-FO, co umożliwi generację pliku PDF przy użyciu FOP.
 
 \subsection{Wykorzystane technologie} \label{sec:appTech}
-Ze względu na łatwość przetwarzania dokumentów XML wykorzystanych zostanie wykorzystujący maszynę wirtualną \emph{Javy} język \emph{Groovy}. Nawiązując do działania FOP, dobrym pomysłem mogłoby okazać się również przygotowanie narzędzia do działania na serwerze aplikacyjnym. Mogłoby to ułatwić tworzenie infrastruktury służącej do raportowania. Ponadto ApEx umożliwia wywołanie zewnętrznych usług, dzięki czemu proces zostałby usprawniony poprzez ograniczenie konieczności ingerencji człowieka. W takim przypadku wygodnie będzie skorzystać z istniejących bibliotek i frameworków do tworzenia aplikacji webowych. Dodatkowo do zarządzania dodatkowymi zależnościami i usprawienia procesu budowania wykorzystane zostanie narzędzie \emph{Apache Maven}.
+Ze względu na łatwość przetwarzania dokumentów XML wykorzystanych zostanie wykorzystujący maszynę wirtualną \emph{Javy} język \emph{Groovy}. Podstawowym trybem działania będzie uruchamianie go z wiersza poleceń, jednak nawiązując do działania FOP, dobrym pomysłem mogłoby okazać się również przygotowanie narzędzia do działania na serwerze aplikacyjnym. Mogłoby to ułatwić tworzenie infrastruktury służącej do raportowania. Ponadto ApEx umożliwia wywołanie zewnętrznych usług, dzięki czemu proces zostałby usprawniony poprzez ograniczenie konieczności ingerencji człowieka. W takim przypadku wygodnie będzie skorzystać z istniejących bibliotek i frameworków do tworzenia aplikacji webowych. Dodatkowo do zarządzania dodatkowymi zależnościami i usprawienia procesu budowania wykorzystane zostanie narzędzie \emph{Apache Maven}.
 
 \section{Dalsze plany}\label{sec:plany}
 W następnych etapach przygotowania pracy planowane jest przede wszystkim uszczegółowienie opisu przetwarzania danych w taki sposób, aby dało się na jego podstawie rozpocząć implementację aplikacji realizującej funkcjonalność będącą celem pracy. 

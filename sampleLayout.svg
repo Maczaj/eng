@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:inkex="http://sodipodi.sourceforge.net/DTD/inkex-0.dtd"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="sampleLayout.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="361.06487"
+     inkscape:cy="817.72475"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2993" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <inkex:tables
+     count="2">
+    <inkex:table
+       table-id="inkscape-table0"
+       rows="2"
+       columns="7" />
+    <inkex:table
+       columns="7"
+       rows="2"
+       table-id="inkscape-table1" />
+  </inkex:tables>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="W1"
+     style="display:inline">
+    <rect
+       style="fill:none;stroke:#000000"
+       id="rect4605"
+       width="90"
+       height="30"
+       x="30"
+       y="52.362183" />
+    <rect
+       y="52.362183"
+       x="150"
+       height="30"
+       width="110"
+       id="rect4636"
+       style="fill:none;stroke:#000000" />
+    <flowRoot
+       id="flowRoot4642"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New"
+       xml:space="preserve"><flowRegion
+         id="flowRegion4644"><use
+           id="use4646"
+           xlink:href="#rect4605"
+           y="0"
+           x="0" /></flowRegion><flowPara
+         id="flowPara4648">Kolumna1</flowPara></flowRoot>    <flowRoot
+       id="flowRoot4662"
+       style="font-size:14px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New;font-stretch:normal;font-variant:normal"
+       xml:space="preserve"><flowRegion
+         id="flowRegion4664"><use
+           id="use4666"
+           xlink:href="#rect4636"
+           y="0"
+           x="0" /></flowRegion><flowPara
+         id="flowPara4668">Kolumna2</flowPara></flowRoot>    <rect
+       height="35.433071"
+       id="inkscape-table1"
+       inkex:table-id="inkscape-table1"
+       x="52.857143"
+       y="230.71428"
+       inkex:column="0"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <rect
+       height="35.433071"
+       id="inkscape-table1i"
+       inkex:table-id="inkscape-table1"
+       x="141.43982"
+       y="230.71428"
+       inkex:column="1"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <rect
+       height="35.433071"
+       id="inkscape-table1s"
+       inkex:table-id="inkscape-table1"
+       x="230.02251"
+       y="230.71428"
+       inkex:column="2"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <rect
+       height="35.433071"
+       id="inkscape-table1w"
+       inkex:table-id="inkscape-table1"
+       x="318.60516"
+       y="230.71428"
+       inkex:column="3"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <rect
+       height="35.433071"
+       id="inkscape-table1q"
+       inkex:table-id="inkscape-table1"
+       x="408.61642"
+       y="231.42857"
+       inkex:column="4"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <rect
+       height="35.433071"
+       id="inkscape-table1t"
+       inkex:table-id="inkscape-table1"
+       x="495.77054"
+       y="230.71428"
+       inkex:column="5"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <rect
+       height="35.433071"
+       id="inkscape-table1c"
+       inkex:table-id="inkscape-table1"
+       x="584.35315"
+       y="230.71428"
+       inkex:column="6"
+       inkex:row="0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       width="88.58268" />
+    <flowRoot
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New;font-stretch:normal;font-variant:normal"
+       id="flowRoot4738"><flowRegion
+         id="flowRegion4740"><use
+           x="0"
+           y="0"
+           xlink:href="#inkscape-table1"
+           id="use4742" /></flowRegion><flowPara
+         id="flowPara4744">Kolumna</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot4750"><flowRegion
+         id="flowRegion4752"><use
+           x="0"
+           y="0"
+           xlink:href="#inkscape-table1i"
+           id="use4754" /></flowRegion><flowPara
+         id="flowPara4756">Kol</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="340"
+       y="82.362183"
+       id="text3008"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3010"
+         x="340"
+         y="82.362183">Some text</tspan><tspan
+         sodipodi:role="line"
+         x="340"
+         y="132.36218"
+         id="tspan3012" /></text>
+  </g>
+</svg>
