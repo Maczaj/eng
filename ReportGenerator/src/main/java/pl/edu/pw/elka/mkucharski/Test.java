@@ -15,6 +15,6 @@ public class Test {
 
     public static void main( String[] args) {
         InputProcessor processor = new InputProcessor();
-        processor.processInput(null,null);
+        processor.processInput( "../employees.xml", "../sampleLayout.svg");
     }
 }

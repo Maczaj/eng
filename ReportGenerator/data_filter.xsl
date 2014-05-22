@@ -1,11 +1,16 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+
+    <xsl:template match="/">
+        <DOCUMENT>
+            <xsl:apply-templates></xsl:apply-templates>
+        </DOCUMENT>
+    </xsl:template>
+
     <xsl:template match="ROW[position()=1]" >
-        <DOCUMENT>\n
-            <ROWSET>\n
+        <ROWSET>
                   <xsl:copy-of select="." />
-            </ROWSET>\n
-        </DOCUMENT>\n
+            </ROWSET>
     </xsl:template>
 
     <xsl:template match="ROW[position()>1]" />

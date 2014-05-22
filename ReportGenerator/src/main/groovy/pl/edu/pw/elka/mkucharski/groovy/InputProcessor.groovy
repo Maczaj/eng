@@ -16,10 +16,15 @@ import javax.xml.transform.stream.StreamSource
 class InputProcessor {
     static final Logger logger = Logger.getLogger(InputProcessor.getClass().getName());
 
-    static def xslt = '''<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-                            <xsl:template match="/DOCUMENT//ROWSET/ROW[position()>1]">
-                            </xsl:template>
-                        </xsl:stylesheet>'''
+    private static final String DEFAULT_DATA_FILTER = "data_filter.xsl";
+    private static final String DEFAULT_LAYOUT_FILTER = "layout_filter.xsl"
+    private static final String TEMP_DATA = "input.xml";
+    private static final String TEMP_LAYOUT = "layout.svg";
+
+    private String dataFilterFileName;
+    private String layoutFilterFileName;
+
+
 
     /**
      * TODO: czy to ma zapisać wynik na dysku? czy może po prostu zwrócić DOM/stream XMLa?
@@ -27,14 +32,21 @@ class InputProcessor {
      * @param layoutFileName name of file with SVG report layout
      */
     void processInput(String dataFileName, String layoutFileName){
-       File xslt = new File("data_filter.xsl");
-        File input = new File("../employees.xml");
-
-
-       def factory = TransformerFactory.newInstance();
-       def transformer = factory.newTransformer(new StreamSource(new StringReader(xslt.getText("UTF-8"))));
-        transformer.transform(new StreamSource(new StringReader(input.getText("UTF-8"))), new StreamResult(System.out));
+          applyXSLT(dataFileName, layoutFileName);
     }
+
+    private applyXSLT(String dataFileName, String layoutFileName) {
+        def factory = TransformerFactory.newInstance()
+        String dataXSLT = dataFilterFileName == null? DEFAULT_DATA_FILTER : dataFilterFileName;
+        String layoutXSLT = layoutFilterFileName == null ? DEFAULT_LAYOUT_FILTER : layoutFilterFileName;
+
+        def dataTranformer = factory.newTransformer(new StreamSource( new StringReader(new File(dataXSLT).getText())))
+        dataTranformer.transform( new StreamSource( new StringReader(new File(dataFileName).getText("UTF-8"))), new StreamResult(new File(TEMP_DATA)));
+
+        def layoutTransformer = factory.newTransformer(new StreamSource( new StringReader( new File(layoutXSLT).getText())));
+        layoutTransformer.transform( new StreamSource( new StringReader( new File( layoutFileName).getText("UTF-8"))), new StreamResult(new File(TEMP_LAYOUT)));
+    }
+
 
     static void main(){
         InputProcessor ip = new InputProcessor();
