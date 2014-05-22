@@ -6,6 +6,7 @@ package pl.edu.pw.elka.mkucharski;/**
  * To change this template use File | Settings | File Templates.
  */
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import pl.edu.pw.elka.mkucharski.groovy.InputProcessor;
 
@@ -14,7 +15,10 @@ public class Test {
 
 
     public static void main( String[] args) {
+        BasicConfigurator.configure();
+
         InputProcessor processor = new InputProcessor();
-        processor.processInput( "../employees.xml", "../sampleLayout.svg");
+        logger.info("Attempting to generate report");
+        processor.processInput( "../employees.xml", "../sampleLayout.svg", "result.fo");
     }
 }
