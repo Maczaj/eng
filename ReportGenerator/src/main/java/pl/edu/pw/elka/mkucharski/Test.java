@@ -19,6 +19,6 @@ public class Test {
 
         InputProcessor processor = new InputProcessor();
         logger.info("Attempting to generate report");
-        processor.processInput( "../employees.xml", "../sampleLayout.svg", "result.fo");
+        processor.processInput( "../employees.xml", "../sampleLayout.svg", "result.xsl");
     }
 }

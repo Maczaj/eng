@@ -6,11 +6,9 @@ package pl.edu.pw.elka.mkucharski;/**
  * To change this template use File | Settings | File Templates.
  */
 
-import org.apache.log4j.Logger;
-
 public class Constants {
     public static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    public static final String XSLFO_HEADER = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\">";
+    public static final String XSLFO_HEADER = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
     public static final String XSLFO_ENDING = "</fo:root>";
     public static final String XSLFO_PAGE_LAYOUT = "<fo:layout-master-set>\n" +
             "  <fo:simple-page-master master-name=\"A4\">\n" +
@@ -26,5 +24,14 @@ public class Constants {
         return " <fo:flow flow-name=\""+ regionName + "\">";
     }
     public static final String XSLFO_PAGE_FLOW_ENDING = "</fo:flow>";
+    public static final String XSLT_HEADER = "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">";
+    public static final String XSLT_ENDING = "</xsl:stylesheet>";
+    public static final String XSL_TEMPLATE( String xPath ) {
+        return " <xsl:template match=\"" + xPath + "\">";
+    }
+    public static final String XSL_TEMPLATE_ENDING = "</xsl:template>";
+    public static final String XSLFO_BLOCK = "<fo:block>";
+    public static final String XSLFO_BLOCK_ENDING = "</fo:block>";
+
 
 }
