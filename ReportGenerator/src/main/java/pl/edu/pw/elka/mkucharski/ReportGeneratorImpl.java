@@ -5,10 +5,11 @@ import pl.edu.pw.elka.mkucharski.groovy.GrvT;
 
 import javax.jws.WebService;
 
-@WebService(endpointInterface = "pl.edu.pw.elka.mkucharski.HelloWorld")
-public class HelloWorldImpl implements HelloWorld {
+@WebService(endpointInterface = "pl.edu.pw.elka.mkucharski.ReportGenerator")
+public class ReportGeneratorImpl implements ReportGenerator {
 
-    public String sayHi(String text) {
+
+    public String generateXSLT(String data, String layout) {
 
         GrvT g = new GrvT();
         g.setAnother(25);

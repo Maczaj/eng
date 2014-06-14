@@ -30,6 +30,8 @@ class InputProcessor {
     private String dataFilterFileName;
     private String layoutFilterFileName;
 
+    private int usedAdditional;
+
     /**
      * Creates XSLT that can be applied to XML data to create report.
      * @param dataFileName name of file containing XML data
@@ -56,39 +58,25 @@ class InputProcessor {
 
 //         process layout now
             def layoutXML = XmlSlurper.newInstance().parse(layoutFileName);
+            def dataXML = XmlSlurper.newInstance().parse(TEMP_DATA);
+            logger.info("Data file contains " + (dataXML.children().size()-1) + " additional nodes")
+
+            usedAdditional = 0;
+            def masterValues = dataXML.children().findAll { it.name().startsWith('P')}
+            logger.info( "Found " + masterValues.size() + " nodes appearing to be master data");
 
 //            TODO: wrzucic w oddzielne fo:block czesc z pierdolami i czesc tabelkowa
 
-            layoutXML.'g'.children().each { node ->
+            layoutXML.'g'.children().each { node -> processMasterSection(it, node, masterValues)  }
 
-                switch(node.name()) {
-                    case "text":
-                        logger.debug("Processing direct text node");
-                        String x = node.@x;
-                        String y = node.@y;
-                        String style = node.@style;
-                        it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" style=\"" + style + "\">\n") ;
-                        tokenQueue.add("</svg:text>");
+            it.append( SVG_ELEMENT_ENDING );
+            it.append( XSLFO_INSTREAM_FOREIGN_OBJECT_ENDING )
+            it.append(XSLFO_BLOCK_ENDING).append("\n")
 
-                        node.tspan.each { tspan ->
-                            it.append("<svg:tspan x=\"" + tspan.@x + "\" y=\"" + tspan.@y + "\">" + tspan.text() + "</svg:tspan>\n")
-                        }
-                        break;
-
-                    case "image":
-                        logger.debug("Processing image node")
-                        it.append("<svg:image x=\"" + node.@x + "\" y=\"" + node.@y + "\" xlink:href=\"" + node.@'xlink:href' + "\" width=\"" + node.@width + "\" height=\"" + node.@height + "\"   />\n")
-                        break;
-
-                    case "flowRoot":
-//                        TODO: tutaj moze wchodzi wreszcie jakas dana!!!!
-                        break;
-                }
-
-            }
-
-
-
+            it.append(XSLFO_BLOCK)
+//            TODO: przetwarzanie części detail
+            processDetailSection(it, dataXML, layoutXML);
+            it.append(XSLFO_BLOCK_ENDING)
 //            applying ending elements
                 for( int i = tokenQueue.size()-1; i >=0 ; --i){
                     it.append(tokenQueue.get(i)).append("\n");
@@ -101,9 +89,106 @@ class InputProcessor {
     }
 
     /**
+     * Processes detail section of report, which means creating table with data creating XSL-FO fo:table construction.
+     * @param it bufer for output file
+     * @param dataXML parsed XML file with data
+     * @param layoutXML parsed SVG file with layout
+     */
+    private void processDetailSection(EncodingAwareBufferedWriter buf, GPathResult dataXML, GPathResult layoutXML) {
+
+//        buf.append( XSLFO_TABLE_AND_CAPTION ).append("\n")
+        buf.append( XSLFO_TABLE ).append("\n");
+        buf.append( XSLFO_TABLE_HEADER ).append("\n");
+        buf.append( XSLFO_TABLE_ROW ).append("\n");
+
+
+        def tableHeader = layoutXML.flowRoot.findAll{it.@'inkex:row' == 0 }
+        tableHeader = tableHeader.sort {it.@'inkex:column'.toInteger()}
+        logger.debug(tableHeader.size())
+        tableHeader.each { node->
+            buf.append( XSLFO_TABLE_CELL ).append("\n");
+            buf.append( XSLFO_BLOCK ).append( node.text() ).append( XSLFO_BLOCK_ENDING).append("\n");
+            buf.append( XSLFO_TABLE_CELL_ENDING).append("\n")
+        }
+        buf.append(XSLFO_TABLE_ROW_ENDING).append("\n")
+        buf.append(XSLFO_TABLE_HEADER_ENDING).append("\n")
+
+        buf.append(XSLFO_TABLE_BODY).append("\n");
+
+
+//        rows of data now...
+        buf.append(XSL_FOR_EACH("ROWSET/ROW")).append("\n")
+        buf.append(XSLFO_TABLE_ROW).append("\n")
+
+        dataXML.ROWSET.ROW.children().each{ det ->
+            buf.append(XSLFO_TABLE_CELL).append(XSLFO_BLOCK)
+            buf.append(XSL_VALUEOF("./" + det.name())).append(XSLFO_BLOCK_ENDING)
+            buf.append(XSLFO_TABLE_CELL_ENDING).append("\n")
+        }
+
+        buf.append(XSLFO_TABLE_ROW_ENDING).append("\n")
+
+        buf.append(XSL_FOR_EACH_ENDING).append("\n")
+
+        buf.append(XSLFO_TABLE_BODY_ENDING).append("\n");
+        buf.append(XSLFO_TABLE_ENDING).append("\n")
+    }
+
+    /**
+     * Checks if node belongs to master section and processes it.
+     * @param it writer for output file
+     */
+    private void processMasterSection(EncodingAwareBufferedWriter it, GPathResult node, GPathResult masterValues ){
+        switch(node.name()) {
+            case "text":
+                logger.debug("Processing direct text node");
+                String x = node.@x;
+                String y = node.@y;
+                String style = node.@style;
+                it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" style=\"" + style + "\">\n") ;
+
+                node.tspan.each { tspan ->
+                    it.append("<svg:tspan x=\"" + tspan.@x + "\" y=\"" + tspan.@y + "\">" + tspan.text() + "</svg:tspan>\n")
+                }
+                it.append("</svg:text>")
+                break;
+
+            case "image":
+                logger.debug("Processing image node")
+                it.append("<svg:image x=\"" + node.@x + "\" y=\"" + node.@y + "\" xlink:href=\"" + node.@'xlink:href' + "\" width=\"" + node.@width + "\" height=\"" + node.@height + "\"   />\n")
+                break;
+
+            case "flowRoot":
+                logger.debug("Processing possible content node");
+//            TODO: rozważyć czy w layoucie może wystąpić kwadrat z tekstem, jeśli tak to zawrzeć jego obsługę tutaj
+                break;
+
+            case "rect" :
+                logger.debug("Processing rectangle node");
+                if( node.@'inkex:column' != "" ) {
+                    logger.debug("Table rect")
+                    return;
+                }
+
+                if( usedAdditional > masterValues.size()) {
+                    logger.info("No more nodes for master values found");
+                    return;
+                }
+
+                it.append("<svg:rect x=\"" + node.@x + "\" y=\"" + node.@y + "\" height=\"" + node.@height + "\" width=\"" + node.@width + "\" id=\"" +  node.@id + "\" style=\"" + node.@style + "\" /> \n");
+                it.append("<svg:text x=\"" + (node.@x.toDouble()+3) + "\" y=\"" + ( node.@y.toDouble() + node.@height.toDouble()/2  ) +"\">" );
+                it.append("<xsl:value-of select=\"/DOCUMENT/" + masterValues[usedAdditional].name() + "\"/>\n");
+                it.append("</svg:text>\n");
+                usedAdditional++;
+                break;
+
+        }
+    }
+
+    /**
      * Adds XSL-FO constant elements to the output file and adds their closing tokens to the queue
      * @param it file to which it is written
-     * @param toekenQ queue for closing tokens
+     * @param tokenQ queue for closing tokens
      */
     private void addConstantElements(EncodingAwareBufferedWriter it, List<String> tokenQ){
         it.append(XML_HEADER).append("\n");
@@ -127,7 +212,12 @@ class InputProcessor {
 
         it.append("\t").append( XSLFO_BLOCK).append("\n")
         tokenQ.add("\t")
-        tokenQ.add( XSLFO_BLOCK_ENDING )
+//        tokenQ.add( XSLFO_BLOCK_ENDING )
+
+        it.append(XSLFO_INSTREAM_FOREIGN_OBJECT)
+//        tokenQ.add(XSLFO_INSTREAM_FOREIGN_OBJECT_ENDING)
+
+        it.append(SVG_ELEMENT)
     }
 
     /**
@@ -150,10 +240,5 @@ class InputProcessor {
     }
 
 
-    static void main(){
-        InputProcessor ip = new InputProcessor();
-
-        ip.processInput(null,null)
-    }
 
 }

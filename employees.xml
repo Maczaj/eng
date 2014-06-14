@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DOCUMENT>
+<P8_DEPTNO>SUM DEPT</P8_DEPTNO>
+<P8_STH>TEST</P8_STH>
 <ROWSET>
    <ROW>
       <JOB>PRESIDENT</JOB>

@@ -32,6 +32,40 @@ public class Constants {
     public static final String XSL_TEMPLATE_ENDING = "</xsl:template>";
     public static final String XSLFO_BLOCK = "<fo:block>";
     public static final String XSLFO_BLOCK_ENDING = "</fo:block>";
+    public static final String XSL_VALUEOF(String xPath) {
+        return "<xsl:value-of select=\"" + xPath + "\"/>";
+    }
+    public static final String XSLFO_INSTREAM_FOREIGN_OBJECT = "<fo:instream-foreign-object>";
+    public static final String XSLFO_INSTREAM_FOREIGN_OBJECT_ENDING = "</fo:instream-foreign-object>";
+    public static final String SVG_ELEMENT = "<svg:svg version=\"1.2\">";
+    public static final String SVG_ELEMENT_ENDING = "</svg:svg>";
+    public static final String XSLFO_TABLE_AND_CAPTION = "<fo:table-and-caption>";
+    public static final String XSLFO_TABLE_AND_CAPTION_ENDING = "</fo:table-and-caption>";
+    public static final String XSLFO_TABLE = "<fo:table>";
+    public static final String XSLFO_TABLE_ENDING = "</fo:table>";
+    public static String XSLFO_TABLE_COLUMN(String width) {
+        return "<fo:table-column column-width=\"" + width +"\"/>";
+    }
+    public static final String XSLFO_TABLE_HEADER = "<fo:table-header>";
+    public static final String XSLFO_TABLE_HEADER_ENDING = "</fo:table-header>";
+    public static final String XSLFO_TABLE_ROW = "<fo:table-row>";
+    public static final String XSLFO_TABLE_ROW_ENDING = "</fo:table-row>";
+    public static final String XSLFO_TABLE_CELL = "<fo:table-cell>";
+    public static final String XSLFO_TABLE_CELL_ENDING = "</fo:table-cell>";
+    public static String XSLFO_BLOCK(String... attrs) {
+        StringBuilder sb = new StringBuilder(" <fo:block >");
+        for( String attr : attrs) {
+            sb.append(attr).append(" ");
+        }
+        sb.append(">");
+        return sb.toString();
+    }
+    public static final String XSLFO_TABLE_BODY = "<fo:table-body>";
+    public static final String XSLFO_TABLE_BODY_ENDING = "</fo:table-body>";
+    public static  String XSL_FOR_EACH(String xPath){
+        return "<xsl:for-each select=\"" + xPath + "\">";
+    }
+    public static final String XSL_FOR_EACH_ENDING = "</xsl:for-each>";
 
 
 }

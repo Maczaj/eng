@@ -8,9 +8,9 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
-	<jaxws:endpoint 
-	  id="helloWorld" 
-	  implementor="pl.edu.pw.elka.mkucharski.HelloWorldImpl" 
-	  address="/HelloWorld" />
-	  
+	<jaxws:endpoint
+	  id="reportGenerator"
+	  implementor="pl.edu.pw.elka.mkucharski.ReportGeneratorImpl"
+	  address="/ReportGenerator" />
+
 </beans>
