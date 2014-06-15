@@ -72,6 +72,7 @@ class InputProcessor {
             it.append( SVG_ELEMENT_ENDING );
             it.append( XSLFO_INSTREAM_FOREIGN_OBJECT_ENDING )
             it.append(XSLFO_BLOCK_ENDING).append("\n")
+            it.append(XSLFO_BLOCK_CONTAINER_ENDING).append("\n")
 
             it.append(XSLFO_BLOCK)
 //            TODO: przetwarzanie części detail
@@ -96,33 +97,38 @@ class InputProcessor {
      */
     private void processDetailSection(EncodingAwareBufferedWriter buf, GPathResult dataXML, GPathResult layoutXML) {
 
-//        buf.append( XSLFO_TABLE_AND_CAPTION ).append("\n")
         buf.append( XSLFO_TABLE ).append("\n");
         buf.append( XSLFO_TABLE_HEADER ).append("\n");
         buf.append( XSLFO_TABLE_ROW ).append("\n");
 
 
         def tableHeader = layoutXML.flowRoot.findAll{it.@'inkex:row' == 0 }
+        GPathResult headerRect = layoutXML.children().find { it.@'inkex:row' == 0 }
         tableHeader = tableHeader.sort {it.@'inkex:column'.toInteger()}
-        logger.debug(tableHeader.size())
+
         tableHeader.each { node->
             buf.append( XSLFO_TABLE_CELL ).append("\n");
+            buf.append(XSLFO_BLOCK_CONTAINER("height=\""+headerRect.@height.toString()+ "pt\"","text-align=\"center\"","border-width=\"1pt\"","border-color=\"black\"", "border-style=\"solid\"")).append("\n");
             buf.append( XSLFO_BLOCK ).append( node.text() ).append( XSLFO_BLOCK_ENDING).append("\n");
+            buf.append(XSLFO_BLOCK_CONTAINER_ENDING).append("\n")
             buf.append( XSLFO_TABLE_CELL_ENDING).append("\n")
         }
         buf.append(XSLFO_TABLE_ROW_ENDING).append("\n")
         buf.append(XSLFO_TABLE_HEADER_ENDING).append("\n")
 
+//        Find any rectangle from table header
+
         buf.append(XSLFO_TABLE_BODY).append("\n");
-
-
 //        rows of data now...
-        buf.append(XSL_FOR_EACH("ROWSET/ROW")).append("\n")
+        buf.append(XSL_FOR_EACH("/DOCUMENT//ROWSET/ROW")).append("\n")
         buf.append(XSLFO_TABLE_ROW).append("\n")
 
         dataXML.ROWSET.ROW.children().each{ det ->
-            buf.append(XSLFO_TABLE_CELL).append(XSLFO_BLOCK)
+            buf.append(XSLFO_TABLE_CELL)
+            buf.append(XSLFO_BLOCK_CONTAINER("text-align=\"center\"","border-width=\"1pt\"","border-style=\"solid\"","border-color=\"black\"","height=\"25pt\"")).append("\n")
+            buf.append(XSLFO_BLOCK)
             buf.append(XSL_VALUEOF("./" + det.name())).append(XSLFO_BLOCK_ENDING)
+            buf.append(XSLFO_BLOCK_CONTAINER_ENDING)
             buf.append(XSLFO_TABLE_CELL_ENDING).append("\n")
         }
 
@@ -210,12 +216,11 @@ class InputProcessor {
         it.append(XSLFO_PAGE_FLOW_HEADER("xsl-region-body")).append("\n");
         tokenQ.add(XSLFO_PAGE_FLOW_ENDING);
 
+        it.append(XSLFO_BLOCK_CONTAINER("70mm"));
         it.append("\t").append( XSLFO_BLOCK).append("\n")
         tokenQ.add("\t")
-//        tokenQ.add( XSLFO_BLOCK_ENDING )
 
         it.append(XSLFO_INSTREAM_FOREIGN_OBJECT)
-//        tokenQ.add(XSLFO_INSTREAM_FOREIGN_OBJECT_ENDING)
 
         it.append(SVG_ELEMENT)
     }

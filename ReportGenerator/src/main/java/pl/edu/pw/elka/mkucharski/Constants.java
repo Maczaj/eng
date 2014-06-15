@@ -11,7 +11,7 @@ public class Constants {
     public static final String XSLFO_HEADER = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
     public static final String XSLFO_ENDING = "</fo:root>";
     public static final String XSLFO_PAGE_LAYOUT = "<fo:layout-master-set>\n" +
-            "  <fo:simple-page-master master-name=\"A4\">\n" +
+            "  <fo:simple-page-master master-name=\"A4\" margin=\"2cm\">\n" +
             "    <fo:region-body />\n" +
             "    <fo:region-after />\n"    +
             "  </fo:simple-page-master>\n" +
@@ -53,7 +53,7 @@ public class Constants {
     public static final String XSLFO_TABLE_CELL = "<fo:table-cell>";
     public static final String XSLFO_TABLE_CELL_ENDING = "</fo:table-cell>";
     public static String XSLFO_BLOCK(String... attrs) {
-        StringBuilder sb = new StringBuilder(" <fo:block >");
+        StringBuilder sb = new StringBuilder(" <fo:block ");
         for( String attr : attrs) {
             sb.append(attr).append(" ");
         }
@@ -66,6 +66,17 @@ public class Constants {
         return "<xsl:for-each select=\"" + xPath + "\">";
     }
     public static final String XSL_FOR_EACH_ENDING = "</xsl:for-each>";
-
+    public static String XSLFO_BLOCK_CONTAINER (String height){
+        return "<fo:block-container height=\"" + height +"\" >";
+    }
+    public static String XSLFO_BLOCK_CONTAINER(String...properties){
+        StringBuilder sb = new StringBuilder("<fo:block-container ");
+        for( String prop : properties) {
+            sb.append(prop).append(" ");
+        }
+        sb.append(">");
+        return sb.toString();
+    }
+    public static final String XSLFO_BLOCK_CONTAINER_ENDING = "</fo:block-container>";
 
 }

@@ -4,11 +4,26 @@
     <groupId>pl.edu.pw.elka.mkucharski</groupId>
     <artifactId>ReportGenerator</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>${packaging.type}</packaging>
     <name>Reports Generator</name>
     <description>This tools takes two input parameters: XML data (in form like from Oracle ApEx report)
                 and SVG report layout (in form like from InkScape). Result of running this tool is final
                 report page in XSL-FO that can be further processed by Apache FOP</description>
+    <profiles>
+        <profile>
+            <id>cmd</id>
+            <properties>
+            <packaging.type>jar</packaging.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>ws</id>
+            <properties>
+            <packaging.type>war</packaging.type>
+            </properties>
+            <activation><activeByDefault>true</activeByDefault></activation>
+        </profile>
+    </profiles>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -79,7 +94,7 @@
                             <phase>pre-integration-test</phase>
                             <configuration>
                                 <port>${test.server.port}</port>
-                                <path>/webservice</path>
+                                <path>/ReportGenerator</path>
                                 <fork>true</fork>
                                 <useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
                             </configuration>
