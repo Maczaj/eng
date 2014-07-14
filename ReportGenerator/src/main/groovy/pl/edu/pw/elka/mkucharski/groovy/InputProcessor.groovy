@@ -54,11 +54,11 @@ class InputProcessor {
           applyXSLT(dataFileName, layoutFileName);
 
         File resultFile = new File(resultFileName).withWriter("UTF-8",{
-            addConstantElements(it, tokenQueue);
 
-//         process layout now
+//         start processing
             def layoutXML = XmlSlurper.newInstance().parse(layoutFileName);
             def dataXML = XmlSlurper.newInstance().parse(TEMP_DATA);
+            addConstantElements(it, tokenQueue, layoutXML);
             logger.info("Data file contains " + (dataXML.children().size()-1) + " additional nodes")
 
             usedAdditional = 0;
@@ -196,7 +196,7 @@ class InputProcessor {
      * @param it file to which it is written
      * @param tokenQ queue for closing tokens
      */
-    private void addConstantElements(EncodingAwareBufferedWriter it, List<String> tokenQ){
+    private void addConstantElements(EncodingAwareBufferedWriter it, List<String> tokenQ, GPathResult layout){
         it.append(XML_HEADER).append("\n");
 
         it.append(XSLT_HEADER).append("\n");
@@ -216,7 +216,8 @@ class InputProcessor {
         it.append(XSLFO_PAGE_FLOW_HEADER("xsl-region-body")).append("\n");
         tokenQ.add(XSLFO_PAGE_FLOW_ENDING);
 
-        it.append(XSLFO_BLOCK_CONTAINER("70mm"));
+// master section with embedded SVG
+        it.append(XSLFO_BLOCK_CONTAINER(Double.toString( computeMasterHeight( layout )) + "pt"));
         it.append("\t").append( XSLFO_BLOCK).append("\n")
         tokenQ.add("\t")
 
@@ -244,6 +245,14 @@ class InputProcessor {
         layoutTransformer.transform( new StreamSource( new StringReader( new File( layoutFileName).getText("UTF-8"))), new StreamResult(new File(TEMP_LAYOUT)));
     }
 
+    /**
+     * Computes height of master section
+     * @return computer height
+     */
+    private double computeMasterHeight( GPathResult layout){
+        GPathResult result =  layout.children().findAll { it.@'inkex:row' == 0 }
+         return Double.parseDouble(result[0].@y.toString());
+    }
 
 
 }
