@@ -3,8 +3,6 @@ package pl.edu.pw.elka.mkucharski.groovy
 import groovy.io.EncodingAwareBufferedWriter
 import groovy.util.slurpersupport.GPathResult
 import org.apache.log4j.Logger
-import pl.edu.pw.elka.mkucharski.Constants
-import sun.org.mozilla.javascript.internal.xmlimpl.XML
 
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
@@ -106,6 +104,8 @@ class InputProcessor {
         GPathResult headerRect = layoutXML.children().find { it.@'inkex:row' == 0 }
         tableHeader = tableHeader.sort {it.@'inkex:column'.toInteger()}
 
+        String headerHeight = tableHeader[0].@height;
+
         tableHeader.each { node->
             buf.append( XSLFO_TABLE_CELL ).append("\n");
             buf.append(XSLFO_BLOCK_CONTAINER("height=\""+headerRect.@height.toString()+ "pt\"","text-align=\"center\"","border-width=\"1pt\"","border-color=\"black\"", "border-style=\"solid\"")).append("\n");
@@ -123,9 +123,13 @@ class InputProcessor {
         buf.append(XSL_FOR_EACH("/DOCUMENT//ROWSET/ROW")).append("\n")
         buf.append(XSLFO_TABLE_ROW).append("\n")
 
+//        Hax jeśli w layoucie nie ma specjalnie wiersza dla danych zrobionego
+        String tableCellHeight = computeTableCellHeight( layoutXML )
+        tableCellHeight = "".equals(tableCellHeight) ? headerHeight : tableCellHeight;
+
         dataXML.ROWSET.ROW.children().each{ det ->
             buf.append(XSLFO_TABLE_CELL)
-            buf.append(XSLFO_BLOCK_CONTAINER("text-align=\"center\"","border-width=\"1pt\"","border-style=\"solid\"","border-color=\"black\"","height=\"25pt\"")).append("\n")
+            buf.append(XSLFO_BLOCK_CONTAINER("text-align=\"center\"","border-width=\"1pt\"","border-style=\"solid\"","border-color=\"black\"","height=\"" + tableCellHeight + "pt\"")).append("\n")
             buf.append(XSLFO_BLOCK)
             buf.append(XSL_VALUEOF("./" + det.name())).append(XSLFO_BLOCK_ENDING)
             buf.append(XSLFO_BLOCK_CONTAINER_ENDING)
@@ -217,7 +221,7 @@ class InputProcessor {
         tokenQ.add(XSLFO_PAGE_FLOW_ENDING);
 
 // master section with embedded SVG
-        it.append(XSLFO_BLOCK_CONTAINER(Double.toString( computeMasterHeight( layout )) + "pt"));
+        it.append(XSLFO_BLOCK_CONTAINER( computeMasterHeight( layout ) + "pt"));
         it.append("\t").append( XSLFO_BLOCK).append("\n")
         tokenQ.add("\t")
 
@@ -249,9 +253,29 @@ class InputProcessor {
      * Computes height of master section
      * @return computer height
      */
-    private double computeMasterHeight( GPathResult layout){
+    private String computeMasterHeight( GPathResult layout){
         GPathResult result =  layout.children().findAll { it.@'inkex:row' == 0 }
-         return Double.parseDouble(result[0].@y.toString());
+         return result[0].@y.toString();
+    }
+
+    /**
+     * Computes height of table header cell
+     * @param layout
+     * @return
+     */
+    private String computeTableHeaderHeight(GPathResult layout) {
+        GPathResult result = layout.children().find {it.@'inkex:row' == 0}
+        return result.@height.toString();
+    }
+
+    /**
+     * Computes height of cell containing data
+     * @param layout
+     * @return
+     */
+    private String computeTableCellHeight( GPathResult layout ) {
+        GPathResult result = layout.children().find { it.@'inkex:row' == 1 }
+        return result.@height.toString();
     }
 
 
