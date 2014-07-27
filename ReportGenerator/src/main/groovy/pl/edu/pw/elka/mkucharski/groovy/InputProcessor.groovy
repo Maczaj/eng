@@ -3,6 +3,7 @@ package pl.edu.pw.elka.mkucharski.groovy
 import groovy.io.EncodingAwareBufferedWriter
 import groovy.util.slurpersupport.GPathResult
 import org.apache.log4j.Logger
+import org.springframework.stereotype.Component
 
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
@@ -17,6 +18,7 @@ import static pl.edu.pw.elka.mkucharski.Constants.*
  * Time: 22:25
  * To change this template use File | Settings | File Templates.
  */
+@Component
 class InputProcessor {
     static final Logger logger = Logger.getLogger(InputProcessor.getClass());
 
@@ -73,7 +75,6 @@ class InputProcessor {
             it.append(XSLFO_BLOCK_CONTAINER_ENDING).append("\n")
 
             it.append(XSLFO_BLOCK)
-//            TODO: przetwarzanie części detail
             processDetailSection(it, dataXML, layoutXML);
             it.append(XSLFO_BLOCK_ENDING)
 //            applying ending elements

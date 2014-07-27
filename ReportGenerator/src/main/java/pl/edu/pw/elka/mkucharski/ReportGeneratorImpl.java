@@ -1,11 +1,12 @@
 
 package pl.edu.pw.elka.mkucharski;
 
+import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.mkucharski.groovy.GrvT;
 
 import javax.jws.WebService;
 
-@WebService(endpointInterface = "pl.edu.pw.elka.mkucharski.ReportGenerator")
+@Component
 public class ReportGeneratorImpl implements ReportGenerator {
 
 
