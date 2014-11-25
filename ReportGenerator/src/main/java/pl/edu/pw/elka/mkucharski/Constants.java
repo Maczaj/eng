@@ -6,7 +6,7 @@ package pl.edu.pw.elka.mkucharski;/**
  * To change this template use File | Settings | File Templates.
  */
 
-public class Constants {
+public final class Constants {
     public static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static final String XSLFO_HEADER = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
     public static final String XSLFO_ENDING = "</fo:root>";
@@ -78,5 +78,31 @@ public class Constants {
         return sb.toString();
     }
     public static final String XSLFO_BLOCK_CONTAINER_ENDING = "</fo:block-container>";
+
+    /**
+     * Creates string representation of XSL-FO element, assuming xmlns:fo is used.
+     * @param element - name of element
+     * @param attrs attributes in form: "attr_name=\"attr_val\""
+     * @return concatenated string representation
+     */
+    public static String XSLFO_ELLEMENT(String element,String... attrs) {
+        StringBuilder sb = new StringBuilder("<fo:").append(element).append(" ");
+
+        for(String attr: attrs) {
+            sb.append(attr).append(" ");
+        }
+
+        return sb.append(" />").toString();
+    }
+
+    /**
+     * Creates string ending XML node assuming xmlns:fo is used.
+     * @param element element name
+     * @return
+     */
+    public static String XSLFO_ELEMENT_ENDING (String element) {
+        return new StringBuilder("<fo:").append(element).append("/>").toString();
+    }
+
 
 }

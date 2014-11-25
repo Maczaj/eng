@@ -97,6 +97,8 @@ class InputProcessor {
     private void processDetailSection(EncodingAwareBufferedWriter buf, GPathResult dataXML, GPathResult layoutXML) {
 
         buf.append( XSLFO_TABLE ).append("\n");
+        // FIXME: ponizsze trzeba wykonac dla kazdej kolumny wraz z podaniem atrybutu column-number
+        buf.append( XSLFO_ELLEMENT('table-column', 'column-width=\"25mm\"'))
         buf.append( XSLFO_TABLE_HEADER ).append("\n");
         buf.append( XSLFO_TABLE_ROW ).append("\n");
 
