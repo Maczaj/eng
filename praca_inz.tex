@@ -59,13 +59,13 @@ doc. dr inż. Tomasz Traczyk
 
 %Wstęp
 \section{Wstęp} \label{sec:wst}
-Obecnie bazy danych wykorzystywane są powszechnie. Niemal każde przedsiębiorstwo dysponujące przynajmniej podstawową infrastrukturą informatyczną wykorzystuje w swoich działaniach bazę danych. Dane zgromadzone w takiej bazie danych często muszą być przedstawiane, np. zarządowi przedsiębiorstwa, bądź udostępniane publiczne w przypadku instytucji publicznych. Zwykła, surowa tabela będąca wynikiem działania zapytania \emph{SQL} nie jest wystarczająca dla takich zastosowań ze względu na jej ubogi wygląd oraz kiepską czytelność.  Samo pobieranie raportowanych danych z bazy również jest problematyczne ze względu na konieczność znajomości języka \emph{SQL}. 
+Obecnie bazy danych wykorzystywane są powszechnie. Niemal każde przedsiębiorstwo dysponujące przynajmniej podstawową infrastrukturą informatyczną wykorzystuje w swoich działaniach bazę danych. Dane zgromadzone w takiej bazie danych często muszą być przedstawiane, np. zarządowi przedsiębiorstwa, bądź udostępniane publicznie w przypadku instytucji publicznych. Zwykła, surowa tabela będąca wynikiem działania zapytania \emph{SQL} nie jest wystarczająca dla takich zastosowań ze względu na jej ubogi wygląd oraz kiepską czytelność.  Samo pobieranie raportowanych danych z bazy również jest problematyczne ze względu na konieczność znajomości języka \emph{SQL}. 
 
 Funkcjonalny z punktu widzenia biznesu system raportowy powinien spełniać pewne wymagania:
 \begin{itemize}
 	\item umożliwienie stosowania własnych wzorców wyglądu raportu (tzw. \emph{layout})
-	\item minimalizacja wymaganej ilości wiedzy informatycznej w celu określania danych przeznaczonych do raportu
-	\item umożliwienie generowania raportów w formacie \emph{PDF} w celu uniknięcia problemów wynikających z wykorzystywania różnych platform systemowych
+	\item minimalizacja wymaganej do obsługi ilości wiedzy informatycznej 
+	\item umożliwienie generowania raportów w formacie \emph{PDF} w celu uniknięcia problemów wynikających z innego wyświetlania na różnych platformach systemowych
 \end{itemize}
 
 Na rynku dostępna jest cała gama narzędzi spełniających powyższe wymagania w mniejszym lub większym stopniu. Najlepszym przykładem jest \emph{Oracle BI Publisher}, który spełnia wszystkie wyżej postawione wymagania, jednak konieczność corocznego ponoszenia niemałych kosztów wynikających z opłat licencyjnych sprawia, że jest on w zasięgu niewielu organizacji.
@@ -83,13 +83,13 @@ W ramach pracy przygotowano:
 \newpage
 
 \section{Wprowadzenie teoretyczne} \label{sec:teoria}
-Raport jest standardową formą dokumentu biznesowego, który służy do logicznej prezentacji informacji jakościowych oraz ilościowy. Raporty, w zależności od swojego zastosowania, mogą zawierać różne informacje, stąd też przedstawione na nich informacje mogą być przeznaczone dla różnych grup odbiorców. Również układ wizualny raportu powinien być dostosowany do odbiorcy - raport przygotowany dla celów operacyjnych nie musi mieć atrakcyjnej szaty graficznej, w przeciwieństwie do raportu przeznaczonego dla kierownictwa organizacji, bądź wglądu publicznego. 
+Raport jest standardową formą dokumentu biznesowego, który służy do logicznej prezentacji informacji jakościowych oraz ilościowych. Raporty, w zależności od swojego zastosowania, mogą zawierać różne informacje, być przeznaczone dla różnych grup odbiorców. Układ wizualny raportu powinien być dostosowany do odbiorcy - raport przygotowany dla celów operacyjnych nie musi mieć atrakcyjnej szaty graficznej, w przeciwieństwie do raportu przeznaczonego dla kierownictwa organizacji, bądź wglądu publicznego. 
 
-Funkcjami raportów to np. podsumowywanie kluczowych wskaźników biznesu, prezentacja miar biznesowych w oparciu o rozmaite statystyki, czy ocena wydajności biznesowej, umożliwiająca szybką weryfikację stopnia realizacji strategicznych celów przedsiębiorstwa. Ze względu na swoje funkcje, raporty należą do najważniejszych dokumentów, którymi dysponuje organizacja. 
+Funkcjami raportów są np. podsumowywanie kluczowych wskaźników biznesu, prezentacja miar biznesowych w oparciu o rozmaite statystyki, czy ocena wydajności biznesowej, umożliwiająca szybką weryfikację stopnia realizacji strategicznych celów przedsiębiorstwa. Ze względu na swoje funkcje, raporty należą do najważniejszych dokumentów, którymi dysponuje organizacja. 
 Za raport może być uznany każdy dokument prezentujący jakieś dane w ustandaryzowany sposób, jednak w ramach niniejszej pracy ograniczono się do podstawowych typów raportów najczęściej występujących w literaturze. Zostaną one zaprezentowane w dalszej części rozdziału.
 
 \subsection{Raport typu \emph{master-detail}} \label{teoria:md}
-Ten typ raportu służy prezentacji wartości pełniących funkcję nadrzędnych względem innych oraz szczegóły aktualnie wybranej pozycji. Najlepszym przykładem raportu tego typu jest powszechnie występujący dokument, jakim jest np. faktura. Ten typ raportu może być zastosowany przy występowaniu związków typu jedne-wiele. Zarówno obszar nadrzędny, jak i podrzędny może być listą lub drzewem pozycji, co umożliwia wprowadzenie wielu stopni podrzędności. Obszar podrzędny zwykle jest prezentowany pod obszarem nadrzędnym lub obok niego. Przykładem może być wspomniana uprzednio faktura prezentująca spis pozycji wchodzących w skład zamówienia lub spis pracowników zatrudnionych w konkretnym dziale spółki. Przykładowa faktura zaprezentowana jest na rysunku \ref{img:faktura}. Dane klienta i numer faktury są uznawane za dane nadrzędne, zaś pozycje występujące na fakturze - podrzędne. 
+Ten typ raportu służy prezentacji wartości pełniących funkcję nadrzędnych względem innych oraz szczegóły aktualnie wybranej pozycji. Ten typ raportu może być zastosowany przy występowaniu związków typu jeden-do-wielu. Najlepszym przykładem raportu tego typu jest powszechnie występujący dokument, jakim jest np. faktura. Zarówno obszar nadrzędny, jak i podrzędny może być listą lub drzewem pozycji, co umożliwia wprowadzenie wielu stopni podrzędności. Obszar podrzędny zwykle jest prezentowany pod obszarem nadrzędnym lub obok niego. Przykładem może być wspomniana uprzednio faktura prezentująca spis pozycji wchodzących w skład zamówienia lub spis pracowników zatrudnionych w konkretnym dziale spółki. Przykładowa faktura zaprezentowana jest na rysunku \ref{img:faktura}. Dane klienta i numer faktury są uznawane za dane nadrzędne, zaś pozycje występujące na fakturze - podrzędne. 
 
 %źródło
 %http://www.infakt.pl/images/icons-for_articles/grafiki/faktura_vat_pdf.png
@@ -101,7 +101,7 @@ Ten typ raportu służy prezentacji wartości pełniących funkcję nadrzędnych
 \end{figure}
 
 \subsection{Raport z grupami łamiącymi ( \emph{break-groups} )} \label{teoria:bg}
-Głównym celem tego typu raportu jest zwiększenie jego czytelności. Polega na podziale wierszy trafiających do raportu na grupy o odpowiednich wartościach w wyróżnionych kolumnach. Każda z takich grup może zostać odpowiednio obsłużona, np. poprzez opatrzenie ich nagłówkami, wyliczenie dla nich podsumowań itp. Taka struktura umożliwia dość elastyczną prezentację tych samych danych. Grupy łamiące mogą być zastosowane w innych typach raportów, np. wspomnianym w rozdziale \ref{teoria:md} raporcie \emph{master-detail}. Na obrazku \ref{img:bg} zaprezentowany jest przykład raportu wykorzystującego grupy łamiące. Dane przedstawione na nim są zgrupowane według dwóch pierwszych kolumn.
+Głównym celem tego typu raportu jest zwiększenie jego czytelności. Polega na podziale wierszy trafiających do raportu na grupy o odpowiednich wartościach w wyróżnionych kolumnach. Każda z takich grup może zostać odpowiednio obsłużona, np. poprzez opatrzenie ich nagłówkami, wyliczenie dla nich podsumowań itp. Taka struktura umożliwia dość elastyczną prezentację tych samych danych. Grupy łamiące mogą być zastosowane w innych typach raportów, np. wspomnianym w rozdziale \ref{teoria:md} raporcie \emph{master-detail}. Na obrazku \ref{img:bg} zaprezentowany jest przykład raportu wykorzystującego grupy łamiące. Dane przedstawione na nim są zgrupowane według wartości zawartych w pierwszej kolumnie.
 %źródło
 %http://docs.oracle.com/cd/E17904_01/bi.1111/b32122/img/grp1col_lft1_out1.gif
 \begin{figure}[h]
@@ -140,12 +140,12 @@ Oracle Application Express, zwany również ApEx'em, jest darmowym narzędziem i
 \label{img:apex_fop}
 \end{figure}
 
-Ręczne tworzenie arkuszy XSLT dla potrzeb raportów jest jednak problematyczne. Zmiany we wzorcu wyglądu raportu pociągają za sobą konieczność dokonania zmian w transformacji XSLT. W przypadku drobnych zmian, takich jak np. zmiana marginesu bądź rozmiaru pewnego elementu problem nie jest jeszcze tak duży, jednak w przypadku konieczności np. dodania nowego elementu konieczne jest wykorzystanie specjalistycznej wiedzy. Ponadto stworzenie nowego wzorca od podstaw jest problematyczne dla osoby nie posiadającej wymaganych kompetencji.
+Ręczne tworzenie arkuszy XSLT dla potrzeb raportów jest jednak problematyczne. Zmiany we wzorcu wyglądu raportu pociągają za sobą konieczność dokonania zmian w transformacji XSLT. W przypadku drobnych zmian, takich jak np. zmiana marginesu bądź rozmiaru pewnego elementu problem nie jest jeszcze tak duży, jednak w przypadku konieczności np. dodania nowego elementu konieczne jest już skorzystanie ze specjalistycznej wiedzy. Ponadto stworzenie nowego wzorca od podstaw jest problematyczne dla osoby nie posiadającej wymaganych kompetencji.
 
 Problem ten rozwiązuje jednak przygotowane w ramach pracy narzędzie. Potrafi ono, przy przyjęciu pewnych założeń, wygenerować arkusz transformacji XSLT na podstawie danych wejściowych oraz wzorca wyglądu raportu. Arkusz ten posłuży do przekształcenia danych w formacie XML w wynikowy raport w formacie XSL-FO. 
 
 \subsection{XSLT} \label{tools:xslt}
-XSLT (\emph{eXtensible Stylesheet Language Transformations} to oparty na XML język służący do przekstałcania jednych dokumentów w formacie XML na dowolny inny zgodny ze składnią XML. Jest podzbiorem szerszej specyfikacji określanej jako XSL. Transformacje XSLT zapisywane są w dokumentach XML z wykorzystaniem specjalnej przestrzeni nazw. Ze względu na dużą siłę wyrazu, łatwość implementacji oraz powszechne stosowanie XML, XSLT jest szeroko stosowane w różnych rodzajach oprogramowania. Ze względu na fakt, że współczesne przeglądarki internetowe posiadają wbudowane procesory XSLT, najczęstszym jego zastosowaniem jest transformacja dokumentów XML w celu wyświetlenia w przeglądarce WWW. Rysunek \ref{img:xslt} prezentuje poglądowy schemat zastosowania XSLT. W ramach niniejszej pracy XSLT jest stosowane do uzyskania raportu w formacie XSL-FO, co umożliwia stworzenie pliku PDF przez FOP.
+XSLT (\emph{eXtensible Stylesheet Language Transformations} to oparty na XML język służący do przekstałcania jednych dokumentów w formacie XML na dowolny inny zgodny ze składnią XML. Jest podzbiorem szerszej specyfikacji określanej jako XSL. Transformacje XSLT zapisywane są w dokumentach XML z wykorzystaniem specjalnej przestrzeni nazw. Ze względu na dużą siłę wyrazu, łatwość implementacji oraz powszechne stosowanie XML, XSLT jest szeroko stosowane w różnych rodzajach oprogramowania. Ze względu na fakt, że współczesne przeglądarki internetowe posiadają wbudowane procesory XSLT, najczęstszym jego zastosowaniem jest transformacja dokumentów XML w celu wyświetlenia w przeglądarce WWW. Rysunek \ref{img:xslt} prezentuje poglądowy schemat zastosowania XSLT. W ramach niniejszej pracy XSLT jest stosowane do przekształcenia pliku XML w postać zgodną ze specyfikacją XSL-FO, co umożliwi stworzenie pliku z raportem w formacie PDF przez FOP.
 \begin{figure}[h]
 \centering
 \caption{Schemat poglądowy zastosowania XSLT}
@@ -169,6 +169,8 @@ SVG (\emph{Scallable Vector Graphics}) to bazujący na XML format do zapisu dwuw
 Plik zawierający grafikę SVG może być edytowany dowolnym edytorem tekstowym, jednak wygodniejsze jest zastosowanie do tego celu dedykowanego oprogramowania. Polecanym do tego celu programem jest darmowy \emph{InkScape}.
 
 W ramach pracy standard SVG jest wykorzystywany do zapisu wzorca wyglądu raportu. 
+
+\subsection{Groovy} \label{tools:groovy}
 \newpage
 
 
@@ -178,7 +180,7 @@ W ramach pracy standard SVG jest wykorzystywany do zapisu wzorca wyglądu raport
 Głównym problemem przy wykorzystaniu ApEx'a jest konieczność tworzenia nowych arkuszy transformacji XSLT przy zmianach wzorca wyglądu raportu. Przy wykorzystaniu przez biznes jest to niedopuszczalne. W związku z tym w ramach pracy zostało przygotowane narzędzie mające na celu rozwiązanie tego problemu. Jego głównym przeznaczeniem jest wspieranie ApEx'a w zakresie generowania arkuszy transformacji XSLT na podstawie danych wejściowych w XML oraz wzorca wyglądu raportu w SVG. Arkusz ten może być wykorzystany do przekształcenia pliku XML z danymi w plik w formacie XSL-FO. Ten z kolei może zostać wysłany do FOP, co skutkuje utworzeniem raportu w formacie PDF.
 
 \subsection{Dane wejściowe} \label{solution:data}
-Dane przeznaczone do raportu zapisane są w formacie XML. Ponieważ dane pochodzą z ApEx'a, możliwe jest przyjęcie założeń odnośnie ich struktury. Ogólna struktura jest przedstawiona na listingu \ref{rap:apex}. Element ROWSET jest opcjonalny i może nie wystąpić. Wpis zawierający informacje zawarte w pojedynczym wierszu zawarte są w strukturze znacznika ROW. W nim z kolei znajdują się informacje dotyczące poszczególnych kolumn. Nazwa kolumny jest taka sama, jak nazwa znacznika, zaś wartość odpowiadająca węzłowi to wartość konkretnej danej.
+Dane przeznaczone do raportu zapisane są w formacie XML. Ponieważ dane pochodzą z ApEx'a, możliwe jest przyjęcie założeń odnośnie ich struktury. Ogólna struktura jest przedstawiona na listingu \ref{rap:apex}. Element REGION jest opcjonalny i może nie wystąpić. Wpis zawierający informacje zawarte w pojedynczym wierszu zawarte są w strukturze znacznika ROW. W nim z kolei znajdują się informacje dotyczące poszczególnych kolumn. Nazwa kolumny jest taka sama, jak nazwa znacznika, zaś wartość odpowiadająca węzłowi to wartość konkretnej danej.
 
 \lstset{language=XML}
 \begin{lstlisting}[frame=single,caption=Ogólna postać dokumentu XML z danymi pochodzącymi z ApExa,label=rap:apex]
@@ -197,7 +199,7 @@ Dane przeznaczone do raportu zapisane są w formacie XML. Ponieważ dane pochodz
 </DOCUMENT>
 \end{lstlisting}
 
-Ponadto, w pliku danych mogą zostać przekazane dodatkowe informacje. Mogą to być np. informacje o zalogowanym użytkowniku, sesji, identyfikator aplikacji, data itp. Można również przekazać inne informacje znajdujące się w pewnym miejscu na stronie w ApEx'ie. Jest to tzw. \emph{region}. Fakt ten jest wykorzystywany do przekazania informacji ,,nadrzędnych" przy wyborze raportu typu \emph{master-detail}. Format danych ,,nadrzędnych" jest zaprezentowany na listingu \ref{rap:master}. Dane te zawarte są w strukturze głównego znacznika DOCUMENT. Litera X w widocznym przykładzie jest w rzeczywistości numerem strony w ApEx'ie, na której znajduje się owa dana. Litera P występuje zawsze. 
+Ponadto, w pliku danych mogą zostać przekazane dodatkowe informacje. Mogą to być np. informacje o zalogowanym użytkowniku, sesji, identyfikator aplikacji, data itp. Można również przekazać inne informacje znajdujące się w pewnym miejscu na stronie w ApEx'ie. Jest to tzw. \emph{region}.Wtedy to jest dodawany znacznik REGION. Fakt ten jest wykorzystywany do przekazania informacji ,,nadrzędnych" przy wyborze raportu typu \emph{master-detail}. Format danych ,,nadrzędnych" jest zaprezentowany na listingu \ref{rap:master}. Dane te zawarte są w strukturze głównego znacznika DOCUMENT. Litera X w widocznym przykładzie jest w rzeczywistości numerem strony w ApEx'ie, na której znajduje się owa dana. Litera P występuje zawsze. 
 
 \lstset{language=XML}
 \begin{lstlisting}[frame=single,caption=Format danych typu \emph{master},label=rap:master]
@@ -231,9 +233,83 @@ Dodatkowym założeniem mającym na celu uproszczenie stosowania grup łamiącyc
 \end{lstlisting}
 
 \subsection{Wzorzec wyglądu raportu} \label{solution:layout}
-Wzorzec wyglądu raportu jest zapisany w formacie SVG, jak zostało to zaznaczone w rozdziale \ref{tools:svg}. Specyfikacja SVG zawiera bardzo dużo elementów. W ramach pracy nie byłoby możliwe pełne wsparcie specyfikacji, zatem przyjęto pewne ograniczenia. Wspieranymi elementami jest stały tekst, grafika (np. logo organizacji) oraz prostokąty jako pola danych.
+Wzorzec wyglądu raportu jest zapisany w formacie SVG, jak zostało to zaznaczone w rozdziale \ref{tools:svg}. Specyfikacja SVG zawiera bardzo dużo elementów. W ramach pracy nie byłoby możliwe pełne wsparcie specyfikacji, zatem przyjęto pewne ograniczenia. Wspieranymi elementami jest stały tekst, grafika (np. logo organizacji) oraz prostokąty jako pola danych, a zatem typowe komponenty wchodzące w skład raportu.
 
 Kolejne założenie upraszczające dotyczy reprezentacji tabeli. W SVG nie występuje specjalna konstrukcja służąca do tworzenia tabeli. Jest ona reprezentowana za pomocą odpowiednio rozmieszczonych prostokątów. Przyjmuje się, że wzorzec jest stworzony za pomocą programu \emph{InkScape} z dołączonym pluginem odpowiedzialnym za tworzenie tabel. Dodaje on do kwadratów tworzących tabelę dodatkowe atrybuty \emph{inkex:row} oraz \emph{inkex:column} co w znacznym stopniu ułatwia przetwarzanie wzorca.
+
+\subsection{Realizacja po stronie \emph{ApEx}} \label{solution:realization}
+W celu wykorzystania rozwiązania opisanego w ramach niniejszej pracy, niezbędna jest pewna konfiguracja \emph{ApExa} oraz stosowanie się do pewnych zasad.
+
+Przede wszystkim należy pamiętać o tym, że wykorzystanie przez \emph{ApExa} zewnętrznego serwera wydruków wymaga takiej konfiguracji po stronie bazy danych, która umożliwi komunikację sieciową. Taka konfiguracja może być wykonana przez administratora za pomocą procedur z pakietu \textbf{DBMS\_NETWORK\_ACL\_ADMIN}.
+
+Kolejną istotną rzeczą jest stosowanie określonej reprezentacji wzorca wyglądu raportu w \emph{ApExie}. Rozwiązanie stworzone w ramach pracy współpracuje z opcją \textbf{Generic Columns (XSL-FO)}. Opcja ta umożliwia zastosowanie dowolnej transformacji XSLT do przekształcenia danych XML. Przy wybraniu tej opcji należy podać cztery transformacje XSLT - dla ogólnego szablonu strony, dla komórki nagłówka tabeli, dla komórki tabeli z danymi i dla szerokości komórki tabeli.
+Takie rozwiązanie zwiększa elastyczność - w przypadku raportu typu \emph{master-detail} jeśli tylko dane ,,nadrzędne" nie ulegną zmianie, możliwe będzie prezentowanie różnych zestawów danych ,,podrzędnych" przy wykorzystaniu tego samego wzorca wyglądu raportu. 
+
+Nazwy kolumn wchodzących w skład części z danymi ,,podrzędnymi" są automatycznie określane przez \emph{ApExa} na podstawie nazw zwracanych przez zapytanie \emph{SQL} pobierające dane. Listing \ref{solution:sql} przedstawia w jaki sposób można dostosowywać wyświetlane nazwy kolumn. Wlasne nazwy można również nadać za pomocą kreatora graficznego.
+ 
+\lstset{language=SQL}
+\begin{lstlisting}[frame=single,caption=Przykładowe zapytanie \emph{SQL},label=solution:sql]
+select
+    EMPLOYEES.LAST_NAME as "Nazwisko",
+    EMPLOYEES.HIRE_DATE as "Data zatrudnienia",
+    EMPLOYEES.SALARY as "Pensja"
+from EMPLOYEES EMPLOYEES
+where DEPARTMENT_ID = :P3_DEPARTMENT_ID
+\end{lstlisting}
+
+
+Podejście to nie jest jednak idealne. Przy jego zastosowaniu nie jest możliwe określenie innego stylu (np. szerokości czy koloru tła) dla poszczególnych kolumn. Oznacza to również problemy przy próbie utworzenia raportu krzyżowego - pionowy nagłówek raportu będzie traktowany przez \emph{ApExa} jako zwyczajna komórka wiersza z danymi.
+
+Listing \ref{solution:sql} przedstawia również, w jaki sposób są pobierane dane pozycji ,,nadrzędnych". \textbf{\emph{P3\_DEPARTMENT\_ID}} to region o nazwie \textbf{\emph{DEPARTMENT\_ID}} znajdujący się na stronie o identyfikatorze 3. W tym przypadku pełni funkcję ,,nadrzędną". Jest ona odczytywana bezpośrednio ze strony o identyfikatorze 3, a zatem musi być określona w momencie inicjacji stworzenia raportu. W starszych wersjach \emph{ApEx} można to było osiągnąć poprzez utworzenie przycisku z akcją \emph{Submit and redirect to URL}. W nowszych wersjach niestety trzeba użyć dwóch przycisków - jednego z akcją \emph{Submit} który spowoduje zapisanie strony i drugiego z akcją \emph{Redirect to URL}, który spowoduje wysłanie żądania \emph{HTTP POST} pod adres URL odpowiadający za akcję wydruku. Oczywiście może to prowadzić do trudnych do namierzenia problemów przy wielodostępie. 
+
+\subsection{Realizacja narzędzia wspomagającego} \label{solution:tool}
+Zadaniem stworzonego w ramach pracy narzędzia jest generowanie arkuszy transformacji XSLT na podstawie danych wejściowych w XML oraz wzorca wyglądu raportu w SVG. Ponieważ wykonanie tego zadania sprowadza się do przetworzenia dwóch plików XML, wskazane jest wykorzystanie technologii, która pozwoli na dokonanie tego w możliwie najprostszy sposób. Ze względu na prostą składnię i wygodne tworzenie konstrukcji umożliwiających pobieranie interesujących elementów na dość wysokim poziomie abstrakcji język programowania \emph{Groovy}, opisany szerzej w rozdziale \ref{tools:groovy}, został wybrany do realizacji zadania.  W wyniku działania, narzędzie nie buduje w pamięci drzewa XML z arkuszem transformacji, a zamiast tego na bieżąco zapisuje tworzone konstrukcje do plików wynikowych.
+
+\subsubsection{Wstępne przetwarzanie danych wejściowych} \label{solution:tool:input}
+Wejściowymi dla narzędzia jest wzorzec wyglądu raportu zapisany w \emph{SVG} oraz dane w formacie \emph{XML} spełniające założenia przyjęte w rozdziale \ref{solution:data}.  Dla spełnienia zadania stawianego narzędziu wystarczy, aby w pliku danych znajdowały się odpowiedniki danych ,,narzędnych" oraz jednego wiersza danych ,,podrzędnych", dlatego są one filtrowane tak, aby pozostał odpowiednik tylko jednego wiersza oraz został usunięty element o znaczniku \emph{\textbf{REGION}}. Dokonuje tego transformacja zawarta na listingu \ref{solution:tool:xslt}.
+
+\lstset{language=XSLT}
+\begin{lstlisting}[frame=single,caption=Transformacja wstępnie przetwarzająca dane, label=solution:tool:xslt]
+<xsl:stylesheet version="1.0" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:template match="/">
+ <DOCUMENT>
+  <xsl:apply-templates></xsl:apply-templates>
+   </DOCUMENT>
+  </xsl:template>
+
+ <xsl:template match="ROW[position()=1]" >
+  <ROWSET>
+   <xsl:copy-of select="." />
+  </ROWSET>
+ </xsl:template>
+
+ <xsl:template match="ROW[position()>1]" />
+
+ <xsl:template match="/DOCUMENT/*[count(child::*)=0 ]" >
+  <xsl:copy-of select="." />
+  </xsl:template>
+</xsl:stylesheet>
+\end{lstlisting}
+
+\subsubsection{Tworzenie ogólnego szablonu strony}
+Stworzenie transformacji dla ogólnego szablonu strony sprowadza się do przeszukania drzewa obiektów składających się na wzorzec wyglądu raportu, wyszukaniu odpowiednich wartości i podstawieniu ich do właściwych ich przeznaczeniu nazwanych zbiorów atrybutów. Zbiory te mogą być następnie użyte w charakterze zmiennych w innych znacznikach znajdujących się w tym samym raporcie. Zbiory atrybutów mogą dotyczyć m.in. marginesów strony, koloru i kroju czcionki itp. Następnie wyszukiwane są elementy odpowiadające części ,,nadrzędnej" wzorca. W przypadku wyszukania pola danych tworzony jest również znacznik odpowiadający za wyświetlenie tekstu z podaniem wyrażenia \textbf{\emph{\textless xsl:value-of select="xpath" /\textgreater}} jako wartość tekstu do wyświetlenia, gdzie \textbf{\emph{xpath}} jest właściwym wyrażeniem odpowiadającym odwołaniu do danej ,,nadrzędnej" z pliku danych, czyli np. \textbf{\emph{//P3\_DEPARTMENT\_NAME}}. Podstawienie danych w odpowiednie miejsca odbywa się poprzez sformatowanie uprzednio przygotowanego łańcucha znaków.
+
+\subsubsection{Tworzenie szablonu komórki nagłówka tabeli}
+Ponieważ w poprzednim kroku zostały ustawione wszystkie zestawy atrybutów, utworzenie polega właściwie na utworzeniu ogólnego transformacji podpowiadanej przez \emph{ApExa} przy tworzeniu wzorca raportu. Jest ona zaprezentowana na listingu \ref{tool:header}.
+
+\lstset{language=XSLT}
+\begin{lstlisting}[frame=single,caption=Transformacja dla nagłówka tabeli, label=tool:header]
+<fo:table-cell xsl:use-attribute-sets="cell header-color border">
+ <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+  <fo:inline xsl:use-attribute-sets="header-font">
+      #COLUMN_HEADING#
+  </fo:inline>
+ </fo:block>
+</fo:table-cell>
+\end{lstlisting}
+
+Czy w InkScape da sie wyklikać wyrównanie tekstu wewnątrz kwadratu?
 
 \end{document}
 
