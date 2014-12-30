@@ -104,5 +104,11 @@ public final class Constants {
         return new StringBuilder("<fo:").append(element).append("/>").toString();
     }
 
+    public static final String SVG_NAMESPACE = "xmlns:svg=\"http://www.w3.org/2000/svg\"";
 
+    public static String SVG_ELEMENT(String width, String height) {
+        StringBuilder sb = new StringBuilder("<svg:svg ").append(SVG_NAMESPACE).append(" width=\"").append(width)
+                .append("\" height=\"").append(height).append("\" >");
+        return sb.toString();
+    }
 }

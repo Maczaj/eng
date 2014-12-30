@@ -2,12 +2,15 @@ package pl.edu.pw.elka.mkucharski.groovy
 
 import groovy.io.EncodingAwareBufferedWriter
 import groovy.util.slurpersupport.GPathResult
+import org.apache.cxf.helpers.IOUtils
 import org.apache.log4j.Logger
 import org.springframework.stereotype.Component
+import org.springframework.util.StringUtils
 
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
+import java.util.regex.Pattern
 
 import static pl.edu.pw.elka.mkucharski.Constants.*
 
@@ -20,15 +23,18 @@ import static pl.edu.pw.elka.mkucharski.Constants.*
  */
 @Component
 class InputProcessor {
-    static final Logger logger = Logger.getLogger(InputProcessor.getClass());
+    static final Logger logger = Logger.getLogger(InputProcessor.getClass().getName());
 
     private static final String DEFAULT_DATA_FILTER = "data_filter.xsl";
     private static final String DEFAULT_LAYOUT_FILTER = "layout_filter.xsl"
     private static final String TEMP_DATA = "input.xml";
     private static final String TEMP_LAYOUT = "layout.svg";
 
+    private Properties defaults;
+
     private String dataFilterFileName;
     private String layoutFilterFileName;
+
 
     private int usedAdditional;
 
@@ -36,7 +42,7 @@ class InputProcessor {
      * Creates XSLT that can be applied to XML data to create report.
      * @param dataFileName name of file containing XML data
      * @param layoutFileName name of file containing SVG report layout
-     * @return name of file with result XSLT
+     * @return name of file with resulting XSLT
      */
     public String processInput(String dataFileName,String layoutFileName) {
         return processInput(dataFileName, layoutFileName, "report"+System.currentTimeMillis())
@@ -50,119 +56,113 @@ class InputProcessor {
      * @return name of file with XSLT
      */
     String processInput(String dataFileName, String layoutFileName, String resultFileName){
-        final List<String> tokenQueue = new ArrayList<>();
-          applyXSLT(dataFileName, layoutFileName);
+        applyXSLT(dataFileName, layoutFileName);
+        loadDefaults()
 
-        File resultFile = new File(resultFileName).withWriter("UTF-8",{
+        InputStream pageStream = InputProcessor.getClass().getResourceAsStream("/page.xml");
+        StringBuilder pageTemplate = new StringBuilder(IOUtils.toString(pageStream,"UTF-8"));
 
 //         start processing
             def layoutXML = XmlSlurper.newInstance().parse(layoutFileName);
             def dataXML = XmlSlurper.newInstance().parse(TEMP_DATA);
-            addConstantElements(it, tokenQueue, layoutXML);
             logger.info("Data file contains " + (dataXML.children().size()-1) + " additional nodes")
 
             usedAdditional = 0;
             def masterValues = dataXML.children().findAll { it.name().startsWith('P')}
             logger.info( "Found " + masterValues.size() + " nodes appearing to be master data");
 
-//            TODO: wrzucic w oddzielne fo:block czesc z pierdolami i czesc tabelkowa
+//            master section (SVG part)
+            StringBuilder master = new StringBuilder();
+            master.append(SVG_ELEMENT("20cm", computeMasterHeight(layoutXML)+"pt"))
+            layoutXML.g.children().each { node -> processMasterSection(master, node, masterValues)  }
+            master.append("</svg:svg>")
 
-            layoutXML.'g'.children().each { node -> processMasterSection(it, node, masterValues)  }
+//        Compute values for attributes
+            setHeaderProperties(layoutXML);
+        setBodyProperties(layoutXML);
 
-            it.append( SVG_ELEMENT_ENDING );
-            it.append( XSLFO_INSTREAM_FOREIGN_OBJECT_ENDING )
-            it.append(XSLFO_BLOCK_ENDING).append("\n")
-            it.append(XSLFO_BLOCK_CONTAINER_ENDING).append("\n")
-
-            it.append(XSLFO_BLOCK)
-            processDetailSection(it, dataXML, layoutXML);
-            it.append(XSLFO_BLOCK_ENDING)
-//            applying ending elements
-                for( int i = tokenQueue.size()-1; i >=0 ; --i){
-                    it.append(tokenQueue.get(i)).append("\n");
+//        Store computed attribute values in result
+            for(String key : defaults.stringPropertyNames() ) {
+                String _key = '${' + key + '}'
+                int i;
+                while(( i = pageTemplate.indexOf(_key) ) != -1 ) {
+                    pageTemplate.replace(i, i + _key.length() , defaults.getProperty(key));
                 }
+            }
 
-
-        })
-
-
+//        format page template with svg part
+            new File(resultFileName).withWriter("UTF-8", {it.write(String.format(pageTemplate.toString(),master.toString()))} )
+        logger.info("Processing finished")
     }
 
     /**
-     * Processes detail section of report, which means creating table with data creating XSL-FO fo:table construction.
-     * @param it bufer for output file
-     * @param dataXML parsed XML file with data
-     * @param layoutXML parsed SVG file with layout
+     * Sets properties of table's data cells. If layout doesn't contain such, default values are left.
+     * @param layout
      */
-    private void processDetailSection(EncodingAwareBufferedWriter buf, GPathResult dataXML, GPathResult layoutXML) {
+    void setBodyProperties(GPathResult layout) {
+        
 
-        buf.append( XSLFO_TABLE ).append("\n");
-        // FIXME: ponizsze trzeba wykonac dla kazdej kolumny wraz z podaniem atrybutu column-number
-        buf.append( XSLFO_ELLEMENT('table-column', 'column-width=\"25mm\"'))
-        buf.append( XSLFO_TABLE_HEADER ).append("\n");
-        buf.append( XSLFO_TABLE_ROW ).append("\n");
+    }
+/**
+     * Sets properties for table header cell
+     * @param layout GPathResult for report layout root
+     */
+    void setHeaderProperties(GPathResult layout) {
+        def cell =  layout.children().find { it.@'inkex:row' == 0 }
 
-
-        def tableHeader = layoutXML.flowRoot.findAll{it.@'inkex:row' == 0 }
-        GPathResult headerRect = layoutXML.children().find { it.@'inkex:row' == 0 }
-        tableHeader = tableHeader.sort {it.@'inkex:column'.toInteger()}
-
-        String headerHeight = tableHeader[0].@height;
-
-        tableHeader.each { node->
-            buf.append( XSLFO_TABLE_CELL ).append("\n");
-            buf.append(XSLFO_BLOCK_CONTAINER("height=\""+headerRect.@height.toString()+ "pt\"","text-align=\"center\"","border-width=\"1pt\"","border-color=\"black\"", "border-style=\"solid\"")).append("\n");
-            buf.append( XSLFO_BLOCK ).append( node.text() ).append( XSLFO_BLOCK_ENDING).append("\n");
-            buf.append(XSLFO_BLOCK_CONTAINER_ENDING).append("\n")
-            buf.append( XSLFO_TABLE_CELL_ENDING).append("\n")
-        }
-        buf.append(XSLFO_TABLE_ROW_ENDING).append("\n")
-        buf.append(XSLFO_TABLE_HEADER_ENDING).append("\n")
-
-//        Find any rectangle from table header
-
-        buf.append(XSLFO_TABLE_BODY).append("\n");
-//        rows of data now...
-        buf.append(XSL_FOR_EACH("/DOCUMENT//ROWSET/ROW")).append("\n")
-        buf.append(XSLFO_TABLE_ROW).append("\n")
-
-//        Hax jeśli w layoucie nie ma specjalnie wiersza dla danych zrobionego
-        String tableCellHeight = computeTableCellHeight( layoutXML )
-        tableCellHeight = "".equals(tableCellHeight) ? headerHeight : tableCellHeight;
-
-        dataXML.ROWSET.ROW.children().each{ det ->
-            buf.append(XSLFO_TABLE_CELL)
-            buf.append(XSLFO_BLOCK_CONTAINER("text-align=\"center\"","border-width=\"1pt\"","border-style=\"solid\"","border-color=\"black\"","height=\"" + tableCellHeight + "pt\"")).append("\n")
-            buf.append(XSLFO_BLOCK)
-            buf.append(XSL_VALUEOF("./" + det.name())).append(XSLFO_BLOCK_ENDING)
-            buf.append(XSLFO_BLOCK_CONTAINER_ENDING)
-            buf.append(XSLFO_TABLE_CELL_ENDING).append("\n")
+        String style = cell.@style;
+        Map<String,String> mapper = new HashMap<>();
+        for(String sp : style.split(";")) {
+            String[] tokenized = sp.split(":");
+            mapper.put(tokenized[0],tokenized[1]);
         }
 
-        buf.append(XSLFO_TABLE_ROW_ENDING).append("\n")
+        defaults.setProperty('header.color.background', mapper.get("fill") );
+        defaults.setProperty('border.color',mapper.get("stroke"))
+        String borderWidth = mapper.get("stroke-width")
+        defaults.setProperty('border.width',borderWidth.substring(0,borderWidth.indexOf("px")))
 
-        buf.append(XSL_FOR_EACH_ENDING).append("\n")
+        mapper.clear();
 
-        buf.append(XSLFO_TABLE_BODY_ENDING).append("\n");
-        buf.append(XSLFO_TABLE_ENDING).append("\n")
+        def text = layout.flowRoot.find{ it.@'inkex:row' == 0 && it.@'inkex:column' == 0}
+        style = text.@style;
+        for(String sp : style.split(";")) {
+            String[] tokenized = sp.split(":");
+            mapper.put(tokenized[0],tokenized[1]);
+        }
+
+        defaults.setProperty('header.color.color', mapper.get("fill"));
+        String textSize = mapper.get("font-size")
+        defaults.setProperty('header.font.size', textSize.substring(0,textSize.indexOf("px")))
+        defaults.setProperty('header.font.family', mapper.get("font-family"))
+        defaults.setProperty('header.font.weight', mapper.get("font-weight"))
+    }
+/**
+     * Loads default report properties from resource
+     */
+    void loadDefaults() {
+        defaults = new Properties();
+        defaults.load(this.getClass().getResourceAsStream("/defaults.properties"));
+        logger.info("Default properties successfully loaded")
     }
 
     /**
      * Checks if node belongs to master section and processes it.
-     * @param it writer for output file
+     * @param it stringbuilder to store master part of report
      */
-    private void processMasterSection(EncodingAwareBufferedWriter it, GPathResult node, GPathResult masterValues ){
+    private void processMasterSection(StringBuilder it, GPathResult node, GPathResult masterValues ){
         switch(node.name()) {
+//            TODO: mapowanie elementow zgodnie z nowymi zalozeniami, tj. styl nie CSSowy etc.
             case "text":
                 logger.debug("Processing direct text node");
                 String x = node.@x;
                 String y = node.@y;
-                String style = node.@style;
-                it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" style=\"" + style + "\">\n") ;
+                it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" " + mapStyle( (String)node.@style) + " >") ;
 
                 node.tspan.each { tspan ->
                     it.append("<svg:tspan x=\"" + tspan.@x + "\" y=\"" + tspan.@y + "\">" + tspan.text() + "</svg:tspan>\n")
                 }
+
                 it.append("</svg:text>")
                 break;
 
@@ -176,9 +176,10 @@ class InputProcessor {
 //            TODO: rozważyć czy w layoucie może wystąpić kwadrat z tekstem, jeśli tak to zawrzeć jego obsługę tutaj
                 break;
 
+//            rect not belonging to table means its data field
             case "rect" :
                 logger.debug("Processing rectangle node");
-                if( node.@'inkex:column' != "" ) {
+                if( StringUtils.hasText((String)node.@'inkex:column')  ) {
                     logger.debug("Table rect")
                     return;
                 }
@@ -188,49 +189,13 @@ class InputProcessor {
                     return;
                 }
 
-                it.append("<svg:rect x=\"" + node.@x + "\" y=\"" + node.@y + "\" height=\"" + node.@height + "\" width=\"" + node.@width + "\" id=\"" +  node.@id + "\" style=\"" + node.@style + "\" /> \n");
+                it.append("<svg:rect x=\"" + node.@x + "\" y=\"" + node.@y + "\" height=\"" + node.@height + "\" width=\"" + node.@width + "\" id=\"" +  node.@id + "\" " + mapStyle((String)node.@style ) + " /> \n");
                 it.append("<svg:text x=\"" + (node.@x.toDouble()+3) + "\" y=\"" + ( node.@y.toDouble() + node.@height.toDouble()/2  ) +"\">" );
                 it.append("<xsl:value-of select=\"/DOCUMENT/" + masterValues[usedAdditional].name() + "\"/>\n");
                 it.append("</svg:text>\n");
                 usedAdditional++;
                 break;
-
         }
-    }
-
-    /**
-     * Adds XSL-FO constant elements to the output file and adds their closing tokens to the queue
-     * @param it file to which it is written
-     * @param tokenQ queue for closing tokens
-     */
-    private void addConstantElements(EncodingAwareBufferedWriter it, List<String> tokenQ, GPathResult layout){
-        it.append(XML_HEADER).append("\n");
-
-        it.append(XSLT_HEADER).append("\n");
-        tokenQ.add(XSLT_ENDING);
-
-        it.append( XSL_TEMPLATE("/")).append("\n")
-        tokenQ.add(XSL_TEMPLATE_ENDING)
-
-        it.append( XSLFO_HEADER ).append("\n")
-        tokenQ.add( XSLFO_ENDING );
-
-        it.append(XSLFO_PAGE_LAYOUT).append("\n").append("\n");
-
-        it.append(XSLFO_PAGE_SEQUENCE_HEADER).append("\n");
-        tokenQ.add(XSLFO_PAGE_SEQUENCE_ENDING);
-
-        it.append(XSLFO_PAGE_FLOW_HEADER("xsl-region-body")).append("\n");
-        tokenQ.add(XSLFO_PAGE_FLOW_ENDING);
-
-// master section with embedded SVG
-        it.append(XSLFO_BLOCK_CONTAINER( computeMasterHeight( layout ) + "pt"));
-        it.append("\t").append( XSLFO_BLOCK).append("\n")
-        tokenQ.add("\t")
-
-        it.append(XSLFO_INSTREAM_FOREIGN_OBJECT)
-
-        it.append(SVG_ELEMENT)
     }
 
     /**
@@ -281,5 +246,19 @@ class InputProcessor {
         return result.@height.toString();
     }
 
+    /**
+     * This method transforms CSS-style attributes into form acceptable by FOP delivered with ApEx
+     * @param style String with style expression
+     */
+    private String mapStyle( String style) {
+        StringBuilder sb = new StringBuilder();
+        String[] tokenizedStyle = style.split(";");
+
+        for(String attr : tokenizedStyle ) {
+            String[] splitted = attr.split(":");
+            sb.append(splitted[0]).append("=\"").append(splitted[1]).append("\" ");
+        }
+        return sb.toString();
+    }
 
 }
