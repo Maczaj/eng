@@ -73,9 +73,9 @@ class InputProcessor {
 
 //            master section (SVG part)
             StringBuilder master = new StringBuilder();
-            master.append(SVG_ELEMENT("20cm", computeMasterHeight(layoutXML)+"pt"))
+            master.append(SVG_ELEMENT("20cm", computeMasterHeight(layoutXML)+"pt")).append("\n")
             layoutXML.g.children().each { node -> processMasterSection(master, node, masterValues)  }
-            master.append("</svg:svg>")
+            master.append("</svg:svg>").append("\n")
 
 //        Compute values for attributes
             setHeaderProperties(layoutXML);
@@ -158,12 +158,15 @@ class InputProcessor {
                 String x = node.@x;
                 String y = node.@y;
                 it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" " + mapStyle( (String)node.@style) + " >") ;
-
-                node.tspan.each { tspan ->
-                    it.append("<svg:tspan x=\"" + tspan.@x + "\" y=\"" + tspan.@y + "\">" + tspan.text() + "</svg:tspan>\n")
+                if( StringUtils.hasText(node.text())) {
+                    it.append(node.text().trim())
+                } else {
+                    node.tspan.each { tspan ->
+                        it.append( tspan.text())
+                    }
                 }
 
-                it.append("</svg:text>")
+                it.append("</svg:text>").append("\n")
                 break;
 
             case "image":
@@ -191,7 +194,7 @@ class InputProcessor {
 
                 it.append("<svg:rect x=\"" + node.@x + "\" y=\"" + node.@y + "\" height=\"" + node.@height + "\" width=\"" + node.@width + "\" id=\"" +  node.@id + "\" " + mapStyle((String)node.@style ) + " /> \n");
                 it.append("<svg:text x=\"" + (node.@x.toDouble()+3) + "\" y=\"" + ( node.@y.toDouble() + node.@height.toDouble()/2  ) +"\">" );
-                it.append("<xsl:value-of select=\"/DOCUMENT/" + masterValues[usedAdditional].name() + "\"/>\n");
+                it.append("<xsl:value-of select=\".//" + masterValues[usedAdditional].name() + "\"/>\n");
                 it.append("</svg:text>\n");
                 usedAdditional++;
                 break;
@@ -256,6 +259,10 @@ class InputProcessor {
 
         for(String attr : tokenizedStyle ) {
             String[] splitted = attr.split(":");
+            if("line-height".equals(splitted[0])) {
+                continue;
+            }
+
             sb.append(splitted[0]).append("=\"").append(splitted[1]).append("\" ");
         }
         return sb.toString();
