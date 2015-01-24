@@ -1,97 +1,318 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-<svg xmlns:inkex="http://sodipodi.sourceforge.net/DTD/inkex-0.dtd" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="inny.svg" inkscape:version="0.48.5 r10040" version="1.1" id="svg2" height="1052.3622047" width="744.09448819" inkscape:export-filename="I:\workspace\eng\sampleLayout.png" inkscape:export-xdpi="90" inkscape:export-ydpi="90">
-	<sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="1.4" inkscape:cx="251.0937" inkscape:cy="830.99491" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1858" inkscape:window-height="1058" inkscape:window-x="1358" inkscape:window-y="-8" inkscape:window-maximized="1">
-		<inkscape:grid id="grid2993" type="xygrid" />
-	</sodipodi:namedview>
-	<defs id="defs4">
-		<linearGradient id="linearGradient5260" osb:paint="gradient">
-			<stop style="stop-color:#000000;stop-opacity:1;" offset="0" id="stop5262" />
-			<stop style="stop-color:#000000;stop-opacity:0;" offset="1" id="stop5264" />
-		</linearGradient>
-	</defs>
-	<metadata id="metadata7">
-		<rdf:RDF>
-			<cc:Work rdf:about="">
-				<dc:format>image/svg+xml</dc:format>
-				<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-				<dc:title/>
-			</cc:Work>
-		</rdf:RDF>
-	</metadata>
-	<inkex:tables count="3">
-		<inkex:table columns="7" rows="2" table-id="inkscape-table0" />
-		<inkex:table table-id="inkscape-table1" rows="2" columns="7" />
-		<inkex:table columns="6" rows="2" table-id="inkscape-table2" />
-	</inkex:tables>
-	<g style="display:inline" inkscape:label="W1" id="layer1" inkscape:groupmode="layer">
-		<rect y="112.36218" x="130" height="30" width="90" id="rect4605" style="fill:none;stroke:#000000" />
-		<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New" id="flowRoot4642" transform="translate(30,226.61735)">
-			<flowRegion id="flowRegion4644">
-				<use x="0" y="0" xlink:href="#rect4605" id="use4646" width="744.09448" height="1052.3622" />
+<svg
+   xmlns:inkex="http://sodipodi.sourceforge.net/DTD/inkex-0.dtd"
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="inny.svg"
+   inkscape:version="0.48.5 r10040"
+   version="1.1"
+   id="svg2"
+   height="1052.3622047"
+   width="744.09448819"
+   inkscape:export-filename="I:\workspace\eng\sampleLayout.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="251.0937"
+     inkscape:cy="830.99491"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1858"
+     inkscape:window-height="1058"
+     inkscape:window-x="1358"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       id="grid2993"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient5260"
+       osb:paint="gradient">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop5262" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop5264" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <inkex:tables
+     count="3">
+    <inkex:table
+       columns="7"
+       rows="2"
+       table-id="inkscape-table0" />
+    <inkex:table
+       table-id="inkscape-table1"
+       rows="2"
+       columns="7" />
+    <inkex:table
+       columns="6"
+       rows="2"
+       table-id="inkscape-table2" />
+  </inkex:tables>
+  <g
+     style="display:inline"
+     inkscape:label="W1"
+     id="layer1"
+     inkscape:groupmode="layer">
+    <rect
+       y="112.36218"
+       x="150"
+       height="30"
+       width="90"
+       id="rect4605"
+       style="fill:none;stroke:#000000" />
+    <flowRoot
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New"
+       id="flowRoot4642"
+       transform="translate(30,226.61735)">
+			<flowRegion
+   id="flowRegion4644">
+				<use
+   x="0"
+   y="0"
+   xlink:href="#rect4605"
+   id="use4646"
+   width="744.09448"
+   height="1052.3622" />
 			</flowRegion>
-			<flowPara id="flowPara4648">Kolumna1</flowPara>
-		</flowRoot>
-		<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New" id="flowRoot4662" transform="translate(30,226.61735)">
-			<flowRegion id="flowRegion4664">
+			<flowPara
+   id="flowPara4648">Kolumna1</flowPara>
+		</flowRoot>    <flowRoot
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier New;-inkscape-font-specification:Courier New"
+       id="flowRoot4662"
+       transform="translate(30,226.61735)">
+			<flowRegion
+   id="flowRegion4664">
 
 			</flowRegion>
-			<flowPara id="flowPara4668">Kolumna2</flowPara>
-		</flowRoot>
-		<text sodipodi:linespacing="125%" id="text3008" y="72.362183" x="80" style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans" xml:space="preserve">
-			<tspan id="tspan3012" y="72.362183" x="80" sodipodi:role="line" />    Pracownicy departamentu       </text>
-		<text xml:space="preserve" style="font-size:18px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans" x="10" y="132.36218" id="text3034" sodipodi:linespacing="125%">
-			<tspan sodipodi:role="line" id="tspan3036" x="10" y="132.36218">Departament</tspan>
+			<flowPara
+   id="flowPara4668">Kolumna2</flowPara>
+		</flowRoot>    <text
+       sodipodi:linespacing="125%"
+       id="text3008"
+       y="72.362183"
+       x="80"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve">
+			<tspan
+   id="tspan3012"
+   y="72.362183"
+   x="80"
+   sodipodi:role="line" />    Pracownicy departamentu       </text>
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="10"
+       y="132.36218"
+       id="text3034"
+       sodipodi:linespacing="125%">
+			<tspan
+   sodipodi:role="line"
+   id="tspan3036"
+   x="10"
+   y="132.36218">Departament</tspan>
 		</text>
-		<image y="82.362183" x="470" id="image3065" xlink:href="file:///I:/workspace/eng/exam_gif_to_png_q1.png" height="96.571426" width="124.42857" />
-	</g>
-	<rect height="35.433071" id="inkscape-table2" inkex:table-id="inkscape-table2" x="30" y="226.61736" inkex:column="0" inkex:row="0" style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2H" inkex:table-id="inkscape-table2" x="136.29921" y="226.61736" inkex:column="1" inkex:row="0" style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2D" inkex:table-id="inkscape-table2" x="242.59842" y="226.61736" inkex:column="2" inkex:row="0" style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2i" inkex:table-id="inkscape-table2" x="348.89764" y="226.61736" inkex:column="3" inkex:row="0" style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table23" inkex:table-id="inkscape-table2" x="455.19684" y="226.61736" inkex:column="4" inkex:row="0" style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2X" inkex:table-id="inkscape-table2" x="561.49603" y="226.61736" inkex:column="5" inkex:row="0" style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table29" inkex:table-id="inkscape-table2" x="30" y="262.05042" inkex:column="0" inkex:row="1" style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table24" inkex:table-id="inkscape-table2" x="136.29921" y="262.05042" inkex:column="1" inkex:row="1" style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2l" inkex:table-id="inkscape-table2" x="242.59842" y="262.05042" inkex:column="2" inkex:row="1" style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2G" inkex:table-id="inkscape-table2" x="348.89764" y="262.05042" inkex:column="3" inkex:row="1" style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2I" inkex:table-id="inkscape-table2" x="455.19684" y="262.05042" inkex:column="4" inkex:row="1" style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" width="106.29921" />
-	<rect height="35.433071" id="inkscape-table2B" inkex:table-id="inkscape-table2" x="561.49603" y="262.05042" inkex:column="5" inkex:row="1" style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" width="106.29921" />
-	<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans" inkex:column="3" inkex:row="0" inkex:table-id="inkscape-table2-text" id="inkscape-table26">
-		<flowRegion id="inkscape-table2C">
-			<rect height="35.433071" width="106.29921" y="226.61736" x="348.89764" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans" id="inkscape-table2P" />
+    <image
+       y="95.790756"
+       x="415.57141"
+       id="image3065"
+       xlink:href="file:///I:/workspace/eng/exam_gif_to_png_q1.png"
+       height="96.571426"
+       width="124.42857" />
+  </g>
+  <rect
+     height="35.433071"
+     id="inkscape-table2"
+     inkex:table-id="inkscape-table2"
+     x="30"
+     y="226.61736"
+     inkex:column="0"
+     inkex:row="0"
+     style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001"
+     width="106.29921" />
+  <rect
+     height="35.433071"
+     id="inkscape-table2H"
+     inkex:table-id="inkscape-table2"
+     x="136.29921"
+     y="226.61736"
+     inkex:column="1"
+     inkex:row="0"
+     style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001"
+     width="106.29921" />
+  <rect
+     height="35.433071"
+     id="inkscape-table2D"
+     inkex:table-id="inkscape-table2"
+     x="242.59842"
+     y="226.61736"
+     inkex:column="2"
+     inkex:row="0"
+     style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:0.80000001"
+     width="106.29921" />
+  <rect
+     height="35.433071"
+     id="inkscape-table2i"
+     inkex:table-id="inkscape-table2"
+     x="348.89764"
+     y="226.61736"
+     inkex:column="3"
+     inkex:row="0"
+     style="fill:#cccccc;fill-opacity:0.8;stroke:#000000;stroke-width:1.19225895px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="151.10236" />
+  <rect
+     height="35.433071"
+     id="inkscape-table29"
+     inkex:table-id="inkscape-table2"
+     x="30"
+     y="262.05042"
+     inkex:column="0"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="106.29921" />
+  <rect
+     height="35.433071"
+     id="inkscape-table24"
+     inkex:table-id="inkscape-table2"
+     x="136.29921"
+     y="262.05042"
+     inkex:column="1"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="106.29921" />
+  <rect
+     height="35.433071"
+     id="inkscape-table2l"
+     inkex:table-id="inkscape-table2"
+     x="242.59842"
+     y="262.05042"
+     inkex:column="2"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="106.29921" />
+  <rect
+     height="35.433071"
+     id="inkscape-table2G"
+     inkex:table-id="inkscape-table2"
+     x="348.89764"
+     y="262.05042"
+     inkex:column="3"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1.19225895px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="151.10236" />
+  <flowRoot
+     xml:space="preserve"
+     style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     inkex:column="3"
+     inkex:row="0"
+     inkex:table-id="inkscape-table2-text"
+     id="inkscape-table26">
+		<flowRegion
+   id="inkscape-table2C">
+			<rect
+   height="35.433071"
+   width="106.29921"
+   y="226.61736"
+   x="348.89764"
+   style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
+   id="inkscape-table2P" />
 		</flowRegion>
-		<flowPara id="inkscape-table24X">Pensja</flowPara>
-	</flowRoot>
-	<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans" inkex:column="1" inkex:row="0" inkex:table-id="inkscape-table2-text" id="inkscape-table2Dj">
-		<flowRegion id="inkscape-table26J">
-			<rect height="35.433071" width="106.29921" y="226.61736" x="136.29921" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans;font-size:14px" id="inkscape-table2Dd" />
+		<flowPara
+   id="inkscape-table24X">Pensja</flowPara>
+	</flowRoot>  <flowRoot
+     xml:space="preserve"
+     style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     inkex:column="1"
+     inkex:row="0"
+     inkex:table-id="inkscape-table2-text"
+     id="inkscape-table2Dj">
+		<flowRegion
+   id="inkscape-table26J">
+			<rect
+   height="35.433071"
+   width="106.29921"
+   y="226.61736"
+   x="136.29921"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans;font-size:14px"
+   id="inkscape-table2Dd" />
 		</flowRegion>
-		<flowPara id="inkscape-table2M">Nazwisko</flowPara>
-	</flowRoot>
-	<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans" inkex:column="2" inkex:row="0" inkex:table-id="inkscape-table2-text" id="inkscape-table2g">
-		<flowRegion id="inkscape-table26O">
-			<rect height="35.433071" width="106.29921" y="226.61736" x="242.59842" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans" id="inkscape-table2HZ" />
+		<flowPara
+   id="inkscape-table2M">Nazwisko</flowPara>
+	</flowRoot>  <flowRoot
+     xml:space="preserve"
+     style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     inkex:column="2"
+     inkex:row="0"
+     inkex:table-id="inkscape-table2-text"
+     id="inkscape-table2g">
+		<flowRegion
+   id="inkscape-table26O">
+			<rect
+   height="35.433071"
+   width="106.29921"
+   y="226.61736"
+   x="242.59842"
+   style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans"
+   id="inkscape-table2HZ" />
 		</flowRegion>
-		<flowPara id="inkscape-table2x">Data zatrudnienia</flowPara>
-	</flowRoot>
-	<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans" inkex:column="5" inkex:row="0" inkex:table-id="inkscape-table2-text" id="inkscape-table2y">
-		<flowRegion id="inkscape-table2d">
-			<rect height="35.433071" width="106.29921" y="226.61736" x="561.49603" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans" id="inkscape-table2q" />
+		<flowPara
+   id="inkscape-table2x">Data zatrudnienia</flowPara>
+	</flowRoot>  <flowRoot
+     xml:space="preserve"
+     style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+     inkex:column="0"
+     inkex:row="0"
+     inkex:table-id="inkscape-table2-text"
+     id="inkscape-table2da"
+     transform="translate(-13.15625,4.0391539)">
+		<flowRegion
+   id="inkscape-table2a">
+			<rect
+   height="35.433071"
+   width="106.29921"
+   y="226.61736"
+   x="30"
+   style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+   id="inkscape-table24C" />
 		</flowRegion>
-		<flowPara id="inkscape-table2b">Kierownik</flowPara>
-	</flowRoot>
-	<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans" inkex:column="0" inkex:row="0" inkex:table-id="inkscape-table2-text" id="inkscape-table2da" transform="translate(-13.15625,4.0391539)">
-		<flowRegion id="inkscape-table2a">
-			<rect height="35.433071" width="106.29921" y="226.61736" x="30" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans" id="inkscape-table24C" />
-		</flowRegion>
-		<flowPara id="inkscape-table298">Stanowisko</flowPara>
-	</flowRoot>
-	<flowRoot xml:space="preserve" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans" inkex:column="4" inkex:row="0" inkex:table-id="inkscape-table2-text" id="inkscape-table2v">
-		<flowRegion id="inkscape-table2z">
-			<rect height="35.433071" width="106.29921" y="226.61736" x="455.19684" style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Sans;-inkscape-font-specification:Sans" id="inkscape-table22" />
-		</flowRegion>
-		<flowPara id="inkscape-table2Hu">Premia</flowPara>
-	</flowRoot>
-</svg>
+		<flowPara
+   id="inkscape-table298">Stanowisko</flowPara>
+	</flowRoot></svg>
