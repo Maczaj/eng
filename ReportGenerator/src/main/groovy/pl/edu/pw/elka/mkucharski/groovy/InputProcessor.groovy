@@ -3,13 +3,13 @@ package pl.edu.pw.elka.mkucharski.groovy
 import groovy.util.slurpersupport.GPathResult
 import org.apache.cxf.helpers.IOUtils
 import org.apache.log4j.Logger
-import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
+import static org.springframework.util.StringUtils.hasText
 import static pl.edu.pw.elka.mkucharski.Constants.*
 
 /**
@@ -19,9 +19,8 @@ import static pl.edu.pw.elka.mkucharski.Constants.*
  * Time: 22:25
  * To change this template use File | Settings | File Templates.
  */
-@Component
 class InputProcessor {
-    static final Logger logger = Logger.getLogger(InputProcessor.getClass().getName());
+    static final Logger logger = Logger.getLogger('InputProcessor');
 
     private static final String DEFAULT_DATA_FILTER = "data_filter.xsl";
     private static final String DEFAULT_LAYOUT_FILTER = "layout_filter.xsl"
@@ -37,8 +36,33 @@ class InputProcessor {
     private boolean grouping = false;
     private boolean autoWidth = true;
 
+    List<String> getMasterDisplayNames() {
+        return masterDisplayNames
+    }
+    private List<String> masterDisplayNames = new ArrayList();
+
 
     private int usedAdditional;
+    private String column;
+    private String row;
+
+    void setMasterCount(int masterCount) {
+        this.masterCount = masterCount
+    }
+    private int masterCount;
+
+    private findInkexNamespacePrefix(GPathResult layout){
+        def namespaceTagHints = layout.getClass().getSuperclass().getDeclaredField("namespaceTagHints")
+        namespaceTagHints.setAccessible(true)
+
+        for (String ns : namespaceTagHints.get(layout)) {
+            if(ns.contains("http://sodipodi.sourceforge.net/DTD/inkex-0.dtd")) {
+                String prefix = ns.substring(0,ns.indexOf("="));
+                row = prefix + ":row"
+                column = prefix + ":column"
+            }
+        }
+    }
 
     /**
      * Creates XSLT that can be applied to XML data to create report.
@@ -57,11 +81,11 @@ class InputProcessor {
 //         start processing
         def layoutXML = XmlSlurper.newInstance().parse(TEMP_LAYOUT);
         def dataXML = XmlSlurper.newInstance().parse(TEMP_DATA);
-        logger.info("Data file contains " + (dataXML.children().size() - 1) + " additional nodes")
+
+        findInkexNamespacePrefix(layoutXML)
 
         usedAdditional = 0;
-        def masterValues = dataXML.children().findAll { it.name().startsWith('P') }
-        logger.info("Found " + masterValues.size() + " nodes appearing to be master data");
+        def masterValues = dataXML.'ROWSET'.'ROW';
 
 //            master section (SVG part)
         StringBuilder master = new StringBuilder();
@@ -83,9 +107,10 @@ class InputProcessor {
         }
 
 //        format page template with svg part
+        String keyExpr = getKeyExpression(masterValues)
         new File(outputDir + File.separator + "page" + outputSuffix + ".xsl").
                 withWriter("UTF-8", {
-                    it.write(String.format(pageTemplate.toString(), master.toString(), autoWidth ? "#PRN_TABLE_CELLS# " : computeCellWidths(layoutXML)))
+                    it.write(String.format(pageTemplate.toString(), keyExpr, keyExpr, master.toString(), autoWidth ? getAutoWidthColumns(masterValues.children().size() - masterCount) : computeCellWidths(layoutXML), keyExpr))
                 })
         logger.info("Page template transformation created")
 
@@ -96,16 +121,40 @@ class InputProcessor {
         logger.info("Processing finished")
     }
 
+    private String getAutoWidthColumns(int colNo) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < colNo; i++) {
+            sb.append("<fo:table-column column-width=\"#COLUMN_WIDTH#pt\"/>\n");
+        }
+        return sb.toString()
+    }
+
+
+    private String getKeyExpression(GPathResult masterValues) {
+        if (masterCount > 0) {
+            StringBuilder sb = new StringBuilder("concat(")
+            for (int i = 0; i < masterCount; i++) {
+                sb.append(masterValues.children()[i].name()).append(",':'")
+                if(i != masterCount - 1 ) {
+                    sb.append(",");
+                }
+            }
+            sb.append(")")
+            return sb.toString()
+        }
+        return ":";
+    }
+
 
     private String computeCellWidths(GPathResult layout) {
         logger.info("Using fixed table cell width")
         StringBuilder sb = new StringBuilder();
 
-        def cells = layout.children().findAll { it.@'inkex:row' == 0 && "rect".equals(it.name()) }
-        cells.sort{ (String)it.@'inkex:column' }
+        def cells = layout.children().findAll { it.@"$row" == 0 && "rect".equals(it.name()) }
+        cells.sort { (String) it.@"$column" }
         logger.debug("Found " + cells.size() + " columns")
 
-        cells.each {sb.append(XSLFO_TABLE_COLUMN(((String)it.@width) + "pt")).append("\n")}
+        cells.each { sb.append(XSLFO_TABLE_COLUMN(((String) it.@width) + "pt")).append("\n") }
 
         return sb.toString();
     }
@@ -116,7 +165,7 @@ class InputProcessor {
         InputStream stream = InputProcessor.getClass().getResourceAsStream(template)
 
         new File(dir + File.separator + "column" + suffix + ".xsl").withWriter("UTF-8", {
-            it.write(IOUtils.toString(stream))
+            it.write(String.format(IOUtils.toString(stream), masterCount - 1))
         });
     }
 /**
@@ -125,9 +174,18 @@ class InputProcessor {
  */
     private void createHeaderTransformation(String outputDir, String fileNameSuffix) {
         InputStream stream = InputProcessor.getClass().getResourceAsStream("/header.xml");
+        StringBuilder sb = new StringBuilder()
+        for (int i = 0; i < masterDisplayNames.size(); ++i) {
+            if (i > 0) {
+                sb.append(" and ")
+            }
+            sb.append("'#COLUMN_HEADING#'!='").append(masterDisplayNames.get(i)).append("'")
+        }
+
+        String formatted = String.format(IOUtils.toString(stream), sb.toString())
 
         new File(outputDir + File.separator + "header" + fileNameSuffix + ".xsl").withWriter("UTF-8", {
-            it.write(IOUtils.toString(stream));
+            it.write(formatted);
         })
     }
 /**
@@ -135,7 +193,44 @@ class InputProcessor {
  * @param layout
  */
     void setBodyProperties(GPathResult layout) {
+        def cell = layout.children().find { it.@"$row" == 1 }
+        Map<String, String> mapper = new HashMap<>();
+        String style = null
+        style = cell.@style;
 
+        if (hasText(style)) {
+            for (String sp : style.split(";")) {
+                String[] tokenized = sp.split(":");
+                mapper.put(tokenized[0], tokenized[1]);
+            }
+
+        }
+        String prop = mapper.get("fill")
+        defaults.setProperty('cell.background.color', prop != null ? prop : defaults.getProperty('header.color.background'));
+
+        mapper.clear();
+        style = null;
+
+        def text = layout.flowRoot.find { it.@"$row" == 1 && it.@"$column" == 0 }
+        style = text.@style;
+        for (String sp : style.split(";")) {
+            if (hasText(sp)) {
+                String[] tokenized = sp.split(":");
+                mapper.put(tokenized[0], tokenized[1]);
+            }
+        }
+
+        prop = mapper.get("fill")
+        defaults.setProperty('cell.font.color', prop != null ? prop : defaults.getProperty('header.color.color'));
+
+        prop = mapper.get("font-size")
+        defaults.setProperty('body.font.size', prop != null ? textSize.substring(0, textSize.indexOf("px")) : defaults.getProperty('header.font.size'))
+
+        prop = mapper.get("font-family")
+        defaults.setProperty('body.font.family', prop != null ? prop : defaults.getProperty('header.font.family'))
+
+        prop = mapper.get("font-weight")
+        defaults.setProperty('body.font.weight', prop != null ? prop : defaults.getProperty('header.font.weight'))
 
     }
 /**
@@ -143,8 +238,7 @@ class InputProcessor {
  * @param layout GPathResult for report layout root
  */
     void setHeaderProperties(GPathResult layout) {
-        def cell = layout.children().find { it.@'inkex:row' == 0 }
-
+        def cell = layout.rect.find { it.@"$row" == 0 }
         String style = cell.@style;
         Map<String, String> mapper = new HashMap<>();
         for (String sp : style.split(";")) {
@@ -159,11 +253,20 @@ class InputProcessor {
 
         mapper.clear();
 
-        def text = layout.flowRoot.find { it.@'inkex:row' == 0 && it.@'inkex:column' == 0 }
+        def text = layout.flowRoot.find { it.@"$row" == 0 && it.@"$column" == 0 }
+        def x = text.flowPara;
+
         style = text.@style;
         for (String sp : style.split(";")) {
             String[] tokenized = sp.split(":");
             mapper.put(tokenized[0], tokenized[1]);
+        }
+        style = x.@style;
+        for(String sp : style.split(";")) {
+           if( !sp.startsWith("-inkex")) {
+               String [] tokenized = sp.split(":")
+               mapper.put(tokenized[0],tokenized[1])
+           }
         }
 
         defaults.setProperty('header.color.color', mapper.get("fill"));
@@ -178,7 +281,33 @@ class InputProcessor {
     void loadDefaults() {
         defaults = new Properties();
         defaults.load(this.getClass().getResourceAsStream("/defaults.properties"));
-        logger.info("Default properties successfully loaded")
+        logger.info("Default properties loaded")
+    }
+
+    private String mapStyle(String moreImportant, String leastImportant) {
+        Map<String, String> result = new HashMap<>();
+        if (hasText(leastImportant)) {
+            for (String s : leastImportant.split(";")) {
+                String[] splitted = s.split(":");
+                if (!"line-height".equals(splitted[0]) && !splitted[0].startsWith("-inkscape")) {
+                    result.put(splitted[0], splitted[1]);
+                }
+            }
+        }
+        if (hasText(moreImportant)) {
+            for (String s : moreImportant.split(";")) {
+                String[] splitted = s.split(":");
+                if (!"line-height".equals(splitted[0]) && !splitted[0].startsWith("-inkscape")) {
+                    result.put(splitted[0], splitted[1]);
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> e : result.entrySet()) {
+            sb.append(e.getKey()).append("=\"").append(e.getValue()).append("\" ")
+        }
+        return sb.toString();
     }
 
     /**
@@ -191,16 +320,11 @@ class InputProcessor {
                 logger.debug("Processing direct text node");
                 String x = node.@x;
                 String y = node.@y;
-                it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" " + mapStyle((String) node.@style) + " >");
-                if (StringUtils.hasText(node.text())) {
-                    it.append(node.text().trim())
-                } else {
-                    node.tspan.each { tspan ->
-                        it.append(tspan.text())
-                    }
-                }
-
+                GPathResult chld = node.tspan[0];
+                it.append("<svg:text x=\"" + x + "\" y=\"" + y + "\" " + mapStyle((String) chld.@style, (String) node.@style) + " >");
+                it.append(hasText(chld.text()) ? chld.text().trim() : node.text().trim())
                 it.append("</svg:text>").append("\n")
+
                 break;
 
             case "image":
@@ -216,19 +340,19 @@ class InputProcessor {
 //            rect not belonging to table means its data field
             case "rect":
                 logger.debug("Processing rectangle node");
-                if (StringUtils.hasText((String) node.@'inkex:column')) {
+                if (hasText((String) node.@"$column")) {
                     logger.debug("Table rect")
-                    return;
-                }
-
-                if (usedAdditional > masterValues.size()) {
-                    logger.info("No more nodes for master values found");
                     return;
                 }
 
                 it.append("<svg:rect x=\"" + node.@x + "\" y=\"" + node.@y + "\" height=\"" + node.@height + "\" width=\"" + node.@width + "\" id=\"" + node.@id + "\" " + mapStyle((String) node.@style) + " /> \n");
                 it.append("<svg:text x=\"" + (node.@x.toDouble() + 3) + "\" y=\"" + (node.@y.toDouble() + node.@height.toDouble() / 2) + "\">");
-                it.append("<xsl:value-of select=\".//" + masterValues[usedAdditional].name() + "\"/>\n");
+                if (usedAdditional < masterCount) {
+                    it.append("<xsl:value-of select=\"" + masterValues.children()[usedAdditional].name() + "\"/>\n");
+                } else {
+                    it.append("<xsl:value-of select =\"'-'\" /> \n")
+                    logger.info("No more nodes for master values found");
+                }
                 it.append("</svg:text>\n");
                 usedAdditional++;
                 break;
@@ -262,7 +386,7 @@ class InputProcessor {
      * @return computer height
      */
     private String computeMasterHeight(GPathResult layout) {
-        GPathResult result = layout.children().findAll { it.@'inkex:row' == 0 }
+        GPathResult result = layout.children().findAll { it.@"$row" == 0 }
         return result[0].@y.toString();
     }
 
@@ -272,7 +396,7 @@ class InputProcessor {
      * @return
      */
     private String computeTableHeaderHeight(GPathResult layout) {
-        GPathResult result = layout.children().find { it.@'inkex:row' == 0 }
+        GPathResult result = layout.children().find { it.@"$row" == 0 }
         return result.@height.toString();
     }
 
@@ -282,7 +406,7 @@ class InputProcessor {
      * @return
      */
     private String computeTableCellHeight(GPathResult layout) {
-        GPathResult result = layout.children().find { it.@'inkex:row' == 1 }
+        GPathResult result = layout.children().find { it.@"$row" == 1 }
         return result.@height.toString();
     }
 
@@ -299,6 +423,10 @@ class InputProcessor {
             if ("line-height".equals(splitted[0])) {
                 continue;
             }
+            if (splitted[0].startsWith("-inkscape")) {
+                continue;
+            }
+
 
             sb.append(splitted[0]).append("=\"").append(splitted[1]).append("\" ");
         }

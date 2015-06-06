@@ -1,67 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.edu.pw.elka.mkucharski</groupId>
     <artifactId>ReportGenerator</artifactId>
-    <version>1.0</version>
-    <packaging>${packaging.type}</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>Reports Generator</name>
     <description>This tools takes two input parameters: XML data (in form like from Oracle ApEx report)
-                and SVG report layout (in form like from InkScape). Result of running this tool is final
-                report page in XSL-FO that can be further processed by Apache FOP</description>
-    <profiles>
-        <profile>
-            <id>cmd</id>
-            <properties>
-            <packaging.type>jar</packaging.type>
-            </properties>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>2.4</version>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                    <mainClass>pl.edu.pw.elka.mkucharski.ReportGeneratorCmdProxy</mainClass>
-                                    <classpathPrefix>lib/</classpathPrefix>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-dependencies</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>copy-dependencies</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                    <overWriteReleases>false</overWriteReleases>
-                                    <overWriteSnapshots>false</overWriteSnapshots>
-                                    <overWriteIfNewer>true</overWriteIfNewer>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>ws</id>
-            <properties>
-            <packaging.type>war</packaging.type>
-            </properties>
-            <activation><activeByDefault>true</activeByDefault></activation>
-        </profile>
-    </profiles>
+        and SVG report layout (in form like from InkScape). Result of running this tool is final
+        report page in XSL-FO that can be further processed by Apache FOP
+    </description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,7 +17,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-bundle-jaxrs</artifactId>
+            <version>2.7.6</version>
+        </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
@@ -78,28 +30,12 @@
         <dependency>
             <groupId>org.codehaus.gmaven.runtime</groupId>
             <artifactId>gmaven-runtime-2.0</artifactId>
-			<version>1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>2.7.10</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <version>2.7.10</version>
+            <version>1.5</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>3.0.7.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
+            <version>3.2.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -110,31 +46,36 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
             <plugins>
                 <plugin>
-                    <!-- mvn clean install tomcat:run-war to deploy
-                    Look for "Running war on http://xxx" and
-                    "Setting the server's publish address to be /yyy"
-                    in console output; WSDL browser address will be
-                    concatenation of the two: http://xxx/yyy?wsdl
-                    -->
-                    <!--TODO: proper tomcat/jboss deployment config-->
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.0</version>
-                    <executions>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <mainClass>pl.edu.pw.elka.mkucharski.ReportGeneratorCmdProxy</mainClass>
+                                <classpathPrefix>lib/</classpathPrefix>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+         
+                    <artifactId>maven-dependency-plugin</artifactId>
+					<version>2.4</version>
+					<executions>
                         <execution>
-                            <id>start-tomcat</id>
+                            <id>copy</id>
+                            <phase>prepare-package</phase>
                             <goals>
-                                <goal>run-war</goal>
+                                <goal>copy-dependencies</goal>
                             </goals>
-                            <phase>pre-integration-test</phase>
                             <configuration>
-                                <port>${test.server.port}</port>
-                                <path>/ReportGenerator</path>
-                                <fork>true</fork>
-                                <useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
+                                <outputDirectory>${build.directory}/lib</outputDirectory>
+								<overWriteReleases>true</overWriteReleases>
+								<overWriteSnapshots>true</overWriteSnapshots>
                             </configuration>
                         </execution>
                     </executions>
@@ -142,41 +83,26 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
+                    <version>3.1</version>
                     <configuration>
                         <source>1.7</source>
                         <target>1.7</target>
-						<compilerId>groovy-eclipse-compiler</compilerId>
+                        <compilerId>groovy-eclipse-compiler</compilerId>
                     </configuration>
-					<dependencies>
-						<dependency>
-							<groupId>org.codehaus.groovy</groupId>
-							<artifactId>groovy-eclipse-compiler</artifactId>
-							<version>2.8.0-01</version>
-						</dependency>
-						<dependency>
-							<groupId>org.codehaus.groovy</groupId>
-							<artifactId>groovy-eclipse-batch</artifactId>
-							<version>2.1.8-01</version>
-						</dependency>
-					</dependencies>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-compiler</artifactId>
+                            <version>2.8.0-01</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-batch</artifactId>
+                            <version>2.1.8-01</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-eclipse-plugin</artifactId>
-                    <configuration>
-                        <projectNameTemplate>[artifactId]</projectNameTemplate>
-                        <wtpmanifest>true</wtpmanifest>
-                        <wtpapplicationxml>true</wtpapplicationxml>
-                        <wtpversion>2.0</wtpversion>
-                    </configuration>
-                </plugin>
-
-
-
-
-            </plugins>
-        </pluginManagement>
+			</plugins>
     </build>
 
 </project>

@@ -8,6 +8,7 @@ package pl.edu.pw.elka.mkucharski;/**
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.codehaus.groovy.syntax.Numbers;
 import pl.edu.pw.elka.mkucharski.groovy.InputProcessor;
 
 import java.util.HashMap;
@@ -22,7 +23,8 @@ public class ReportGeneratorCmdProxy {
 
         InputProcessor processor = new InputProcessor();
         logger.info("Attempting to generate report");
-        processor.processInput( "../md-test.xml", "../inny.svg", ".", "test");
+        processor.processInput( "../sth-pdf.xml", "../ir_md.svg", "act", "test");
+        processor.setMasterCount(1);
     }
     //        arg1: xml z danymi, arg2: svg z layoutem, arg3: outputDir, arg4: suffix wynikowych plików
 //    opcje: -cw auto lub fixed, -grp 0 lub 1
@@ -33,7 +35,7 @@ public class ReportGeneratorCmdProxy {
 //            tutaj jakiś tekst o tym, że źle wywołane, etc.
             throw new IllegalArgumentException("Mandatory arguments not given!");
         }
-        String outputSuffix = args.length >= 4 ? args[3] : Long.toString(System.currentTimeMillis());
+//        String outputSuffix = args.length >= 4 ? args[3] : Long.toString(System.currentTimeMillis());
         InputProcessor processor = new InputProcessor();
 
         Map<String,String> argMap = new HashMap<>();
@@ -50,12 +52,25 @@ public class ReportGeneratorCmdProxy {
             } else if("fixed".equals(argMap.get("-cw"))) {
                 processor.setAutoWidth(false);
             } else {
-                logger.error("Unknown value for cw parameter. Argument ignored");
+                logger.warn("Unknown value for cw parameter. Argument ignored");
             }
         }
 
+        if(argMap.containsKey("-md")) {
+            String[] arg = argMap.get("-md").split(";");
+            processor.setMasterCount(arg.length);
+                for (String name : arg ) {
+                    processor.getMasterDisplayNames().add(name);
+                }
+        }
+
+
+//        processor.setMasterCount(1);
+//        processor.processInput( "../sth-pdf.xml", "../ir_md.svg", "act", "test");
+
+
 
         logger.info("Attempting to generate report");
-        processor.processInput( args[0], args[1], args[2], "_" + outputSuffix);
+        processor.processInput( args[0], args[1], args[2], args[3]);
     }
 }

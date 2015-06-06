@@ -1,7 +1,9 @@
-<fo:table-cell xsl:use-attribute-sets="cell border">
-    <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-        <fo:inline xsl:use-attribute-sets="body-font">
-            <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
-        </fo:inline>
-    </fo:block>
-</fo:table-cell>
+<xsl:if test="count(.//#COLUMN_HEADER_NAME#/preceding-sibling::*)>%d">
+    <fo:table-cell xsl:use-attribute-sets="cell border">
+        <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+            <fo:inline xsl:use-attribute-sets="body-font">
+                <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
+            </fo:inline>
+        </fo:block>
+    </fo:table-cell>
+</xsl:if>

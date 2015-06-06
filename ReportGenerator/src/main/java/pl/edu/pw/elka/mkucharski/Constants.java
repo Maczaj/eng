@@ -85,7 +85,7 @@ public final class Constants {
      * @param attrs attributes in form: "attr_name=\"attr_val\""
      * @return concatenated string representation
      */
-    public static String XSLFO_ELLEMENT(String element,String... attrs) {
+    public static final String XSLFO_ELLEMENT(String element,String... attrs) {
         StringBuilder sb = new StringBuilder("<fo:").append(element).append(" ");
 
         for(String attr: attrs) {
@@ -106,7 +106,7 @@ public final class Constants {
 
     public static final String SVG_NAMESPACE = "xmlns:svg=\"http://www.w3.org/2000/svg\"";
 
-    public static String SVG_ELEMENT(String width, String height) {
+    public static final String SVG_ELEMENT(String width, String height) {
         StringBuilder sb = new StringBuilder("<svg:svg ").append(SVG_NAMESPACE).append(" width=\"").append(width)
                 .append("\" height=\"").append(height).append("\" >");
         return sb.toString();

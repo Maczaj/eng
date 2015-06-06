@@ -1,38 +1,58 @@
-<xsl:choose>
-    <xsl:when test="//ROW[count(preceding-sibling::*)]/#COLUMN_HEADER_NAME#=//ROW[count(preceding-sibling::*)+1]/#COLUMN_HEADER_NAME# and //ROW[count(preceding-sibling::*)+1]/#COLUMN_HEADER_NAME#=//ROW[count(preceding-sibling::*)+2]/#COLUMN_HEADER_NAME#">
-        <fo:table-cell xsl:use-attribute-sets="cell borderOnlySides">
-            <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-                <fo:inline xsl:use-attribute-sets="body-font">
-                </fo:inline>
-            </fo:block>
-        </fo:table-cell>
-    </xsl:when>
-    <xsl:when test="//ROW[count(preceding-sibling::*)]/#COLUMN_HEADER_NAME#=//ROW[count(preceding-sibling::*)+1]/#COLUMN_HEADER_NAME#" >
-        <fo:table-cell xsl:use-attribute-sets="cell borderNoTop">
-            <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-                <fo:inline xsl:use-attribute-sets="body-font">
-                </fo:inline>
-            </fo:block>
-        </fo:table-cell>
-    </xsl:when>
-    <xsl:when test="//ROW[count(preceding-sibling::*)+1]/#COLUMN_HEADER_NAME#=//ROW[count(preceding-sibling::*)+2]/#COLUMN_HEADER_NAME#" >
-        <fo:table-cell xsl:use-attribute-sets="cell borderNoBottom">
-            <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-                <fo:inline xsl:use-attribute-sets="body-font">
-                    <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
-                </fo:inline>
-            </fo:block>
-        </fo:table-cell>
-    </xsl:when>
-    <xsl:otherwise>
-        <fo:table-cell xsl:use-attribute-sets="cell border">
-            <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-                <fo:inline xsl:use-attribute-sets="body-font">
-                    <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
-                </fo:inline>
-            </fo:block>
-        </fo:table-cell>
-    </xsl:otherwise>
-</xsl:choose>
-
+<xsl:if test="count(.//#COLUMN_HEADER_NAME#/preceding-sibling::*)>%d">
+    <xsl:choose>
+        <xsl:when
+                test="preceding-sibling::*[1]//#COLUMN_HEADER_NAME#=.//#COLUMN_HEADER_NAME# and following-sibling::*[1]//#COLUMN_HEADER_NAME#!=.//#COLUMN_HEADER_NAME#">
+            <!-- poprzedni taki sam, ale nastepny inny -->
+            <fo:table-cell xsl:use-attribute-sets="cell borderNoTop">
+                <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+                    <fo:inline xsl:use-attribute-sets="body-font">
+                        <!--xsl:value-of select=".//#COLUMN_HEADER_NAME#"/-->
+                    </fo:inline>
+                </fo:block>
+            </fo:table-cell>
+        </xsl:when>
+        <xsl:when
+                test="preceding-sibling::*[1]//#COLUMN_HEADER_NAME#=.//#COLUMN_HEADER_NAME# and following-sibling::*[1]//#COLUMN_HEADER_NAME#=.//#COLUMN_HEADER_NAME#">
+            <!-- poprzedni i nastepnik taki sam -->
+            <fo:table-cell xsl:use-attribute-sets="cell borderOnlySides">
+                <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+                    <fo:inline xsl:use-attribute-sets="body-font">
+                        <!--xsl:value-of select=".//#COLUMN_HEADER_NAME#"/-->
+                    </fo:inline>
+                </fo:block>
+            </fo:table-cell>
+        </xsl:when>
+        <xsl:when test="following-sibling::*[1]//#COLUMN_HEADER_NAME#=.//#COLUMN_HEADER_NAME#">
+            <!-- jest pierwszy i nastepnik taki sam -->
+            <fo:table-cell xsl:use-attribute-sets="cell borderNoBottom">
+                <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+                    <fo:inline xsl:use-attribute-sets="body-font">
+                        <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
+                    </fo:inline>
+                </fo:block>
+            </fo:table-cell>
+        </xsl:when>
+        <xsl:when
+                test="count(following-sibling::*) = 0 and preceding-sibling::*[1]//#COLUMN_HEADER_NAME#=.//#COLUMN_HEADER_NAME#">
+            <!-- to jest ostatni oraz poprzednik jest taki sam -->
+            <fo:table-cell xsl:use-attribute-sets="cell borderNoTop">
+                <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+                    <fo:inline xsl:use-attribute-sets="body-font">
+                        <!--xsl:value-of select=".//#COLUMN_HEADER_NAME#"/-->
+                    </fo:inline>
+                </fo:block>
+            </fo:table-cell>
+        </xsl:when>
+        <xsl:otherwise>
+            <!--porpzednik i nastepnik rozne-->
+            <fo:table-cell xsl:use-attribute-sets="cell border">
+                <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+                    <fo:inline xsl:use-attribute-sets="body-font">
+                        <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
+                    </fo:inline>
+                </fo:block>
+            </fo:table-cell>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:if>
 

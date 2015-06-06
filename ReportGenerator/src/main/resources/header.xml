@@ -1,5 +1,7 @@
-<fo:table-cell xsl:use-attribute-sets="cell header-color border">
-    <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-        <fo:inline xsl:use-attribute-sets="header-font">#COLUMN_HEADING#</fo:inline>
-    </fo:block>
-</fo:table-cell>
+<xsl:if test="%s">
+    <fo:table-cell xsl:use-attribute-sets="cell header-color border">
+        <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+            <fo:inline xsl:use-attribute-sets="header-font">#COLUMN_HEADING#</fo:inline>
+        </fo:block>
+    </fo:table-cell>
+</xsl:if>

@@ -324,9 +324,11 @@ Wejściowe dane dla narzędzia stanowi wzorzec wyglądu raportu zapisany w \emph
 
 
 \subsubsection{Tworzenie ogólnego szablonu strony}
-Stworzenie transformacji dla ogólnego szablonu strony sprowadza się do przeszukania drzewa obiektów składających się na wzorzec wyglądu raportu, wyszukaniu odpowiednich elementów, obliczenia pewnych wielkości i podstawieniu ich do właściwych ich przeznaczeniu nazwanych zbiorów atrybutów. Zbiory te mogą być następnie użyte w charakterze stałych w innych znacznikach znajdujących się w tym samym raporcie. Zbiory atrybutów mogą dotyczyć m.in. marginesów strony, koloru i kroju czcionki itp. Następnie wyszukiwane są elementy odpowiadające części ,,nadrzędnej" wzorca. W przypadku wyszukania pola danych tworzony jest również znacznik odpowiadający za wyświetlenie tekstu z podaniem wyrażenia \textbf{\emph{\textless xsl:value-of select="xpath" /\textgreater}} jako wartość tekstu do wyświetlenia, gdzie \textbf{\emph{xpath}} jest właściwym wyrażeniem odpowiadającym odwołaniu do węzła ,,nadrzędnego" z pliku danych, czyli np. \textbf{\emph{//P3\_DEPARTMENT\_NAME}}. Podstawienie danych w odpowiednie miejsca odbywa się poprzez sformatowanie uprzednio przygotowanego łańcucha znaków.
+Stworzenie transformacji dla ogólnego szablonu strony sprowadza się do przeszukania drzewa obiektów składających się na wzorzec wyglądu raportu, wyszukaniu odpowiednich elementów, obliczenia pewnych wielkości i podstawieniu ich do właściwych ich przeznaczeniu nazwanych zbiorów atrybutów. Zbiory te mogą być następnie użyte w charakterze stałych w innych znacznikach znajdujących się w tym samym raporcie. Zbiory atrybutów mogą dotyczyć m.in. marginesów strony, koloru i kroju czcionki itp. Następnie wyszukiwane są elementy odpowiadające części ,,nadrzędnej" wzorca. W przypadku wyszukania pola danych tworzony jest również znacznik odpowiadający za wyświetlenie tekstu z podaniem wyrażenia \textbf{\emph{\textless xsl:value-of select="xpath" /\textgreater}} jako wartość tekstu do wyświetlenia, gdzie \textbf{\emph{xpath}} jest właściwym wyrażeniem odpowiadającym odwołaniu do węzła z pliku danych uznanego za ,,nadrzędny". Podstawienie danych w odpowiednie miejsca odbywa się poprzez sformatowanie uprzednio przygotowanego łańcucha znaków.
 
 Każdy element \emph{SVG} który pojawi się w raporcie, musi również zostać odpowiednio odwzorowany. Przede wszystkim należy dodać do nich właściwą przestrzeń nazw -- grafika tworzona w programie \emph{InkScape} nie wykorzystuje przestrzeni nazw. Ponadto należy właściwie określić styl obiektu: styl obiektów stworzonych w programie \emph{InkScape} jest określony w taki sam sposób, jak w przypadku styli \emph{CSS}, co jest zaprezentowane na listingu \ref{con:css}, jednak przy użyciu za pośrednictwem \emph{ApExa} wymagane jest utworzenie oddzielnego atrybutu wraz z wartością dla każdej właściwości stylu. Postać stylu właściwa do zastosowania w przyjętym rozwiązaniu jest przedstawiona na listingu \ref{con:apex}.
+
+W tym szablonie znajdują się również kluczowe konstrukcje wykorzystane do zrealizowania raportu \emph{master-detail}. Jest to konstrukcja \emph{\textbf{\textless xsl:key\textgreater}} oraz funkcje \emph{\textbf{key()}} i \emph{\textbf{generate-id()}} ze standardu \emph{XSLT 1.0}.
 
 \lstset{}
 \begin{lstlisting}[frame=single,caption=Przykład stylu obiektu utworzonego w programie \emph{InkScape}, label=con:css]
@@ -338,40 +340,46 @@ style="font-size:40px;font-style:normal;font-weight:normal;"
 font-size="40px" font-style="normal" font-weight="normal"
 \end{lstlisting}
 
-Dodatkowo w tej transformacji dodawana jest jest informacja o szerokości kolumny. W przypadku stosowania zmiennej liczby kolumn o stałej szerokości jest to zmienna \emph{ApExa} \textbf{\emph{\#PRN\_TABLE\_CELLS\#}}, zaś w przypadku ustalonej szerokości każdej kolumny \emph{\textbf{\textless fo:table-column column-width="wartość"/\textgreater}} dla każdej kolumny, która ma się znaleźć w wynikowym raporcie.
+Dodatkowo w tej transformacji dodawana jest jest informacja o szerokości kolumny. W przypadku stosowania zmiennej liczby kolumn o stałej szerokości jako wartość jest wykorzystywana zmienna \emph{ApExa} \textbf{\emph{\#COLUMN\_WIDTH\#}}, zaś w przypadku raportu o ustalonych szerokościach kolumn dokładna wartość odczytana z wzorca.
 
 
 \subsubsection{Tworzenie szablonu komórki nagłówka tabeli} \label{table:header}
-Ponieważ w poprzednim kroku zostały ustawione zestawy atrybutów określające krój czcionki użytej w nagłówku, styl obramowania oraz wypełnienia ramki, utworzenie szablonu dla nagłówka polega właściwie na wykorzystaniu transformacji podpowiadanej przez \emph{ApExa} przy dodawaniu wzorca wyglądu raportu. Jest ona zaprezentowana na listingu \ref{tool:header}.
+Ponieważ w poprzednim kroku zostały ustawione zestawy atrybutów określające krój czcionki użytej w nagłówku, styl obramowania oraz wypełnienia ramki, utworzenie szablonu dla nagłówka polega właściwie na wykorzystaniu transformacji podpowiadanej przez \emph{ApExa} z pewną drobną zmianą. W przypadku gdy pewna kolumna jest stosowana jako \emph{master}, niepożądane jest prezentowanie jej również w części \emph{detail} czyli tabeli. Przykład transformacji komórki nagłówka tabeli jest zaprezentowany na listingu \ref{tool:header}. Użycie dokładnych nazw w transformacji jest konieczne, gdyż wyznaczanie ich jest wykonywane wewnętrznie przez \emph{ApExa} i nie da się w ten proces zaingerować.
 
 \lstset{language=XSLT}
 \begin{lstlisting}[frame=single,caption=Transformacja dla nagłówka tabeli, label=tool:header]
-<fo:table-cell xsl:use-attribute-sets="cell header-color border">
- <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-  <fo:inline xsl:use-attribute-sets="header-font">
-      #COLUMN_HEADING#
-  </fo:inline>
- </fo:block>
-</fo:table-cell>
+<xsl:if test="'#COLUMN_HEADING#'!='Nazwa dzialu' 
+   and '#COLUMN_HEADING#'!='Stanowisko'">
+    <fo:table-cell xsl:use-attribute-sets="cell header-color border">
+        <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+            <fo:inline xsl:use-attribute-sets="header-font">
+              #COLUMN_HEADING#
+            </fo:inline>
+        </fo:block>
+    </fo:table-cell>
+</xsl:if>
+
 \end{lstlisting}
 
 Przy okazji należy zaznaczyć fakt, że z powodu natury SVG nie jest możliwe określenie sposobu wyrównania tekstu w komórkach tabeli. W celu zwiększenia elastyczności narzędzia można jednak przyjąć, że będzie to sterowane poprzez odpowiedni argument wywołania programu.
 
 \subsubsection{Tworzenie szablonu komórki tabeli}
-Sytuacja dla komórki tabeli jest właściwie analogiczna jak w przypadku nagłówka - Po utworzeniu szablonu strony wszystkie atrybuty powinny być ustawione, więc zadanie wyświetlenia danych wykona transformacja przedstawiona na listingu \ref{cell:xslt}. Dodatkowo, w przypadku wariantu z grupowaniem kolumn, może pojawić się instrukcja warunkowo modyfikująca odpowiednie atrybuty tak, aby nastąpiło faktyczne zgrupowanie odpowiednich wartości.
+Sytuacja dla komórki tabeli jest właściwie analogiczna jak w przypadku nagłówka - po utworzeniu szablonu strony wszystkie atrybuty powinny być ustawione, więc zadanie wyświetlenia danych wykona transformacja przedstawiona na listingu \ref{cell:xslt}. Widoczna na listingu instrukcja warunkowa powoduje również pominięcie wyświetlania kolumn przynależących do części \emph{master} (w tym przypadku jest to jedna kolumna). Różnicą w tym przypadku jest fakt, że w tym przypadku możliwe jest obliczenie czy dana kolumna przynależy do części \emph{master} i pominięcie jej. 
 
 Wykorzystanie grup łamiących polega na dołączeniu transformacji testującej wartość atrybutu w poprzednim wierszu i następnym wierszu, a także pomijającej tworzenie górnej i ewentuanie dolnej granicy komórki oraz samego tekstu w niej zawartego w przypadku zgodności.
 
 \lstset{language=XSLT}
 \begin{lstlisting}[frame=single,caption=Transformacja dla komórki tabeli, label=cell:xslt]
-<fo:table-cell xsl:use-attribute-sets="cell border">
- <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
-  <fo:inline xsl:use-attribute-sets="body-font">
-   <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
-  </fo:inline>
- </fo:block>
-</fo:table-cell>
-
+<xsl:if 
+  test="count(.//#COLUMN_HEADER_NAME#/preceding-sibling::*)>1">
+ <fo:table-cell xsl:use-attribute-sets="cell border">
+  <fo:block xsl:use-attribute-sets="text #TEXT_ALIGN#">
+   <fo:inline xsl:use-attribute-sets="body-font">
+    <xsl:value-of select=".//#COLUMN_HEADER_NAME#"/>
+   </fo:inline>
+  </fo:block>
+ </fo:table-cell>
+</xsl:if>
 \end{lstlisting}
 
 
@@ -392,18 +400,17 @@ W katalogu ze źródłami znajdują się podkatalog \emph{\textbf{main}} zawiera
 \begin{itemize}
 	\item Katalog \emph{\textbf{groovy}} zawierający kod napisany w języku \emph{Groovy},
 	\item Katalog \emph{\textbf{java}} zawierający kod napisany w języku \emph{Java},
-	\item Katalog \emph{\textbf{resources}} zawierający pomocnicze zasoby wykorzystywane przez aplikację,
-	\item Katalog \emph{\textbf{webapp}} zawierający konfigurację elementów webowych aplikacji (nieistotne w przypadku paczki \emph{jar}).
+	\item Katalog \emph{\textbf{resources}} zawierający pomocnicze zasoby wykorzystywane przez aplikację.
 \end{itemize}
 
 Zasoby pomocnicze wykorzystywane przez aplikację to pliki, które nie są generowane przez narzędzie, a ich wykorzystanie w znacznym stopniu upraszcza wykonanie postawionego zadania. Należą do nich:
 \begin{itemize}
 	\item Plik \emph{\textbf{defaults.properties}} zawierający domyślnie stosowane przez \emph{ApExa} dla stylu czcionek i obramowań komórek tabeli. Wartości te są stosowane w przypadku nie znalezienia we wzorcu wyglądu raportu elementów umożliwiających określenie właściwych wartości. 
-	\item Plik \emph{\textbf{header.xml}} zawierający transformację \emph{XSLT} stosowaną dla komórki nagłówka tabeli. Transformacja ta jest po prostu zwracana użytkownikowi.
-	\item Plik \emph{\textbf{page.xml}} zawierający transformację \emph{XSLT} określającą główny szablon strony raportowej. W szablonie tym znajdują się dwa ciągi \emph{\textbf{\%s}} przeznaczone do sformatowania napisami: zawierającym konstrukcje \emph{SVG} oraz określającym szerokości kolumn. Ponadto zamiast właściwych wartości ustawianych atrybutów, w szablonie zawarte są symbole ostatecznie zamieniane na właściwe wartości.
+	\item Plik \emph{\textbf{header.xml}} zawierający transformację \emph{XSLT} stosowaną dla komórki nagłówka tabeli. Do transformacji tej są dołączane instrukcje odpowiadające za pominięcie wyświetlania kolumn należących do części \emph{master}, a następnie jest zwracana użytkownikowi.
+	\item Plik \emph{\textbf{page.xml}} zawierający transformację \emph{XSLT} określającą główny szablon strony raportowej. W szablonie tym znajdują się ciągi \emph{\textbf{\%s}} przeznaczone do sformatowania napisami: zawierającym konstrukcje \emph{SVG}, określającym szerokości kolumn oraz określającym kolumny należące do części \emph{master} wykorzystane w funkcjach \emph{XSLT} generujących klucze. Ponadto zamiast właściwych wartości ustawianych atrybutów, w szablonie zawarte są symbole ostatecznie zamieniane na właściwe wartości.
 	\item Plik \emph{\textbf{data\_filter.xsl}} zawierający transformację \emph{XSLT} stosowaną do danych wejściowych w formacie \emph{XML}.
-	\item Plik \emph{\textbf{column.xml}} zawierający transformację \emph{XSLT} tworzącą komórkę wiersza tabeli. Transformacja jest zwracana użytkownikowi bez żadnych modyfikacji.
-	\item Plik \emph{\textbf{column\_grp.xml}} zawierający transformację \emph{XSLT} tworzącą komórkę wiersza tabeli przy zastosowaniu grup łamiących. Transformacja ta jest zwracana użytkownikowi bez żadnych modyfikacji.
+	\item Plik \emph{\textbf{column.xml}} zawierający transformację \emph{XSLT} tworzącą komórkę wiersza tabeli. Do transformacji tej dołączana jest instrukcja pomijająca wyświetlanie kolumn należących do części \emph{master}, po czym jest zwracana użytkownikowi.
+	\item Plik \emph{\textbf{column\_grp.xml}} zawierający transformację \emph{XSLT} tworzącą komórkę wiersza tabeli przy zastosowaniu grup łamiących. Do transformacji tej dołączana jest instrukcja pomijająca wyświetlanie kolumn należących do części \emph{master}, po czym jest zwracana użytkownikowi.
 \end{itemize}
 
 Główna logika przetwarzająca dane \emph{XML} oraz wzorzec \emph{SVG} jest zawarta w klasie \emph{Groovy} o nazwie \emph{\textbf{InputProcessor}}. Klasa ta ma jedną publiczną metodę o nazwie \emph{\textbf{processInput()}}, która przyjmuje cztery argumenty. Są to: ścieżka do pliku z danymi w \emph{XML}, ścieżka do pliku \emph{SVG} z wzorcem wyglądu raportu, katalog roboczy, w którym narzędzie zapisuje wynikowe oraz tymczasowe pliki i sufiks dołączany do wynikowych plików.
@@ -414,16 +421,11 @@ Po utworzeniu części \emph{master} wyznaczane są właściwości stylu komórk
 
 Końcową czynnością jest sformatowanie transformacji odpowiedzialnej za szablon strony oraz zapisanie plików wynikowych. Opis plików wyjściowych znajduje się w dodatku \ref{app:output}.
 
-W katalogu \emph{\textbf{java}} znajdują się trzy klasy oraz jeden interfejs wspierające klasę wykonującą główną logikę:
+W katalogu \emph{\textbf{java}} znajdują się jedna klasa oraz jeden interfejs wspierające klasę wykonującą główną logikę:
 \begin{itemize}
 	\item Klasa \emph{\textbf{Constants}} zawierająca stałe napisy oraz krótkie metody pełniące funkcje sparametryzowanych makr zwiększających czytelność kodu;
-	\item Klasa \emph{\textbf{ReportGeneratorCmdProxy}} zawierają główną metodę \emph{\textbf{main()}}, której zadaniem jest sprawdzenie, czy wszystkie wymagane parametry zostały podane, skonfigurowanie klasy wykonującej główną logikę na podstawie argumentów wywołania oraz zainicjowanie procesu generowania transformacji;
-	\item Interfejs serwisowy \emph{\textbf{ReportGenerator}} określający udostępniane usługi;
-	\item Klasa \emph{\textbf{ReportGeneratorImpl}} będąca implementacją interfejsu \emph{\textbf{ReportGenerator}}, której zadaniem jest sprawdzenie czy wszystkie wymagane parametry zostały podane, skonfigurowanie klasy wykonującej główną logikę na podstawie argumentów wywołania operacji oraz zainicjowanie procesu generowania transformacji w przypadku wywołania jako usługę \emph{RESTful}.
+	\item Klasa \emph{\textbf{ReportGeneratorCmdProxy}} zawierają główną metodę \emph{\textbf{main()}}, której zadaniem jest sprawdzenie, czy wszystkie wymagane parametry zostały podane, skonfigurowanie klasy wykonującej główną logikę na podstawie argumentów wywołania oraz zainicjowanie procesu generowania transformacji.
 \end{itemize}
-
-
-W katalogu \emph{\textbf{webapp}} znajduje się plik \emph{\textbf{web.xml}} określający konfigurację serwletów odpowiedzialnych za przyjmowanie żądań \emph{HTTP}. Konfiguracja ta jest istotna tylko w przypadku zbudowania paczki \emph{war}.
 
 \subsection{Uruchamianie narzędzia}\label{tool:running}
 Pierwszym krokiem do uruchomienia narzędzia jest zbudowanie odpowiedniej paczki z aplikacją. Listing \ref{tool:build} przedstawia komendę \emph{Mavena} budującą paczkę typu \emph{jar}, którą należy uruchomić w wierszu poleceń. Komenda ta usuwa poprzednio zbudowaną wersję, a następnie buduje nowe archiwum \emph{jar}.
@@ -452,6 +454,7 @@ Obsługiwane argumenty dodatkowe to:
 \begin{itemize}
 	\item \emph{\textbf{-cw}} określający szerokość kolumn w wynikowym raporcie. Wartość \emph{\textbf{auto}} oznacza automatyczne dostosowywanie szerokości, zaś \emph{\textbf{fixed}} ustawia szerokość dla każdej kolumny zawartej we wzorcu wyglądu raportu.
 	\item \emph{\textbf{-gr}} określający grupowanie kolumn. Wartość \emph{\textbf{1}} oznacza grupowanie kolumn, zaś każda inna brak grupowania.
+	\item \emph{\textbf{-md}} określający wyświetlane nazwy kolumn należących do części \emph{master}. Program oczekuje, że zostaną podane jako ciąg nazw oddzielonych średnikami zawartych w cudzysłowniu. Zakładane jest również, że będą to początkowe kolumny.
 \end{itemize}
 
 
@@ -500,25 +503,21 @@ W celu prezentacji raportu typu \emph{master-detail} został wykorzystany związ
 
 
 \subsection{Realizacja w \emph{ApEx}} \label{test:apex}
-Pierwszym krokiem do tworzenia raportów typu \emph{master-detail} w formacie PDF jest stworzenie tzw. \textbf{\emph{Master-detail form}}. Przykład takiego komponentu znajduje się na obrazku \ref{img:master-detail-form}. W jego głównej części znajdują się dane nadrzędne - w tym przypadku jest to m.in. nazwa departamentu, która pojawi się na wynikowym raporcie, zaś w dolnej podrzędne. 
+Pierwszym krokiem do zaprezentowania rozwiązania jest utworzenie raportu interaktywnego. Na rysunku \ref{img:raport_ir_dane} zaprezentowane są kolumny wybrane do demonstracji. Istotne jest upewnienie się, że na raporcie będzie możliwe skorzystanie z menu \emph{\textbf{Actions}} oraz zawartej w nim opcji \emph{\textbf{Control Break}}, co jest konfigurowalne w szczegółach regionu z raportem interaktywnym. 
 
-Dodatkowo w prawej, górnej części komponentu, poza standardowymi przyciskami służącymi do nawigacji po \textbf{\emph{Master-detail form}}, znajdują się również dwa dodatkowe - \textbf{\emph{Zapisz}} wykonujący akcję \textbf{\emph{Submit}} powodującą zapamiętanie stanu strony oraz \textbf{\emph{Drukuj}} wykonujący akcję \textbf{\emph{Redirect to URL}} powodującą wysłanie żądania \textbf{\emph{HTTP POST}} pod określony URL.
-
-%jak wstawić ten obrazek bokiem?
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.4]{master-detail-form}
-\caption{\emph{Master-detail form} utworzony w \emph{ApEx}}
-\label{img:master-detail-form}
+\includegraphics[scale=0.7]{ir_dane}
+\caption{Kolumny wybrane do prezentacji raportu}
+\label{img:raport_ir_dane}
 \end{figure}
 
-Kolejnym elementem jest określenie zapytania, które pobierze odpowiednie dane. Można tego dokonać na ekranie \textbf{\emph{Shared Components -\textgreater Report Queries}} w ustawieniach \textbf{\emph{Application Buildera}}. Przykładowe zapytanie jest zaprezentowane na rysunku \ref{img:query}. 
 
-W sekcji \textbf{\emph{Source Queries}} znajduje się zapytanie \emph{SQL} które może być wprowadzone zarówno ręcznie, jak i utworzone z wykorzystaniem specjalnego kreatora. Istotne jest odwołanie do zmiennej \textbf{\emph{P3\_DEPARTMENT\_ID}} znajdującej się w regionie na stronie oraz określenie nazw kolumn wynikowego raportu. W tym miejscu możliwe jest również testowe pobranie danych w formacie XML.
+Następnym krokiem jest dodanie do strony dodatkowego elementu (\emph{\textbf{Items}}) typu \emph{\textbf{Hidden}}. W ustawioniach elementu musi być wybrana opcja umożliwiająca jego modyfikację na stronie (atrybut \emph{\textbf{Session State Protection}} ustawiony na \emph{\textbf{false}}). Element ten będzie służył do przechowywania nazw kolumn, które zostały wykorzystane do utworzenia grup danych za pomocą wbudowanej w \emph{ApExa} opcji \emph{\textbf{Control Break}}.  Rysunek \ref{img:final} przedstawia przykład grupy danych utworzonej za pomocą opcji \emph{\textbf{Control Break}}.
 
-W sekcji \textbf{\emph{Session State}} może jest zamieszczenie dodatkowych danych takich jak informacje o sesji i użytkowniku, czy dowolną daną znajdującą się w regionie na stronie - w tym przypadku \textbf{\emph{P3\_DEPARTMENT\_NAME}}. 
 
-Najistotniejszym atrybutem z punktu widzenia celu niniejszej pracy jest \textbf{\emph{Print URL}} znajdujący się w sekcji \textbf{\emph{Report Query Attributes}}. Wartość znajdującą się w tym polu jest wykorzystana w przycisku \textbf{\emph{Drukuj}} wspomnianym poprzednio w celu wydrukowania raportu.
+
+Kolejnym krokiem jest utworzenie w sekcji \emph{\textbf{Shared Components}} zapytań SQL oraz wzorca dla raportu. Przykładowe zapytanie zostało przedstawione na rysunku \ref{img:query}. Format nazwy zapytania stanowi niezbyt elegancki sposób rozwiązania pewnego problemu. Otóż, specyfikacja \emph{XSLT} nie zezwala na wykorzystanie wartości zmiennych jako selektora do pobierania danych, dlatego zostały utworzone zapytania i wzorce wyglądu raportu dla każdej kombinacji kolumn, dla której będzie generowany raport \emph{master-detail}. Zastosowanie zostanie zaprezentowane w dalszej części rozdziału. 
 
 \begin{figure}
 \centering
@@ -527,21 +526,62 @@ Najistotniejszym atrybutem z punktu widzenia celu niniejszej pracy jest \textbf{
 \label{img:query}
 \end{figure}
 
+W celu praktycznego zastosowania do strony został dodany przycisk. Wskutek jego kliknięcia wykonuje się dynamiczna akcja, w ramach której odbywają się dwie czynności. Pierwsza to wykonanie kodu \emph{\textbf{PL/SQL}}. Konfiguracja akcji jest przedstawiona na rysunku \ref{img:plsqlaction}. W ramach tej akcji z bazy danych ładowane są kolumnu użyte w funkcji \emph{\textbf{Control Break}}. Następnie wczytany łańcuch znaków jest podstawiany do ukrytego elementu strony, a jego stan jest zapamiętywany w sesji. \textbf{\emph{P10\_COLUMNS}} to nazwa ukrytego elementu strony. 
+
+Druga akcja to wykonanie kodu \emph{\textbf{JavaScript}}. Wykonywany kod jest przedstawiony na listingu \ref{printjs}. Powoduje on odczytanie z ukrytego elementu strony łańcucha znaków zawierającego nazwy kolumn, a następnie zbudowanie adresu \emph{URL} na podstawie jego zawartości. Na końcu wykonywane jest przekierowanie \emph{HTTP} co skutkuje wygenerowaniem raportu.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.9]{plsql_act}
+\caption{Konfiguracja akcji wykonującej kod PL/SQL}
+\label{img:plsqlaction}
+\end{figure}
+
+\lstset{}
+\begin{lstlisting}[frame=single,caption=Kod \emph{JavaScript} wykonywany po kliknięciu na przycisk,label=printjs]
+var cols = $v('P10_COLUMNS');
+var spl = cols.split(":");
+var result = "";
+var i = 0;
+for( i= 0 ; i < spl.length ; i++ ) {
+  if( spl[i] != '0' ) {
+    if( i > 0 ) {
+      result += '_'; 
+    }
+    result += s;
+  }
+}
+var url = 'f?p=&APP_ID.:0:&SESSION.:PRINT_REPORT=IR_MD_' + result; 
+window.location.href = url;
+
+\end{lstlisting}
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{final_screen}
+\caption{Przykład grupy danych widocznej na raporcie interaktywnym}
+\label{img:final}
+\end{figure}
+
 
 \subsection{Uzyskane wyniki} \label{test:result}
-W wyniku uruchomienia przygotowywanego w ramach pracy narzędzia utworzone zostały trzy pliki, które należy wkleić do \emph{ApExa} w odpowiednie sekcje wzorca wyglądu raportu. Wynikowe pliki są nazwane tak, że nie pozostawiają wątpliwości co do tego, w której sekcji powinna znaleźć się poszczególna transformacja. Dokładne omówienie plików wyjściowych znajduje się w dodatku \ref{app:output}.
+W wyniku uruchomienia przygotowywanego w ramach pracy narzędzia utworzone zostały trzy pliki, które należy wkleić do \emph{ApExa} w odpowiednie sekcje wzorca wyglądu raportu. Wynikowe pliki są nazwane tak, że nie pozostawiają wątpliwości co do tego, w której sekcji powinna znaleźć się poszczególna transformacja. Dokładne omówienie zawartości plików wyjściowych znajduje się w dodatku \ref{app:output}.
 
-Efekt wydrukowania raportu składającego się z przedstawionych danych i wzorca wyglądu raportu oraz przy zastosowaniu zaprezentowanej konfiguracji znajduje się na obrazku \ref{img:wynikowy}. W tym przypadku każda kolumna ma niezależnie ustaloną szerokość. Ponadto dane zostały zgrupowane według wartości w pierwszej kolumnie.
+Efekt wydrukowania raportu składającego się z przedstawionych danych i wzorca wyglądu raportu oraz przy zastosowaniu zaprezentowanej konfiguracji znajduje się na rysunku \ref{img:wynikowy}, zawierającym pierwszą stronę wynikowego raportu. W tym przypadku jako \emph{master} zostały przyjęte: dział, w którym pracuje pracownik oraz zajmowane przez niego stanowisko. W tym przypadku została zastosowana kolumna o stałej szerokości. 
 
 %wynikowy raport
-\begin{figure}[p]
+\begin{figure}
 \centering
-\includegraphics[scale=0.3,angle=90]{test-md}
+\includegraphics[scale=0.5,angle=90]{test-md}
 \caption{Wynikowy raport typu \emph{master-detail}}
 \label{img:wynikowy}
 \end{figure}
 
-\newpage
+
+\clearpage
+
 
 \section{Wnioski i podsumowanie}
 \emph{Oracle Application Express} to dość zaawansowane narzędzie umożliwiające sprawne tworzenie zarówno gotowych aplikacji, jak i raportów. Przy wykorzystaniu zewnętrznego narzędzia, możliwe jest również tworzenie raportów w formacie \emph{PDF} przeznaczonych do wydruku. W tym celu dane w formacie XML muszą zostać przekształcone do postaci XSL-FO. Przekształcenie to wykonuje się z wykorzystaniem XSLT, jednak jego wykorzystanie jest kłopotliwe w przypadku ręcznego programowania, gdyż wszelkie zmiany wyglądu raportu pociągają za sobą konieczność sporządzenia nowego arkusza transformacji XSLT.

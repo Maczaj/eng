@@ -164,13 +164,13 @@
                     </fo:block>
                 </fo:static-content>
                 <fo:flow flow-name="region-body">
-                    <fo:block>
-                        <fo:instream-foreign-object>
-                            %s
-                        </fo:instream-foreign-object>
-                    </fo:block>
                     <fo:block xsl:use-attribute-sets="padding">
-                        <fo:table start-indent="0.0pt">
+                        <xsl:key name="_KEY" match="ROW" use="%s" />
+                        <xsl:for-each select="//ROWSET/ROW[generate-id(.)=generate-id(key('_KEY',%s))]" >
+                            <fo:instream-foreign-object>
+                                    %s
+                                    </fo:instream-foreign-object>
+                        <fo:table start-indent="0.0pt" break-after="page">
                             <xsl:variable name="_XDOFOPOS2" select="number(1)"/>
                             <xsl:variable name="_XDOFOTOTAL" select="number(1)"/>
                             %s
@@ -180,13 +180,14 @@
                                 </fo:table-row>
                             </fo:table-header>
                             <fo:table-body>
-                                <xsl:for-each select=".//ROW">
+                                <xsl:for-each select="key('_KEY',%s )">
                                     <fo:table-row>
                                         #PRN_TEMPLATE_BODY_ROW#
                                     </fo:table-row>
                                 </xsl:for-each>
                             </fo:table-body>
                         </fo:table>
+                        </xsl:for-each>
                     </fo:block>
                     <fo:block xsl:use-attribute-sets="text text_2 text_20">
                         <fo:inline id="{concat('page-total-', $_SECTION_NAME, $_XDOFOPOS)}"/>
