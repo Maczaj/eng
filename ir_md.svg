@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:inkex="http://sodipodi.sourceforge.net/DTD/inkex-0.dtd"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="0.48.5 r10040"
+   version="1.1"
+   id="svg2"
+   height="1052.3622047"
+   width="744.09448819"
+   sodipodi:docname="ir_md.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="389.20452"
+     inkscape:cy="844.25711"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     showgrid="false"
+     inkscape:window-width="1858"
+     inkscape:window-height="1058"
+     inkscape:window-x="1358"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:snap-object-midpoints="true" />
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <image
+       width="94.571426"
+       height="90.285713"
+       xlink:href="file:///I:/workspace/eng/exam_gif_to_png_q1.png"
+       id="image3001"
+       x="466.28571"
+       y="118.64787" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3004"
+       y="160.93361"
+       x="84.285713"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve">
+			<tspan
+   style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+   y="160.93361"
+   x="84.285713"
+   id="tspan3006"
+   sodipodi:role="line">Nazwa działu</tspan>
+		</text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3008"
+       y="213.79076"
+       x="90"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve">
+			<tspan
+   style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+   y="213.79076"
+   x="90"
+   id="tspan3010"
+   sodipodi:role="line">Stanowisko</tspan>
+		</text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-opacity:1"
+       y="138.07646"
+       x="290.71429"
+       height="32.857143"
+       width="142.85715"
+       id="rect3012" />
+    <rect
+       y="189.50504"
+       x="290.92856"
+       height="32.857143"
+       width="144.78572"
+       id="rect3782"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.98246533;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:42.73854065px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="151.32852"
+       y="82.773033"
+       id="text3020"
+       sodipodi:linespacing="125%"
+       transform="scale(0.95810381,1.0437282)"><tspan
+         sodipodi:role="line"
+         id="tspan3022"
+         x="151.32852"
+         y="82.773033"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">Wykaz pracowników</tspan></text>
+  </g>
+  <inkex:tables
+     count="1">
+    <inkex:table
+       columns="3"
+       rows="2"
+       table-id="inkscape-table0" />
+  </inkex:tables>
+  <rect
+     height="28.346457"
+     id="inkscape-table0"
+     inkex:table-id="inkscape-table0"
+     x="57.142857"
+     y="334.28571"
+     inkex:column="0"
+     inkex:row="0"
+     style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;"
+     width="70.866142" />
+  <rect
+     height="28.346457"
+     id="inkscape-table0X"
+     inkex:table-id="inkscape-table0"
+     x="128.009"
+     y="334.28571"
+     inkex:column="1"
+     inkex:row="0"
+     style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;"
+     width="106.299212598" />
+  <rect
+     height="28.346457"
+     id="inkscape-table0K"
+     inkex:table-id="inkscape-table0"
+     x="234.30821"
+     y="334.28571"
+     inkex:column="2"
+     inkex:row="0"
+     style="fill:#cccccc;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;opacity:1"
+     width="170.86613" />
+  <rect
+     height="28.346457"
+     id="inkscape-table0g"
+     inkex:table-id="inkscape-table0"
+     x="57.142857"
+     y="362.63217"
+     inkex:column="0"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="70.866142" />
+  <rect
+     height="28.346457"
+     id="inkscape-table0x"
+     inkex:table-id="inkscape-table0"
+     x="128.009"
+     y="362.63217"
+     inkex:column="1"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="106.299212598" />
+  <rect
+     height="28.346457"
+     id="inkscape-table0U"
+     inkex:table-id="inkscape-table0"
+     x="234.30821"
+     y="362.63217"
+     inkex:column="2"
+     inkex:row="1"
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     width="170.86613" />
+  <flowRoot
+     xml:space="preserve"
+     style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     inkex:column="0"
+     inkex:row="0"
+     inkex:table-id="inkscape-table0-text"
+     id="inkscape-table0S"
+     transform="translate(2.8571429,-13.571429)">
+		<flowRegion
+   id="inkscape-table0G">
+			<rect
+   height="28.346457"
+   width="70.866142"
+   y="334.28571"
+   x="57.142857"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans"
+   id="inkscape-table0l" />
+		</flowRegion>
+		<flowPara
+   id="inkscape-table0Gq"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">Kolumna1</flowPara>
+	</flowRoot>  <flowRoot
+     id="inkscape-table0J"
+     inkex:table-id="inkscape-table0-text"
+     inkex:row="0"
+     inkex:column="1"
+     style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     xml:space="preserve">
+		<flowRegion
+   id="inkscape-table0Y">
+			<rect
+   id="inkscape-table0N"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans"
+   x="128.009"
+   y="334.28571"
+   width="106.29921"
+   height="28.346457" />
+		</flowRegion>
+		<flowPara
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+   id="inkscape-table0F">Kolumna2</flowPara>
+	</flowRoot>  <flowRoot
+     xml:space="preserve"
+     style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     inkex:column="2"
+     inkex:row="0"
+     inkex:table-id="inkscape-table0-text"
+     id="inkscape-table0f">
+		<flowRegion
+   id="inkscape-table0A">
+			<rect
+   height="28.346457"
+   width="170.86613"
+   y="334.28571"
+   x="234.30821"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans"
+   id="inkscape-table0e" />
+		</flowRegion>
+		<flowPara
+   id="inkscape-table0I"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">Kolumna3</flowPara>
+		<flowPara
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+   id="flowPara4416" />
+	</flowRoot></svg>
